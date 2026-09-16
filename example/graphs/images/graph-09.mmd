@@ -10,11 +10,17 @@ flowchart TD
         ctx_meta["claimant: :Self\nsubject: :Self\nshape: pshapes:ContactInfoShape"]:::meta
     end
 
+    n9305b380464c[":Alice_CHVA_Network\n(SocialNetwork)"]
+    n6d365cdbdf56[":Marcy\n(Person)"]:::person
+    n0ea289853318[":Henry\n(Person)"]:::person
     n655e442e50be[":Self\n(Person)"]:::person
-    n0daa86f72bd5("Alice"):::lit
-    n53c84af3172f("Alice Walker"):::lit
-    n7f4911b1fc4d("awalker@gmail.com"):::lit
+    n918f89ed2362("Alice"):::lit
+    n14d667235062("Alice Walker"):::lit
+    nb4570f4ab03d("awalker@gmail.com"):::lit
 
-    n655e442e50be -->|"GivenName"| n0daa86f72bd5
-    n655e442e50be -->|"AlternateName"| n53c84af3172f
-    n655e442e50be -->|"EmailAddress"| n7f4911b1fc4d
+    n9305b380464c -->|"hasMemberPart"| n6d365cdbdf56
+    n9305b380464c -->|"hasMemberPart"| n0ea289853318
+    n655e442e50be -->|"GivenName"| n918f89ed2362
+    n655e442e50be -->|"AlternateName"| n14d667235062
+    n655e442e50be -->|"EmailAddress"| nb4570f4ab03d
+    n655e442e50be -->|"hasSocialNetwork"| n9305b380464c

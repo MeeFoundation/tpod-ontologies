@@ -34,7 +34,7 @@ v4:
 
 #### Overview
 
-This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see Check 21), regardless of what the cell's `subject` is. The "Trips" cell is a purely organizational category node (`cell:category: cat:Trips`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TripsTemplateCell` sets as `cell:memberShape` — no longer deliberately empty.
+This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see YAML-6), regardless of what the cell's `subject` is. The "Trips" cell is a purely organizational category node (`cell:category: cat:Trips`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TripsTemplateCell` sets as `cell:memberShape` — no longer deliberately empty.
 
 #### Graph
 
@@ -61,7 +61,7 @@ This graph is the cell's one required `member` entry — a cell with a single `m
 
 #### Overview
 
-This graph is the cell's required tool graph — required since `cat:Trips`'s own `TemplateCell` declares a form tool, even though "Trips" is a purely organizational scaffold cell with no topic content of its own (the real content lives in this category's own leaf cell, Kyoto Trip 2027, instead). Deliberately empty — no triples at all, per Check 32's own allowance. Alice is both the claimant and the subject.
+This graph is the cell's required tool graph — required since `cat:Trips`'s own `TemplateCell` declares a form tool, even though "Trips" is a purely organizational scaffold cell with no topic content of its own (the real content lives in this category's own leaf cell, Kyoto Trip 2027, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
 
 #### Graph
 

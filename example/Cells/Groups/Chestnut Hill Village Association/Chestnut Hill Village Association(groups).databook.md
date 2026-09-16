@@ -44,7 +44,7 @@ v4:
 
 #### Overview
 
-This graph captures Alice Walker's Chestnut Hill Village Association profile — the identity data she shares with her neighbors in the association. It carries the name she goes by there and the email address the association's mailing list reaches her at. Alice is both the claimant and the subject.
+This graph captures Alice Walker's Chestnut Hill Village Association profile — the identity data she shares with her neighbors in the association. It carries the name she goes by there, the email address the association's mailing list reaches her at, and her association social network, whose members are her neighbors Marcy and Henry. Alice is both the claimant and the subject.
 
 #### Graph
 
@@ -59,6 +59,12 @@ This graph captures Alice Walker's Chestnut Hill Village Association profile —
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 :Self rdf:type owl:NamedIndividual ,
+               persona:Person .
+
+:Marcy rdf:type owl:NamedIndividual ,
+               persona:Person .
+
+:Henry rdf:type owl:NamedIndividual ,
                persona:Person .
 
 :Self rdfs:comment "Alice Walker's persona for her Chestnut Hill Village Association profile."@en ;
@@ -76,7 +82,16 @@ This graph captures Alice Walker's Chestnut Hill Village Association profile —
     <https://w3id.org/cco-domains/cco/ont00001879> [  # designated by → Email
         rdf:type cco:ent00000024 ;
         <https://w3id.org/cco-domains/cco/ont00001765> "awalker@gmail.com"
-    ] .
+    ] ;
+
+    persona:hasSocialNetwork :Alice_CHVA_Network .
+
+
+:Alice_CHVA_Network rdf:type owl:NamedIndividual ,
+                             cco:ont00001183 ;  # Social Network
+    rdfs:label "Alice Walker's Chestnut Hill Village Association connections"@en ;
+    <http://purl.obolibrary.org/obo/BFO_0000115> :Marcy ,  # has member part
+                                                 :Henry .
 ```
 
 <a id="graph-45"></a>

@@ -202,7 +202,7 @@ def tag_node(cell_id, index):
     yaml-to-rdf.py emits every cell in the tree into a single document, so a
     label unique only within one process_cell_databook() call would silently
     merge two cells' tag nodes into one. A cell id is already globally unique
-    (integrity.md's Check 9), so deriving from it needs no counter carried
+    (integrity.md's YAML-3), so deriving from it needs no counter carried
     between calls and gives the same label on every run."""
     return f"_:tag_{cell_id.rsplit('/', 1)[-1]}_{index}"
 
@@ -284,7 +284,7 @@ def process_cell_databook(fm, triples):
     # its type are emitted even when the entry is malformed, so a missing
     # sub-key surfaces as an :ServiceTagShape sh:minCount violation
     # rather than the tag vanishing from the synthesized graph unremarked;
-    # integrity.md's Check 36 catches the same thing at YAML level, where it
+    # integrity.md's YAML-9 catches the same thing at YAML level, where it
     # can name the file and the sub-key.
     for i, tag in enumerate(as_list(v4.get("serviceTag"))):
         node = tag_node(subj, i)

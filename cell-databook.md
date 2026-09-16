@@ -22,7 +22,7 @@ in that folder:
 - **A folder stands for a cell, and the reserved `_cell-attachments` folder directly inside it is
   what marks the folder as one.** This gives the repo a cell/not-a-cell test decidable from a single
   folder's immediate contents, with no tree walk — which is what [integrity.md](integrity.md)'s
-  Check 11 relies on. Both markers are present here, the folder's and the file's, and Check 11
+  FS-5 relies on. Both markers are present here, the folder's and the file's, and FS-5
   requires them to agree; that is what keeps the scaffolding from drifting away from the tree it
   represents. At runtime nothing marks a cell, because there is no folder to mark.
 - **A cell's note is a file named after its folder** (`X.md` inside the folder `X`), the folder-note
@@ -91,7 +91,7 @@ the metadata about the cell itself; a cell's unstructured content sits beside it
   with no cell anywhere beneath it. These stay in that member's copy of the cell and never reach
   another member. The remaining two kinds of subfolder are not the cell's content at all: a
   descendant cell, holding its own `_cell-attachments` folder, and a bare pass-through directory on
-  the way to one (integrity.md's Check 11);
+  the way to one (integrity.md's FS-5);
 - **the chat** — a stream shared by the cell's members, not a file in the folder at all; like this
   file's own content, it lives inside the app.
 
@@ -102,7 +102,7 @@ attaching it, so that every member gets it, is just putting it in `_cell-attachm
 runtime the same two acts are ordinary app operations, and the attached/private distinction is a rule
 about what propagates rather than about where a file sits. `c:note`, `c:attachment` and `c:chat` are documentation-only properties — described in
 README.md's [Documentation-only Properties](README.md#documentation-only-properties), declared in no
-ontology, and never written as a triple by anything (integrity.md's Check 12).
+ontology, and never written as a triple by anything (integrity.md's PNG-3).
 
 This document specifies the DataBook file and the folder this repo wraps it in; for what a cell
 holds in the app, see [Cell Contents](app-behavior.md#cell-contents) in app-behavior.md, and for the
@@ -145,7 +145,7 @@ keeps a proposed change honest is that [integrity.md](integrity.md)'s checks and
 
 **Scaffolding only.** At runtime there is no file and so no filename; nothing in a running v4
 depends on any of this section. It governs the DataBooks in this repo, and it is what integrity.md's
-Checks 11, 19 and 20 read.
+FS-5, YAML-5 and PNG-9 read.
 
 Cell-databook filenames follow (there is no separate category-databook file — a folder's sole
 DataBook is its cell-databook, see [Cell/Category split](CLAUDE.md#key-architectural-patterns)):
@@ -159,7 +159,7 @@ whatever case/spacing/punctuation the folder itself has (e.g. `Acme`, `Paula Wal
 is no `-cell` token: cell-databook is the sole DataBook type in a user's instance tree, so nothing
 needs to be disambiguated by it. There is also no numeric disambiguator of any kind (no `-2`, `-N`,
 etc.): a folder holds **at most one** cell-databook, ever. (What marks a folder as a cell
-in this repo is its `_cell-attachments` folder, not this file; Check 11 requires the two markers to
+in this repo is its `_cell-attachments` folder, not this file; FS-5 requires the two markers to
 agree, so in practice a cell folder carries exactly one matching cell-databook and a folder with
 neither marker is simply a plain filesystem folder.) `<catType>` is the folder's own category classification,
 kebab-cased (e.g. `Employees` → `employees`, `ImmediateFamily` → `immediate-family`, `SSN` → `ssn` —
@@ -192,7 +192,7 @@ value; the filename literal below is this repo's way of making that visible on d
 itself. Since there is no category concept to kebab-case into `<catType>`, the filename uses the
 fixed literal string `custom` in its place, e.g. a folder named `Friends` with no category is
 `Friends(custom).databook.md`. The two must always agree — no `v4.category` iff a `(custom)`
-filename — which is what integrity.md's Check 20 enforces in both directions. The compression rule below still applies verbatim on
+filename — which is what integrity.md's PNG-9 enforces in both directions. The compression rule below still applies verbatim on
 top of this (a folder literally named "Custom" would compress to `Custom.databook.md`, though no
 real example does this) — `custom` is just an ordinary `<catType>` value from the filename's point
 of view, it just happens to never come from kebab-casing a `skos:prefLabel`.
@@ -214,7 +214,7 @@ non-compressing case: normalized `Banking & Payments Firms` (`banking-payments-f
 
 Folder naming is standardized as the category's own display label (the OS folder name is used
 verbatim, with no override field anywhere — the cell-databook's own `title:` field mirrors this name
-exactly rather than overriding it, see integrity.md's Check 19), but a folder's own name alone can't
+exactly rather than overriding it, see integrity.md's YAML-5), but a folder's own name alone can't
 disambiguate a repeated name's *role* — the same person can legitimately appear at two different
 tree positions, e.g. as a leaf under `Immediate Family` and again as a leaf under an employer's
 `Employees`, both folders literally named after them — so `catType` carries that role encoding in
@@ -272,7 +272,7 @@ over the same bytes; without the founding event, which only members hold, the id
 creator nor creation time.
 
 This repo's own example data uses sequential `http://www.example.org/v4/cells/cell-<NN>` ids instead
-(see integrity.md's Check 9) — the same flat, opaque shape, deliberately simple for one worked
+(see integrity.md's YAML-3) — the same flat, opaque shape, deliberately simple for one worked
 example living entirely under a single shared example domain, and not unique once real cells belong
 to many different users' independent instances.
 
@@ -281,7 +281,7 @@ to many different users' independent instances.
 The cell's own name, and always exactly the name of the filesystem folder holding the DataBook —
 verbatim, same case, spacing and punctuation. Within this scaffolding the folder is authoritative:
 renaming the folder means updating `title:` to match, never the reverse, and `title:` is never an
-independent display-name override (integrity.md's Check 19, which also treats it as authoritative
+independent display-name override (integrity.md's YAML-5, which also treats it as authoritative
 for what a cell "is called" when matching diagram box labels). At runtime the app's own record of
 the name is authoritative outright, there being no folder to mirror. It is shared, synced cell content, kept identical across every
 member's copy, and any member may rename the cell — see
@@ -342,7 +342,7 @@ one value may be written either as a YAML list or, when it holds a single value,
 below.
 
 There is no *cell-level* `v4.subject` field — who or what a cell's content is about is derived from
-`v4.member`/`v4.tool` rather than asserted independently (see integrity.md's Check 18); the
+`v4.member`/`v4.tool` rather than asserted independently (see integrity.md's YAML-4); the
 `subject:` key that does appear sits inside each `v4.member` entry, naming that member rather than
 the cell's own subject.
 
@@ -353,7 +353,7 @@ embedded in this same file's body. In ontology terms:
 |----------|-------|-------------|---------|
 | `c:member` | `c:MemberGraph` | 1+ (required, no upper bound) | The required baseline of self-vs-other classified graphs backing this cell's content — one or more per member in the relationship — distinguished by each linked graph's own `c:subject`/`c:claimant` combination rather than by separate properties or classes |
 | `c:tool` | `c:Tool` | 0..N — a cell with none is the ordinary case, and nothing caps how many it may carry (see [Tools](README.md#tools)) | Each tool brings its own data format and its own UI contribution; a form tool states, once, what its content is about (`c:formTopic`) |
-| `c:formGraph` | `c:FormGraph` | 1+ (required) on a live `c:Form`, capped in practice at the cell's own member count, per tool (see integrity.md's Check 25) | The graphs beneath one tool, one per claiming member; a different range from `c:member`, since a tool's `c:formTopic` need not be a PDN-mappable identity |
+| `c:formGraph` | `c:FormGraph` | 1+ (required) on a live `c:Form`, capped in practice at the cell's own member count, per tool (see integrity.md's YAML-8) | The graphs beneath one tool, one per claiming member; a different range from `c:member`, since a tool's `c:formTopic` need not be a PDN-mappable identity |
 
 Nothing in an entry marks its own kind. The list it sits in settles it: a `v4.member` entry is a
 `c:MemberGraph`, a graph under a `v4.tool` entry is a `c:FormGraph`. The two are `owl:disjointWith`,
@@ -439,7 +439,7 @@ the data; a named `o:Organization` individual for content contributed by a `s:Se
 organization provides, since the organization is the responsible party and the one an eventual
 cryptographic signature would name; and a named `s:Service` individual for a service with no
 organization standing behind it in the relationship. Note that an organization claimant need not be
-a member subject — it is reached from one via `s:providedBy`, which is what integrity.md's Check 25
+a member subject — it is reached from one via `s:providedBy`, which is what integrity.md's YAML-8
 allows for.
 
 **"Other" claimants**: When the claimant is someone other than the current user (`:Self`), the
@@ -603,11 +603,11 @@ This graph captures …
 
 No single tool checks the whole format. It is enforced in three places:
 
-- **[integrity.md](integrity.md)** — Check 1 (every graph has both an entry and a body section),
-  Check 2 (`graph-<NN>` id pattern), Check 3 (entry well-formedness: which sub-keys each kind of
-  entry carries), Check 9 (`cell-<NN>` id pattern), Check 11 (folder ↔ cell-databook structure),
-  Check 19 (`title:` matches the folder's OS name), Checks 26/27 (a `shape:` value against the
-  graph's own content, and against the cell's category's own template), and Check 36
+- **[integrity.md](integrity.md)** — PNG-2 (every graph has both an entry and a body section),
+  YAML-1 (`graph-<NN>` id pattern), YAML-2 (entry well-formedness: which sub-keys each kind of
+  entry carries), YAML-3 (`cell-<NN>` id pattern), FS-5 (folder ↔ cell-databook structure),
+  YAML-5 (`title:` matches the folder's OS name), TTL-3/TTL-4 (a `shape:` value against the
+  graph's own content, and against the cell's category's own template), and YAML-9
   (`v4.userTag`/`v4.serviceTag` well-formedness).
 - **`helpers/validate.py`** — synthesizes `c:` triples from the frontmatter and runs SHACL
   (`shacl/cell-shacl.ttl` and friends) against them, plus a per-graph template pass driven by each

@@ -34,7 +34,7 @@ v4:
 
 #### Overview
 
-This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see Check 21). Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` every templated cell's `member` content is now expected to conform to (`cell:memberShape`) — no longer the birth certificate document content, which now lives in this cell's tool graph instead (graph 78).
+This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see YAML-6). Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` every templated cell's `member` content is now expected to conform to (`cell:memberShape`) — no longer the birth certificate document content, which now lives in this cell's tool graph instead (graph 78).
 
 #### Graph
 

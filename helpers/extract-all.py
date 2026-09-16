@@ -5,7 +5,7 @@ every cell-databook under a root directory, as one merged Turtle stream.
 
 Why this exists: validation never merges the whole tree — `helpers/validate.py`
 works one cell at a time on purpose — but a few things legitimately need the
-union: integrity.md's Check 4 ("no orphan Persons"), whose reachability question
+union: integrity.md's TTL-1 ("no orphan Persons"), whose reachability question
 only makes sense across every cell at once, and loading the example into a
 triplestore for ad-hoc SPARQL. See example.md's "Merged whole-tree dump".
 

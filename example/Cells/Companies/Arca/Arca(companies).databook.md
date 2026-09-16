@@ -42,7 +42,7 @@ v4:
 
 #### Overview
 
-This graph is one of the cell's two required `member` entries — Alice's own bare given-name claim (see Check 21: `:Self` must be a member of every cell in the user's own tree, regardless of member count), carrying the given name `ContactInfoShape` requires as this template's `cell:memberShape`. Alice is both the claimant and the subject.
+This graph is one of the cell's two required `member` entries — Alice's own bare given-name claim (see YAML-6: `:Self` must be a member of every cell in the user's own tree, regardless of member count), carrying the given name `ContactInfoShape` requires as this template's `cell:memberShape`. Alice is both the claimant and the subject.
 
 #### Graph
 
@@ -71,7 +71,7 @@ This graph is one of the cell's two required `member` entries — Alice's own ba
 
 This graph is the other of the cell's two required `member` entries — Arca's backup service, joining as a real cell member with its own self-claimed member graph, exactly like a human member's. It is typed `service:ArcaBackup`, a leaf under `service:AgentService`, and carries both `service:actsFor :Self` — Alice invited it, and it is her copy of the cell it preserves, so she is the one member it answers to — and `service:providedBy :Arca`, naming the organization that runs it. Carrying both is what distinguishes it from the other two agent-service leaves: `service:ChatGPT` (the Kyoto Trip cell's own agent member, graph 67) names no provider, because OpenAI is not a party to that cell's relationship, whereas Arca genuinely is a party to this one. A `service:Service` is never a `cell:creator` and can never be promoted to `cell:owner` — Alice alone created and owns this cell — but it is a legitimate `cell:member` participant and, having no organization claiming on its behalf in this relationship, a `cell:claimant` under its own IRI.
 
-Like graph 01 and graph 27, this `member` graph declares `pshapes:ContactInfoShape` (required of every member graph by Check 30) while carrying no *substantive* contact-info content — the only `persona:Person` individual here is the bare `:Self` the self-containment convention requires, since `service:actsFor` names her. `helpers/validate.py` re-targets `ContactInfoShape` at substantive individuals only, so that bare declaration is not treated as a contact-info profile, and the graph stays vacuously conformant — the exemption integrity.md's Check 26 describes.
+Like graph 01 and graph 27, this `member` graph declares `pshapes:ContactInfoShape` (required of every member graph by TTL-7) while carrying no *substantive* contact-info content — the only `persona:Person` individual here is the bare `:Self` the self-containment convention requires, since `service:actsFor` names her. `helpers/validate.py` re-targets `ContactInfoShape` at substantive individuals only, so that bare declaration is not treated as a contact-info profile, and the graph stays vacuously conformant — the exemption integrity.md's TTL-3 describes.
 
 #### Graph
 
@@ -107,7 +107,7 @@ Like graph 01 and graph 27, this `member` graph declares `pshapes:ContactInfoSha
 
 #### Overview
 
-This graph captures Alice's basic claim about her Arca account itself — as the Arca cell's sole `topic`, its own `subject: ":Alice_Arca_Account"` is what the cell's derived subject resolves to (see integrity.md's Check 18). Typed `serviceaccounts:ServiceAccount`, also multi-typed `cco:ent00000033` (Online Service Account), and validated by `other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape` — the same pattern the Google and ATT cells use. It records the service name, her account username, the service URI, and her password. `:Self` carries `cco:ent00000045` (holds user account) to `:Alice_Arca_Account`, closing the loop from the Person side.
+This graph captures Alice's basic claim about her Arca account itself — as the Arca cell's sole `topic`, its own `subject: ":Alice_Arca_Account"` is what the cell's derived subject resolves to (see integrity.md's YAML-4). Typed `serviceaccounts:ServiceAccount`, also multi-typed `cco:ent00000033` (Online Service Account), and validated by `other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape` — the same pattern the Google and ATT cells use. It records the service name, her account username, the service URI, and her password. `:Self` carries `cco:ent00000045` (holds user account) to `:Alice_Arca_Account`, closing the loop from the Person side.
 
 #### Graph
 

@@ -34,7 +34,7 @@ v4:
 
 #### Overview
 
-This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see Check 21), regardless of what the cell's `subject` is — here, Alice's Google account itself. Alice is both the claimant and the subject. It carries her given name, plus a minimal organization name and email, so `:Self` satisfies the `ContactInfoShape` every templated cell's `member` content is now expected to conform to (`cell:memberShape`) — no longer deliberately empty now that this requirement applies.
+This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see YAML-6), regardless of what the cell's `subject` is — here, Alice's Google account itself. Alice is both the claimant and the subject. It carries her given name, plus a minimal organization name and email, so `:Self` satisfies the `ContactInfoShape` every templated cell's `member` content is now expected to conform to (`cell:memberShape`) — no longer deliberately empty now that this requirement applies.
 
 #### Graph
 
@@ -69,7 +69,7 @@ This graph is the cell's one required `member` entry — a cell with a single `m
 
 #### Overview
 
-This graph captures Alice's basic claim about her Google account itself — just enough to back the cell's `subject: ":Alice_Google_Account"` with a real graph (see Check 22) — and, validated by `serviceaccounts:ServiceAccount`'s SHACL shape (`other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape`), identifies the service (Google), her account username (her Gmail address — the same Email designator this cell's original single graph used to carry on `:Self` directly, moved here since it's really a fact about the account, not about Alice as a person), and her account password. `:Self` is also, separately, still designated by that same Email address directly (the `:Self`-level fact this cell's `member` graph doesn't itself carry) — a person's Gmail address is both her own contact email and her Google account's username, so it's asserted once here on each individual it actually describes. `:Self` carries `cco:ent00000045` (has/holds user account) to `:Alice_Google_Account`, closing the loop from the Person side.
+This graph captures Alice's basic claim about her Google account itself — just enough to back the cell's `subject: ":Alice_Google_Account"` with a real graph (see YAML-4) — and, validated by `serviceaccounts:ServiceAccount`'s SHACL shape (`other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape`), identifies the service (Google), her account username (her Gmail address — the same Email designator this cell's original single graph used to carry on `:Self` directly, moved here since it's really a fact about the account, not about Alice as a person), and her account password. `:Self` is also, separately, still designated by that same Email address directly (the `:Self`-level fact this cell's `member` graph doesn't itself carry) — a person's Gmail address is both her own contact email and her Google account's username, so it's asserted once here on each individual it actually describes. `:Self` carries `cco:ent00000045` (has/holds user account) to `:Alice_Google_Account`, closing the loop from the Person side.
 
 #### Graph
 

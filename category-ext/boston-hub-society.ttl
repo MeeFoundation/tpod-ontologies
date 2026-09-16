@@ -29,7 +29,7 @@
                     Medical, Vehicles. A single named organization is not one of those kinds; it is
                     an instance of one. Adding it there would grow the shipped taxonomy by one
                     concept per organization anyone ever joins, and would oblige cat-templates.ttl to
-                    grow with it (integrity.md's Check 29). Neither file changes to add an extension.
+                    grow with it (integrity.md's TTL-6). Neither file changes to add an extension.
 
                     How the link into the core taxonomy is made: with skos:broadMatch, not
                     skos:broader. SKOS reserves skos:broader for hierarchy *within* one concept
@@ -41,7 +41,7 @@
                     without having to know anything else about the publisher.
 
                     Every extension concept must carry exactly one skos:broadMatch into a concept of
-                    cat:CategoryScheme; see integrity.md's Check 39, which enforces it, and
+                    cat:CategoryScheme; see integrity.md's TTL-8, which enforces it, and
                     shacl/cell-shacl.ttl's :CellShape, which no longer pins a cell:category value to
                     cat:CategoryScheme itself but still requires it to be a concept in some
                     skos:ConceptScheme."""@en .
@@ -84,7 +84,7 @@ bhscat:BostonHubSocietyTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
     rdfs:comment """The first cell:TemplateCell whose cell:memberShape is not
                     pshapes:ContactInfoShape. Every one of the 106 templates in cat-templates.ttl
                     carries that shape and nothing else, so a member graph is always validated as a
-                    generic contact-info profile whatever its category (integrity.md's Check 30).
+                    generic contact-info profile whatever its category (integrity.md's TTL-7).
                     The Boston Hub Society asks its members for considerably more than contact
                     information, on a two-page directory form, so its template names its own shape
                     instead — which is what cell:memberShape exists for.

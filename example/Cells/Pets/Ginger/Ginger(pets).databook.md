@@ -33,7 +33,7 @@ v4:
 
 #### Overview
 
-This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see Check 21), regardless of what the cell's `subject` is — here, Ginger herself. Alice is both the claimant and the subject. It carries her given name, plus a minimal organization name and email, so `:Self` satisfies the `ContactInfoShape` every templated cell's `member` content is now expected to conform to (`cell:memberShape`) — no longer deliberately empty now that this requirement applies.
+This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own category-cell tree always has `:Self` as that member (see YAML-6), regardless of what the cell's `subject` is — here, Ginger herself. Alice is both the claimant and the subject. It carries her given name, plus a minimal organization name and email, so `:Self` satisfies the `ContactInfoShape` every templated cell's `member` content is now expected to conform to (`cell:memberShape`) — no longer deliberately empty now that this requirement applies.
 
 #### Graph
 
@@ -68,7 +68,7 @@ This graph is the cell's one required `member` entry — a cell with a single `m
 
 #### Overview
 
-This graph captures Alice's basic claim about Ginger herself — just enough to back the cell's `subject: ":Ginger"` with a real graph (see Check 22) — and, validated by `pets:Pet`'s SHACL shape (`other/shacl/pets-shacl.ttl`'s `:PetShape`), identifies her name, what kind of pet she is (species — a real NCBITaxon class IRI — and breed — a real VBO class IRI, here VBO's own "Mixed Breed (Cat)" class, since Ginger isn't a purebred), her birth date (a real `xsd:date`; `pets:birthDate` also accepts a bare `xsd:gYear` when only the approximate year is known, e.g. for an adopted/rescue pet), her current body weight (a `pets:BodyWeight` individual reusing CCO's decimal-value/measurement-unit pattern, the same reification style `pets:DosageAmount` already uses), her sex, and her spay/neuter status. `:Self persona:hasPet :Ginger` closes the loop from the Person side. Ginger's actual medical care and her day-to-day care & feeding instructions live in the nested Medical and Care & Feeding cells instead; this is a minimal, standalone identification.
+This graph captures Alice's basic claim about Ginger herself — just enough to back the cell's `subject: ":Ginger"` with a real graph (see YAML-4) — and, validated by `pets:Pet`'s SHACL shape (`other/shacl/pets-shacl.ttl`'s `:PetShape`), identifies her name, what kind of pet she is (species — a real NCBITaxon class IRI — and breed — a real VBO class IRI, here VBO's own "Mixed Breed (Cat)" class, since Ginger isn't a purebred), her birth date (a real `xsd:date`; `pets:birthDate` also accepts a bare `xsd:gYear` when only the approximate year is known, e.g. for an adopted/rescue pet), her current body weight (a `pets:BodyWeight` individual reusing CCO's decimal-value/measurement-unit pattern, the same reification style `pets:DosageAmount` already uses), her sex, and her spay/neuter status. `:Self persona:hasPet :Ginger` closes the loop from the Person side. Ginger's actual medical care and her day-to-day care & feeding instructions live in the nested Medical and Care & Feeding cells instead; this is a minimal, standalone identification.
 
 #### Graph
 

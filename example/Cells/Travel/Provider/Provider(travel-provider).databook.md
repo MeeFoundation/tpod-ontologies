@@ -36,7 +36,7 @@ v4:
 
 #### Overview
 
-This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own tree of cells always has `:Self` as that member (see Check 21), regardless of what the cell's subject is. The "Provider" cell is a purely organizational category node (`cell:category: cat:TravelProvider`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TravelProviderTemplateCell` sets as `cell:memberShape`.
+This graph is the cell's one required `member` entry — a cell with a single `member` entry in the user's own tree of cells always has `:Self` as that member (see YAML-6), regardless of what the cell's subject is. The "Provider" cell is a purely organizational category node (`cell:category: cat:TravelProvider`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TravelProviderTemplateCell` sets as `cell:memberShape`.
 
 #### Graph
 
@@ -63,7 +63,7 @@ This graph is the cell's one required `member` entry — a cell with a single `m
 
 #### Overview
 
-This graph is the cell's required tool graph — required since `cat:TravelProvider`'s own `TemplateCell` declares a form tool, even though "Provider" is a purely organizational scaffold cell with no topic content of its own (the real content lives in this category's own leaf cell, Hilton, instead). Deliberately empty — no triples at all, per Check 32's own allowance — and so carries no `template:` value either, the same as every other scaffold cell's empty topic. Alice is both the claimant and the subject.
+This graph is the cell's required tool graph — required since `cat:TravelProvider`'s own `TemplateCell` declares a form tool, even though "Provider" is a purely organizational scaffold cell with no topic content of its own (the real content lives in this category's own leaf cell, Hilton, instead). Deliberately empty — no triples at all — and so carries no `template:` value either, the same as every other scaffold cell's empty topic. Alice is both the claimant and the subject.
 
 #### Graph
 

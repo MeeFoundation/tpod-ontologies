@@ -45,7 +45,7 @@
     # This repo's scaffolding mirrors it in the cell-databook's
     # filename, which carries the literal "(custom)" disambiguator;
     # SHACL can't see filenames, so that absence/filename pairing is
-    # checked in integrity.md's Check 20, not here. Now
+    # checked in integrity.md's PNG-9, not here. Now
     # constrained via sh:class skos:Concept — category.ttl's tree is a
     # SKOS concept scheme, not an OWL class hierarchy, so a legal value
     # really is rdf:type skos:Concept, no class-value punning involved
@@ -63,7 +63,7 @@
     # is the other half — that an extension concept really does carry
     # exactly one skos:broadMatch into a cat:CategoryScheme concept, so
     # the recipient's app always knows where to file an incoming cell;
-    # that is integrity.md's Check 39, which needs to dereference across
+    # that is integrity.md's TTL-8, which needs to dereference across
     # two files at once.
     sh:property [
         sh:path cell:category ;
@@ -86,7 +86,7 @@
     # legal bare tree-position-only cell with no member content in the
     # InstanceCell branch (a category node with nothing substantive to
     # say still carries a minimal stub cell:member entry, see
-    # integrity.md's Check 21) and no cell legally carries both kinds at
+    # integrity.md's YAML-6) and no cell legally carries both kinds at
     # once.
     sh:xone (
         [ sh:property [ sh:path rdf:type ; sh:hasValue cell:TemplateCell ] ]
@@ -145,7 +145,7 @@
 #  the cell's active cell:member cell:subject values — an invariant
 #  not itself SHACL-expressible (it requires dereferencing each linked
 #  graph's own cell:subject), so it is checked only by CLAUDE.md's
-#  own integrity check (Check 23), not here. There is no cell-level
+#  own integrity check (YAML-7), not here. There is no cell-level
 #  subject to constrain: cell:subject is scoped to cell:MemberGraph
 #  (:MemberGraphShape below), never asserted on a cell — a cell's own subject
 #  is derived from its tools' own cell:formTopic values, or failing those
@@ -221,7 +221,7 @@
     # rules SHACL cannot see for it (leading/trailing whitespace, a YAML
     # value that isn't a string at all, and duplicates, RDF being a set so a
     # repeated literal collapses before validation ever runs) are
-    # integrity.md's Check 36 instead. cell:serviceTag's value is a
+    # integrity.md's YAML-9 instead. cell:serviceTag's value is a
     # cell:ServiceTag node, and this block fixes only that: the node's
     # own three required parts are :ServiceTagShape's business below.
     sh:property [
@@ -252,7 +252,7 @@
 #  reverse-DNS well-formedness on the namespace, an identifier token on
 #  the key, and — now that the label has a property of its own rather than
 #  being one segment of an opaque string — no leading or trailing
-#  whitespace on the value. What stays integrity.md's Check 36 is only
+#  whitespace on the value. What stays integrity.md's YAML-9 is only
 #  what no SHACL constraint can reach: a YAML sub-value that is not a
 #  string at all (a bare 1.2 stringifies to "1.2" and passes the namespace
 #  pattern), an entry that is not a mapping, an unrecognized extra
@@ -323,7 +323,7 @@
 #
 #  cell:formGraph's real upper bound — one value per cell member, each
 #  with a distinct claimant — is a cross-property invariant SHACL can't
-#  check here; see integrity.md's Check 25.
+#  check here; see integrity.md's YAML-8.
 #################################################################
 
 :LiveToolShape
@@ -344,7 +344,7 @@
     # cannot disagree about what that thing is — and at least one
     # cell:formGraph. SHACL enforces only that minimum; the per-tool upper
     # bound, one graph per cell member each with a distinct claimant, is
-    # integrity.md's Check 25.
+    # integrity.md's YAML-8.
     sh:or (
         [ sh:not [ sh:class cell:Form ] ]
         [ sh:property [
