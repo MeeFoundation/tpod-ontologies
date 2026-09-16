@@ -13,8 +13,8 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <http://mee.foundation/ontologies/persona/shapes> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/persona/shapes/4.16.0> ;
-    dc:date "2026-09-13"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/persona/shapes/4.16.1> ;
+    dc:date "2026-09-16"^^xsd:date ;
     rdfs:label "V4's SHACL Validation Shapes"@en ;
     rdfs:comment """SHACL validation shapes for V4, an identity agent application from The Mee Foundation.
 
@@ -33,7 +33,7 @@
 
 #################################################################
 #  Person
-#  Each SinglePerson topic file contains exactly one persona:Person.
+#  Each graph validated by this shape contains exactly one persona:Person.
 #  All identity data — names, identifiers, addresses, cards — attach here.
 #################################################################
 
@@ -89,7 +89,7 @@
         sh:message "TelephoneNumber values are optional; if present and typed, they must validate."@en
     ] ;
 
-    # Optional: organization names (0..many); each topic may carry its own OrganizationName
+    # Optional: organization names (0..many); each graph may carry its own OrganizationName
     sh:property [
         sh:path <https://w3id.org/cco-domains/cco/ont00001879> ;  # designated by
         sh:qualifiedValueShape [ sh:class cco:ent00000047 ] ;  # OrganizationName
@@ -97,7 +97,7 @@
         sh:message "OrganizationName values, if present, must be of class cco:ent00000047."@en
     ] ;
 
-    # Optional: social networks (0..many); each topic may carry its own social network
+    # Optional: social networks (0..many); each graph may carry its own social network
     sh:property [
         sh:path persona:hasSocialNetwork ;
         sh:class cco:ont00001183 ;  # Social Network
@@ -357,7 +357,7 @@
 #  Health & Wellness cell (graph-17) already uses — height, eye color,
 #  and hair color, each borne directly (or via ScalpHair) by a
 #  persona:Person — with every property optional, since this is a
-#  topic-level reference to someone else's physical characteristics,
+#  form-level reference to someone else's physical characteristics,
 #  not a required profile. Self-contained (the ScalpHair/HairColor
 #  check is duplicated inline rather than deferred to
 #  :ScalpHairShape/:HairColorShape above) so it still validates fully
@@ -368,7 +368,7 @@
 :HealthWellnessShape
     a sh:NodeShape ;
     sh:targetClass persona:Person ;
-    sh:message "Health & Wellness topic: height, eye color, and hair color, all optional."@en ;
+    sh:message "Health & Wellness form: height, eye color, and hair color, all optional."@en ;
 
     # Optional: height quality (0..1)
     sh:property [
@@ -440,7 +440,7 @@
 
     # Each BFO has member part value must be EITHER a sub-group Social Network (e.g. Family,
     # Colleague, Other) OR an ordinary Person member (unified IRI for same person across
-    # topics) — not both at once.
+    # graphs) — not both at once.
     sh:property [
         sh:path <http://purl.obolibrary.org/obo/BFO_0000115> ;  # has member part
         sh:or (
@@ -458,7 +458,7 @@
 :PrimaryCarePhysicianShape
     a sh:NodeShape ;
     sh:targetClass persona:Person ;
-    sh:message "Primary Care Physician topic: an optional medical specialty."@en ;
+    sh:message "Primary Care Physician form: an optional medical specialty."@en ;
     sh:property [
         sh:path persona:specialty ;
         sh:maxCount 1 ;

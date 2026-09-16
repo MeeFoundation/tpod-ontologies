@@ -5,7 +5,7 @@ type: cell-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Cell DataBook for folder "Sophia Walker" (cell:category: cat:ImmediateFamily). It is a two-member cell — Alice (:Self) and her husband Dave — that also carries a form tool about :Sophia_Walker, Alice's daughter. Sophia has no instance of the app, so she is the cell's subject rather than one of its members: Alice added the topic manually and chose the Contact Info template (pshapes:ContactInfoShape) for it, even though cat:ImmediateFamily's own template cell declares no tool.
+  Cell DataBook for folder "Sophia Walker" (cell:category: cat:ImmediateFamily). It is a two-member cell — Alice (:Self) and her husband Dave — that also carries a form tool about :Sophia_Walker, Alice's daughter. Sophia has no instance of the app, so she is the cell's subject rather than one of its members: Alice added the tool manually and chose the Contact Info template (pshapes:ContactInfoShape) for it, even though cat:ImmediateFamily's own template cell declares no tool.
 v4:
   category: "cat:ImmediateFamily"
   creator: ":Self"

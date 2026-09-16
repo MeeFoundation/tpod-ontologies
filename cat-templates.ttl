@@ -19,10 +19,10 @@
 @base <http://mee.foundation/ontologies/cell-templates> .
 
 <http://mee.foundation/ontologies/cell-templates> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/cell-templates/4.1.2> ;
+    owl:versionIRI <http://mee.foundation/ontologies/cell-templates/4.1.3> ;
     dc:date "2026-09-16"^^xsd:date ;
     owl:imports <http://mee.foundation/ontologies/cell> ;
-    owl:versionInfo "Version 4.1.2 - a cell is instantiated into a user's tree, not as a folder; V4 persists no data in the filesystem"@en ;
+    owl:versionInfo "Version 4.1.3 - comment wording aligned on the repo-wide \"tool\" term"@en ;
     rdfs:label "Cell Templates"@en ;
     rdfs:comment """Class-level cell:Cell templates for category concepts (category.ttl's cat:CategoryScheme). Each individual here is what the app clones into a new cell when a cell of its own cell:category concept is first instantiated into a user's tree (Lazy Instantiation) — finding the template for a given category is a reverse lookup (?tc cell:category cat:X), since category.ttl carries no forward pointer of its own. Each is typed solely cell:TemplateCell, and carries cell:memberShape for the member baseline plus zero or more cell:declaresTool nodes naming the tools — a cell:Form and its governing cell:formShape — a cell of that category is created with. Most declare none: most categories have nothing structured to say beyond their member baseline, and a cell cloned from such a template can still gain tools later, chosen by the user."""@en .
 
@@ -117,7 +117,7 @@ ctpl:UserDefinedTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
                     Instantiation falls back to cloning it whenever a new cell is created with no
                     category selected. Carries only cell:memberShape
                     pshapes:ContactInfoShape — a Custom cell has no document type and no
-                    topic content of its own, only ever a contact-info view of its member(s)."""@en ;
+                    tool content of its own, only ever a contact-info view of its member(s)."""@en ;
     cell:memberShape pshapes:ContactInfoShape .
 
 #################################################################

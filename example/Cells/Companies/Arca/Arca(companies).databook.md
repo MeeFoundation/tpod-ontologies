@@ -11,7 +11,7 @@ description: >
   entry (graph-95, graph-96). Unlike :Citibank_Service and :BHS_Service, which are
   service:ServiceProvider individuals standing in for an organization Alice has a relationship with,
   a backup service is not any one member's delegate and has no service:actsFor value — it serves the
-  cell itself. The account Alice holds with Arca is the cell's topic (graph-97), the same
+  cell itself. The account Alice holds with Arca is the topic of the cell's tool (graph-97), the same
   sa:ServiceAccount pattern the Google and ATT cells already use.
 v4:
   category: "cat:Companies"
@@ -107,7 +107,7 @@ Like graph 01 and graph 27, this `member` graph declares `pshapes:ContactInfoSha
 
 #### Overview
 
-This graph captures Alice's basic claim about her Arca account itself — as the Arca cell's sole `topic`, its own `subject: ":Alice_Arca_Account"` is what the cell's derived subject resolves to (see integrity.md's YAML-4). Typed `serviceaccounts:ServiceAccount`, also multi-typed `cco:ent00000033` (Online Service Account), and validated by `other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape` — the same pattern the Google and ATT cells use. It records the service name, her account username, the service URI, and her password. `:Self` carries `cco:ent00000045` (holds user account) to `:Alice_Arca_Account`, closing the loop from the Person side.
+This graph captures Alice's basic claim about her Arca account itself — as the Arca cell's sole tool graph, its tool's own `formTopic: ":Alice_Arca_Account"` is what the cell's derived subject resolves to (see integrity.md's YAML-4). Typed `serviceaccounts:ServiceAccount`, also multi-typed `cco:ent00000033` (Online Service Account), and validated by `other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape` — the same pattern the Google and ATT cells use. It records the service name, her account username, the service URI, and her password. `:Self` carries `cco:ent00000045` (holds user account) to `:Alice_Arca_Account`, closing the loop from the Person side.
 
 #### Graph
 

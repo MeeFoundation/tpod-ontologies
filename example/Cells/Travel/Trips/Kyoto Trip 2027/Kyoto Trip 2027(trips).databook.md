@@ -55,7 +55,7 @@ v4:
 
 #### Overview
 
-This graph is one of the cell's three required `member` entries — Alice's own bare given-name claim (see YAML-6: `:Self` must be a member of every cell in the user's own tree, regardless of member count), extended with her social network link to Dave (mirroring the pattern used in graph 12's Alice–Bob connection) — this is what makes `:Dave` reachable per TTL-1, since he is otherwise referenced only via this cell's `member`/`topic`, not via a dedicated Immediate Family cell of his own (out of scope for this worked example).
+This graph is one of the cell's three required `member` entries — Alice's own bare given-name claim (see YAML-6: `:Self` must be a member of every cell in the user's own tree, regardless of member count), extended with her social network link to Dave (mirroring the pattern used in graph 12's Alice–Bob connection) — this is what makes `:Dave` reachable per TTL-1, since he is otherwise referenced only via this cell's `member`/`tool`, not via a dedicated Immediate Family cell of his own (out of scope for this worked example).
 
 #### Graph
 
@@ -157,7 +157,7 @@ This graph is the cell's third required `member` entry — Dave's own self-claim
 
 #### Overview
 
-This graph is one of the cell's three tool graphs — Alice's own basic claim identifying the trip itself, backing the cell's derived subject `:Kyoto_Trip_2027` with a real graph claimed by her directly (see YAML-4), distinct from her agent's own more substantive contribution ([graph 70](#graph-70)). Both tool graphs share the same subject but a different claimant — mirroring the Medical Appointment cell's two "Med. Appt mt." squares (see README.md's Representative Cells diagram), where one topic subject is claimed from each side.
+This graph is one of the cell's three tool graphs — Alice's own basic claim identifying the trip itself, backing the cell's derived subject `:Kyoto_Trip_2027` with a real graph claimed by her directly (see YAML-4), distinct from her agent's own more substantive contribution ([graph 70](#graph-70)). Both tool graphs share the same subject but a different claimant — mirroring the Medical Appointment cell's two "Med. Appt mt." squares (see README.md's Representative Cells diagram), where one tool's topic is claimed from each side.
 
 #### Graph
 

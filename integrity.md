@@ -486,10 +486,10 @@ def check_cell_tree_id_roots(pattern, expected_prefixes):
             errors += 1
         v4 = fm.get('v4') or {}
         entries = [e for e in as_list(v4.get('member')) if isinstance(e, dict)]
-        for tool in as_list(v4.get('tool')):          # was v4.get('topic') — a
-            if isinstance(tool, dict):                # retired key, so every tool
-                entries += [g for g in as_list(tool.get('graph'))  # graph id went
-                            if isinstance(g, dict)]   # unchecked.
+        for tool in as_list(v4.get('tool')):          # a tool's own graph ids
+            if isinstance(tool, dict):                # live one level down, in
+                entries += [g for g in as_list(tool.get('graph'))  # its own
+                            if isinstance(g, dict)]   # graph list.
         for graph in entries:
             tid = graph.get('id')
             if tid and not any(str(tid).startswith(p) for p in expected_prefixes):

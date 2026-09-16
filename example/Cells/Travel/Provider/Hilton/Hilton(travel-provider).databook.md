@@ -9,7 +9,7 @@ description: >
   for one travel provider Alice books with, nested under the generic Provider
   category node and reusing its category — the same "child cell reuses its parent's
   category" pattern Ginger/Pets and Citibank/Banking & Payments Firms already use.
-  It is a one-member cell with one member entry about :Self and one topic about
+  It is a one-member cell with one member entry about :Self and one tool graph about
   her Hilton Honors account. cat:TravelProvider's own cell:TemplateCell
   declares a form tool carrying cell:formShape sashapes:ServiceAccountShape, so
   that tool is template-driven and the cell carries it from the start.
@@ -40,7 +40,7 @@ v4:
 
 #### Overview
 
-This graph is the cell's one required `member` entry, claimed by and about `:Self`. It carries Alice's given name, satisfying the `ContactInfoShape` `ctpl:TravelProviderTemplateCell` sets as `cell:memberShape`. Everything specific to the Hilton relationship lives in the cell's `topic` graph instead (graph 84), since the member baseline is only ever a contact-info view of the cell's members.
+This graph is the cell's one required `member` entry, claimed by and about `:Self`. It carries Alice's given name, satisfying the `ContactInfoShape` `ctpl:TravelProviderTemplateCell` sets as `cell:memberShape`. Everything specific to the Hilton relationship lives in the cell's tool graph instead (graph 84), since the member baseline is only ever a contact-info view of the cell's members.
 
 #### Graph
 
@@ -67,7 +67,7 @@ This graph is the cell's one required `member` entry, claimed by and about `:Sel
 
 #### Overview
 
-This graph captures Alice's own claim about her Hilton Honors account — the cell's sole `topic`, so its `subject: ":Alice_Hilton_Account"` is what the cell's derived subject resolves to (see YAML-4). It is typed `serviceaccounts:ServiceAccount` and multi-typed `cco:ent00000033` (Online Service Account), the same pattern her Google, AT&T and Arca account graphs use, and is validated by `other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape`. Alongside the usual service name, username, service URI and password, it carries `serviceaccounts:loyaltyProgramID` — her Hilton Honors membership number, the value she quotes when booking or claiming points, distinct from the username she logs in with. It is the one example graph exercising that property; every other service-account graph here (Google, AT&T, Arca, Citibank) belongs to a provider running no loyalty program, so all of them legitimately omit it. `cat:TravelProvider`'s own `cell:TemplateCell` declares a form tool carrying `cell:formShape sashapes:ServiceAccountShape`, so this tool is template-driven rather than hand-added: [Lazy Instantiation](../../../../../app-behavior.md#lazy-instantiation) stamps its `template:` value straight from that shape, and TTL-4 checks the two agree. Its real upper bound is the cell's own member count (YAML-8) — one topic per member, each with a distinct claimant — which for this one-member cell means exactly this one. Alice is both the claimant and the account holder.
+This graph captures Alice's own claim about her Hilton Honors account — the cell's sole tool graph, so its tool's own `formTopic: ":Alice_Hilton_Account"` is what the cell's derived subject resolves to (see YAML-4). It is typed `serviceaccounts:ServiceAccount` and multi-typed `cco:ent00000033` (Online Service Account), the same pattern her Google, AT&T and Arca account graphs use, and is validated by `other/shacl/service-accounts-shacl.ttl`'s `:ServiceAccountShape`. Alongside the usual service name, username, service URI and password, it carries `serviceaccounts:loyaltyProgramID` — her Hilton Honors membership number, the value she quotes when booking or claiming points, distinct from the username she logs in with. It is the one example graph exercising that property; every other service-account graph here (Google, AT&T, Arca, Citibank) belongs to a provider running no loyalty program, so all of them legitimately omit it. `cat:TravelProvider`'s own `cell:TemplateCell` declares a form tool carrying `cell:formShape sashapes:ServiceAccountShape`, so this tool is template-driven rather than hand-added: [Lazy Instantiation](../../../../../app-behavior.md#lazy-instantiation) stamps its `template:` value straight from that shape, and TTL-4 checks the two agree. Its real upper bound is the cell's own member count (YAML-8) — one topic per member, each with a distinct claimant — which for this one-member cell means exactly this one. Alice is both the claimant and the account holder.
 
 #### Graph
 

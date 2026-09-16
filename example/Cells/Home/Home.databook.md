@@ -63,7 +63,7 @@ This graph is the cell's one required `member` entry — a cell with a single `m
 
 #### Overview
 
-This graph is the cell's required tool graph — required since `cat:Home`'s own `TemplateCell` declares a form tool, even though "Home" is a purely organizational scaffold cell with no topic content of its own (the real content lives in this category's own leaf cells, Paradise and Boston, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
+This graph is the cell's required tool graph — required since `cat:Home`'s own `TemplateCell` declares a form tool, even though "Home" is a purely organizational scaffold cell with no tool content of its own (the real content lives in this category's own leaf cells, Paradise and Boston, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
 
 #### Graph
 

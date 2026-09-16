@@ -6,7 +6,7 @@ version: 1.5.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "Boston Hub Society" (cell:category: bhscat:BostonHubSociety). It is a
-  multi-member cell with three members about :BHS_Service, :Self, and :Bob_Johnson, plus one topic
+  multi-member cell with three members about :BHS_Service, :Self, and :Bob_Johnson, plus one tool
   graph about :BHS itself — the society's own organizational profile. An o:Organization is not
   member-capable, so the society participates through :BHS_Service, the service:ServiceProvider it
   provides; both of its graphs are still claimed by :BHS itself, the party really making those
