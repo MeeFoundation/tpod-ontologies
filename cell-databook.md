@@ -36,15 +36,20 @@ the metadata about the cell itself; a cell's unstructured content sits beside it
 - **the note** — one Markdown file named after the folder (`X.md` inside the folder `X`), shown in
   the app's Note area. Naming it after its folder is the folder-note convention PKM tools such as
   Obsidian already use, which is what lets a cell tree double as a vault;
-- **the attachments** — the plain files sitting directly inside the folder, flat, like email
-  attachments. A subfolder is never one: it is either a descendant cell, holding its own DataBook,
-  or a bare pass-through directory on the way to one (integrity.md's Check 11);
+- **the attachments** — the plain files inside the folder's own `_cell-attachments` subfolder, flat,
+  like email attachments. They are the part of a cell's folder that travels when the cell is shared;
+- **the member's own private files** — every other plain file loose in the folder, and any subfolder
+  with no cell anywhere beneath it. These stay in that member's copy of the cell and never reach
+  another member. The remaining two kinds of subfolder are not the cell's content at all: a
+  descendant cell, holding its own DataBook, and a bare pass-through directory on the way to one
+  (integrity.md's Check 11);
 - **the chat** — a stream shared by the cell's members, not a file in the folder at all.
 
-None of the three is named or listed anywhere in the DataBook. There is no attachment manifest and
-no note-filename field: the note is found by its name and the attachments by reading the folder, so
-adding a file to a cell is just putting a file in that cell's folder, whether the app or the user
-does it. `c:note`, `c:attachment` and `c:chat` are documentation-only properties — described in
+None of these is named or listed anywhere in the DataBook. There is no attachment manifest and
+no note-filename field: the note is found by its name and the attachments by reading one reserved
+folder, so adding a file to a cell is just putting a file in that cell's folder — and attaching it,
+so that every member gets it, is just putting it in `_cell-attachments` instead — whether the app or
+the user does it. `c:note`, `c:attachment` and `c:chat` are documentation-only properties — described in
 README.md's [Documentation-only Properties](README.md#documentation-only-properties), declared in no
 ontology, and never written as a triple by anything (integrity.md's Check 12).
 
@@ -571,8 +576,9 @@ a chat is append-only, authored per message, potentially far larger, and read at
 often than in full.
 
 Two constraints narrow the answer. Dropping a transcript into the cell's folder as a plain file makes
-it an attachment unless something says otherwise, and puts it in the user's PKM vault — which may be
-a feature or a mess, but is not currently a choice anyone has made. And a private 1:1 thread between
+it one of the member's own private files, or an attachment if it goes in `_cell-attachments`, unless
+something says otherwise — and either way puts it in the user's PKM vault, which may be a feature
+or a mess, but is not currently a choice anyone has made. And a private 1:1 thread between
 a member and their own agent is not visible to other members
 (see [Chat Area](app-behavior.md#chat-area) in app-behavior.md), so it cannot live in shared, synced
 cell content the way the group stream can — whatever holds a cell's chat has to hold at least two
@@ -627,10 +633,14 @@ A path relative to the cell's own folder survives all three; anything anchored h
 ### How a tool's own files are told apart from the user's
 
 This follows directly from preferring option 1 above. Every plain file sitting in a cell's folder is
-currently an **attachment**, shown to the user in the Attachments area — that is the whole
-definition, and it is what makes adding a file to a cell as simple as putting a file in its folder.
-But a canvas's backing image is not something the user attached, and showing it there alongside the
-files they did attach misrepresents both. Telling the two apart needs a rule the format does not
-have: a reserved filename prefix, a subdirectory that is neither a descendant cell nor a
-pass-through, or an explicit manifest — the last of which would cost the property that adding a file
-requires no DataBook edit.
+already one of two things — an **attachment**, if it sits in `_cell-attachments`, or one of the
+member's own private files if it sits loose — and both are shown to the user in the Attachments
+area. That is the whole definition, and it is what makes adding a file to a cell as simple as putting
+a file in its folder. But a canvas's backing image is not something the user attached, nor something
+they chose to keep back, and showing it in either set alongside the files they did misrepresents
+both. Telling them apart needs a rule the format does not have: a reserved filename prefix, a second
+reserved subdirectory beside `_cell-attachments`, or an explicit manifest — the last of which would
+cost the property that adding a file requires no DataBook edit. `_cell-attachments` is a precedent
+for the second, being exactly a subdirectory that is neither a descendant cell nor a pass-through,
+but it does not settle the question: a tool's own files are neither the cell's attachments nor the
+member's private files, so a third disposition is still needed.
