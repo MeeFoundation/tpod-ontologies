@@ -4,7 +4,7 @@ This file continues [README.md](README.md), which describes the Category, Cell, 
 
 ## Illustrative Example: Alice
 
-This section describes the local dataset for a hypothetical user, Alice Walker. Alice's cells — each a folder holding exactly one cell DataBook file — live in a tree of cells rooted at `example/Cells/`. Every mention of "Self" in the following is a reference to the user, Alice.
+This section describes the local dataset for a hypothetical user, Alice Walker. Alice's cells — each a folder marked as a cell by the `_cell-attachments` folder inside it, and carrying a cell DataBook file as this repo's [development scaffolding](cell-databook.md#development-scaffolding) — live in a tree of cells rooted at `example/Cells/`. Every mention of "Self" in the following is a reference to the user, Alice.
 
 ### Bob and Fred
 

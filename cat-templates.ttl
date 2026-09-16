@@ -19,10 +19,10 @@
 @base <http://mee.foundation/ontologies/cell-templates> .
 
 <http://mee.foundation/ontologies/cell-templates> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/cell-templates/4.1.0> ;
-    dc:date "2026-09-13"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/cell-templates/4.1.1> ;
+    dc:date "2026-09-15"^^xsd:date ;
     owl:imports <http://mee.foundation/ontologies/cell> ;
-    owl:versionInfo "Version 4.1.0 - each template declares, via cell:declaresTool, the tools a cell of its category is created with"@en ;
+    owl:versionInfo "Version 4.1.1 - a category-less cell is identified by carrying no category value, not by its scaffolding filename"@en ;
     rdfs:label "Cell Templates"@en ;
     rdfs:comment """Class-level cell:Cell templates for category concepts (category.ttl's cat:CategoryScheme). Each individual here is what the app clones into a new cell when a folder representing its own cell:category concept is first instantiated into a user's tree (Lazy Instantiation) — finding the template for a given category is a reverse lookup (?tc cell:category cat:X), since category.ttl carries no forward pointer of its own. Each is typed solely cell:TemplateCell, and carries cell:memberShape for the member baseline plus zero or more cell:declaresTool nodes naming the tools — a cell:Form and its governing cell:formShape — a cell of that category is created with. Most declare none: most categories have nothing structured to say beyond their member baseline, and a cell cloned from such a template can still gain tools later, chosen by the user."""@en .
 
@@ -108,8 +108,9 @@ ctpl:UserDefinedTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
     rdfs:label "User-Defined (No Category) Template Cell"@en ;
     rdfs:comment """The one cell:TemplateCell with no cell:category value at all — for a cell the
                     user creates without picking any existing category concept (the Custom/
-                    UserDefined case, identified by its cell-databook filename's (custom)
-                    disambiguator; see the Cell DataBook Filename Convention). Since it has no
+                    UserDefined case, identified by the cell carrying no category value
+                    at all; this repo's scaffolding mirrors it in the cell-databook
+                    filename's (custom) disambiguator). Since it has no
                     cell:category, it isn't reachable by the usual ?tc cell:category cat:X
                     reverse lookup every other template cell uses — it's found instead as the
                     unique cell:TemplateCell carrying no cell:category value, and Lazy

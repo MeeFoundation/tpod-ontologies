@@ -1,12 +1,40 @@
 # Cell DataBook File Format
 
+## Development Scaffolding
+
+**This file specifies an artifact that will not exist on disk once the v4 app ships.** The app stores
+a cell's structured content — everything this document describes: the frontmatter, the `v4:` block,
+and the graphs — internally, not as a file in the cell's folder. A running v4 filesystem contains no
+`.databook.md` file anywhere.
+
+The app does not exist yet, and `example/Cells/` is how this project carries, validates and diagrams
+real cell content in the meantime. So the DataBook lives on disk here, as **development
+scaffolding**: three helpers read those files (`helpers/validate.py`, `helpers/yaml-to-rdf.py` and
+`helpers/extract-all.py` discover them by globbing `*.databook.md`; `helpers/extract-graph.py` and
+`helpers/draw.py` take one as an argument), and seventeen of integrity.md's checks do too. When the
+app ships, all of that has to move to whatever the app exposes instead.
+
+Everything below therefore describes the repo's filesystem, not a user's. Where the two differ, this
+document is the one to read; every other file in the project describes the runtime filesystem and
+points back here. Two differences are worth naming up front, because they are the ones that mislead:
+
+- **This file is not what makes its folder a cell.** At runtime the marker is the cell's
+  `_cell-attachments` folder — see [Filesystem Persistence](app-behavior.md#filesystem-persistence)
+  in app-behavior.md. In this repo both markers are present and integrity.md's Check 11 requires them
+  to agree, which is what keeps the scaffolding from drifting away from the tree it represents.
+- **The [Filename Convention](#filename-convention) below is scaffolding-only.** At runtime there is
+  no file, so there is no filename, and nothing depends on one.
+
+What does not change when the app ships: the cell's folder, its note, its `_cell-attachments` folder,
+its attachments and the member's own private files all stay exactly where they are on disk.
+
+## What a Cell DataBook Is
+
 A **cell DataBook** is the file that carries a cell's structured content. It is a
 [DataBook](https://github.com/w3c-cg/holon/tree/main/architectures/databook) — a Markdown file with
-YAML frontmatter, extension `.databook.md` — and it is what makes its folder a cell: a folder
-holding exactly one cell DataBook is a cell, and a folder holding none is a plain filesystem folder,
-not a cell at all, even when cells of its own sit further down. See
-[Filesystem Persistence](app-behavior.md#filesystem-persistence) in app-behavior.md for how the app
-persists a cell as a folder.
+YAML frontmatter, extension `.databook.md` — sitting directly inside the folder of the cell whose
+content it carries. See [Filesystem Persistence](app-behavior.md#filesystem-persistence) in
+app-behavior.md for how the app persists a cell as a folder, and what marks one.
 
 One cell DataBook carries three things:
 
@@ -28,7 +56,9 @@ folder currently sits; a graph's containing cell is simply wherever its entry ph
 That is what makes moving or renaming a folder a pure filesystem operation with nothing in any file
 to update, and what lets two members of a shared cell each file it wherever they like in their own
 tree without touching content the other sees. It is also why two cells can never share a folder: a
-file sitting in it would be ambiguously part of both.
+file sitting in it would be ambiguously part of both. At runtime that is not merely forbidden but
+structurally impossible, the marker being a folder of one fixed reserved name, of which a directory
+can hold only one.
 
 **The rest of a cell's content is not in this file.** The DataBook holds the structured content and
 the metadata about the cell itself; a cell's unstructured content sits beside it:
@@ -42,9 +72,10 @@ the metadata about the cell itself; a cell's unstructured content sits beside it
 - **the member's own private files** — every other plain file loose in the folder, and any subfolder
   with no cell anywhere beneath it. These stay in that member's copy of the cell and never reach
   another member. The remaining two kinds of subfolder are not the cell's content at all: a
-  descendant cell, holding its own DataBook, and a bare pass-through directory on the way to one
-  (integrity.md's Check 11);
-- **the chat** — a stream shared by the cell's members, not a file in the folder at all.
+  descendant cell, holding its own `_cell-attachments` folder, and a bare pass-through directory on
+  the way to one (integrity.md's Check 11);
+- **the chat** — a stream shared by the cell's members, not a file in the folder at all; like this
+  file's own content, it lives inside the app.
 
 None of these is named or listed anywhere in the DataBook. There is no attachment manifest and
 no note-filename field: the note is found by its name and the attachments by reading one reserved
@@ -95,6 +126,10 @@ keeps a proposed change honest is that [integrity.md](integrity.md)'s checks and
 
 ## Filename Convention
 
+**Scaffolding only.** At runtime there is no file and so no filename; nothing in a running v4
+depends on any of this section. It governs the DataBooks in this repo, and it is what integrity.md's
+Checks 11, 19 and 20 read.
+
 Cell-databook filenames follow (there is no separate category-databook file — a folder's sole
 DataBook is its cell-databook, see [Cell/Category split](CLAUDE.md#key-architectural-patterns)):
 
@@ -134,9 +169,12 @@ derived from the folder name either — see [`id`](#cell-id) below.
 
 **UserDefined folders — `<catType>` is the literal `custom`**: a cell may legally carry no
 `c:category` at all — this is the UserDefined category, for a cell the user created without picking
-any existing category concept. Since there is no category concept to kebab-case into `<catType>`,
-the filename uses the fixed literal string `custom` in its place, e.g. a folder named `Friends` with
-no category is `Friends(custom).databook.md`. The compression rule below still applies verbatim on
+any existing category concept. What identifies such a cell is simply that it carries no `category`
+value; the filename literal below is this repo's way of making that visible on disk, not the test
+itself. Since there is no category concept to kebab-case into `<catType>`, the filename uses the
+fixed literal string `custom` in its place, e.g. a folder named `Friends` with no category is
+`Friends(custom).databook.md`. The two must always agree — no `v4.category` iff a `(custom)`
+filename — which is what integrity.md's Check 20 enforces in both directions. The compression rule below still applies verbatim on
 top of this (a folder literally named "Custom" would compress to `Custom.databook.md`, though no
 real example does this) — `custom` is just an ordinary `<catType>` value from the filename's point
 of view, it just happens to never come from kebab-casing a `skos:prefLabel`.
@@ -233,9 +271,10 @@ the one exception, a bare two-member cell, whose name is instead independent per
 
 ### `type`
 
-Always the literal `cell-databook` — the only DataBook type in a user's own instance tree, which is
-what lets the folder ownership boundary rule identify a cell by the mere presence of a
-`*.databook.md` file without needing any further marker. It is also the tooling's file filter: both
+Always the literal `cell-databook` — the only DataBook type in this repo's instance tree, so no
+`-cell` token is needed to tell one DataBook kind from another. It does not identify a cell: that is
+the `_cell-attachments` folder's job (see [Filesystem Persistence](app-behavior.md#filesystem-persistence)
+in app-behavior.md). It is also the tooling's file filter: both
 `helpers/yaml-to-rdf.py` and `helpers/validate.py` skip any DataBook whose `type` is anything else,
 so a wrong value silently drops the cell from RDF synthesis and validation alike rather than
 raising. No integrity check asserts the value.
@@ -569,23 +608,28 @@ omission.
 
 ### Where chat content goes
 
-Every cell has one chat stream, always — `c:chat`, 1..1, present even when empty — and nothing
-anywhere says where it is stored. It is not in the DataBook, and unlike the note and the attachments
-it has no place in the folder either: it is the one piece of a cell's content with no specified
-storage at all. It is also the piece least like the others. A note is one document that is rewritten;
-a chat is append-only, authored per message, potentially far larger, and read at its tail far more
-often than in full.
+Every cell has one chat stream, always — `c:chat`, 1..1, present even when empty — and it lives
+inside the app, alongside the content this document specifies. That answers the question this section
+used to leave open. It was open because chat had no place in the folder, unlike the note and the
+attachments, and no place in the DataBook either, leaving it the one piece of a cell's content with
+no specified storage at all. Once a cell's structured content is app-internal rather than a file,
+chat simply goes where that content goes, and the reasons it never fit the folder stop mattering.
 
-Two constraints narrow the answer. Dropping a transcript into the cell's folder as a plain file makes
-it one of the member's own private files, or an attachment if it goes in `_cell-attachments`, unless
-something says otherwise — and either way puts it in the user's PKM vault, which may be a feature
-or a mess, but is not currently a choice anyone has made. And a private 1:1 thread between
-a member and their own agent is not visible to other members
-(see [Chat Area](app-behavior.md#chat-area) in app-behavior.md), so it cannot live in shared, synced
-cell content the way the group stream can — whatever holds a cell's chat has to hold at least two
-things with different propagation rules. A cell already has one piece of content that does not
-propagate on a share, `c:serviceTag`, so the precedent exists; what is new is that here the split
-runs *within* one feature rather than between two properties.
+Two constraints shaped that answer and still bound the app's own design. A chat is unlike the other
+content: a note is one document that is rewritten, while a chat is append-only, authored per message,
+potentially far larger, and read at its tail far more often than in full. And a private 1:1 thread
+between a member and their own agent is not visible to other members (see
+[Chat Area](app-behavior.md#chat-area) in app-behavior.md), so it cannot live in shared, synced cell
+content the way the group stream can — whatever holds a cell's chat has to hold at least two things
+with different propagation rules. A cell already has two pieces of content that do not propagate on a
+share, `c:serviceTag` and a member's own private files, so the precedent exists; what is particular
+here is that the split runs *within* one feature rather than between two properties.
+
+What is genuinely still open is the storage format the app uses for it, which is an app-internal
+question this document does not reach. Dropping a transcript into the cell's folder as a plain file
+is no longer one of the options: it would make the transcript one of the member's own private files,
+or an attachment if it went in `_cell-attachments`, and put it in the user's PKM vault — which may be
+a feature or a mess, but is not a choice anyone has made.
 
 ### Where a non-form tool's content goes
 
