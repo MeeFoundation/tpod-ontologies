@@ -15,9 +15,11 @@ documented in cell-databook.md's "The `v4` Block" section.
 There is no category-side synthesis here at all — category.ttl 1.31.0
 deleted cat:Folder and its subclasses cat:CategoryDefined/cat:UserDefined
 outright, along with cat:child/cat:cell/cat:category/cat:catType/cat:label.
-A folder's tree position is now purely a filesystem fact (which cell-databook
-file physically lives in it), with no RDF individual representing the folder
-at all. The only remaining RDF-level record of a cell's classification is
+A cell's tree position is not modelled at all: at runtime it is per-member
+state in that member's own store, and in this repo's scaffolding it is simply
+which folder the cell-databook physically lives in, with no RDF individual
+representing either. The only remaining RDF-level record of a cell's
+classification is
 cell:category (cell.ttl 3.20.0), read directly from the explicit `v4.category`
 YAML field below — never derived from filename-parsing.
 

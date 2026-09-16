@@ -12,10 +12,10 @@
 @base <http://mee.foundation/ontologies/cell> .
 
 <http://mee.foundation/ontologies/cell> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/cell/9.4.0> ;
-    dc:date "2026-09-15"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/cell/9.5.0> ;
+    dc:date "2026-09-16"^^xsd:date ;
     rdfs:label "Cell Ontology"@en ;
-    rdfs:comment """Cell Ontology for the V4 App. A cell is the atomic unit of the user's tree: a filesystem folder marked as a cell by the _cell-attachments folder directly inside it. Defines cell:Cell — the self-contained content facet of a cell, carried by that cell-databook file's own triples. cell:Cell stores no property recording the cell's own tree position: that position is simply whichever folder the cell-databook currently lives in, not a fact this RDF individual needs to carry. cell:Cell splits into two disjoint kinds: cell:TemplateCell (a reusable, class-level template) and cell:InstanceCell (an actual cell instantiated in a user's own tree) — a cell is always exactly one of the two, never both. There are no further kinds of cell: an instance cell that carries anything beyond its cell:member baseline carries it as a cell:Tool — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI (cell:Form, cell:Calendar, cell:Canvas, cell:Map), zero or more per cell, rather than in a subclass of its own. cell:InstanceCell also carries the two tag properties — cell:userTag, a plain xsd:string, and cell:serviceTag, whose values are cell:ServiceTag nodes (also defined here) carrying a namespace, a key and a label — each zero or more values, a retrieval dimension orthogonal to cell:category's single filing hint. Also defines the graph-DataBook classes cell:member/cell:formGraph link to — cell:Graph, its abstract cell:CGraph subclass, and that class's two disjoint leaves cell:MemberGraph (cell:member's range) and cell:FormGraph (cell:formGraph's range) — along with their cell:shape/cell:claimant/cell:subject annotation properties, since a graph DataBook only ever exists to be linked from a cell. cell:MemberGraph and cell:FormGraph are split apart because a cell:subject value always maps to a PDN node subject identity while a cell:formTopic value — the tool-level statement of what the tool's content is about — need not."""@en .
+    rdfs:comment """Cell Ontology for the V4 App. A cell is the atomic unit of the user's tree, a unit the app manages and holds entirely in its own store — V4 persists nothing in the user's filesystem (see storage.md). Defines cell:Cell — the self-contained content facet of a cell. cell:Cell stores no property recording the cell's own tree position: a cell's parent is per-member state in that member's own store, never shared content, and not a fact this RDF individual needs to carry. cell:Cell splits into two disjoint kinds: cell:TemplateCell (a reusable, class-level template) and cell:InstanceCell (an actual cell instantiated in a user's own tree) — a cell is always exactly one of the two, never both. There are no further kinds of cell: an instance cell that carries anything beyond its cell:member baseline carries it as a cell:Tool — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI (cell:Form, cell:Calendar, cell:Canvas, cell:Map), zero or more per cell, rather than in a subclass of its own. cell:InstanceCell also carries the two tag properties — cell:userTag, a plain xsd:string, and cell:serviceTag, whose values are cell:ServiceTag nodes (also defined here) carrying a namespace, a key and a label — each zero or more values, a retrieval dimension orthogonal to cell:category's single filing hint. Also defines the graph-DataBook classes cell:member/cell:formGraph link to — cell:Graph, its abstract cell:CGraph subclass, and that class's two disjoint leaves cell:MemberGraph (cell:member's range) and cell:FormGraph (cell:formGraph's range) — along with their cell:shape/cell:claimant/cell:subject annotation properties, since a graph DataBook only ever exists to be linked from a cell. cell:MemberGraph and cell:FormGraph are split apart because a cell:subject value always maps to a PDN node subject identity while a cell:formTopic value — the tool-level statement of what the tool's content is about — need not."""@en .
 
 
 #################################################################
@@ -31,31 +31,22 @@ cell:abstract rdf:type owl:AnnotationProperty ;
 #################################################################
 #    Cell
 #
-#    A cell is the atomic unit of the user's tree: a filesystem folder
-#    marked as a cell by the _cell-attachments folder directly inside
-#    it — cells nest inside cells, forming the tree. cell:Cell is the
-#    self-contained content record the app holds for that folder. It
-#    stores no property recording the cell's own tree position: that
-#    position is simply whichever folder carries the marker, not a
-#    fact this individual needs to carry — moving the folder is a
-#    pure filesystem operation, asserting nothing new on the cell
-#    itself.
-#    The folder<->cell relationship is strictly one-to-one, not
-#    many-to-one: a folder either IS a cell (it holds a
-#    _cell-attachments folder) or it is a plain filesystem folder
-#    that is not a cell at all, possibly with nested cells of its own
-#    further down. There is no way for two cell:Cell individuals to
-#    share one folder: a cell is self-contained, and letting two
-#    cells share a folder would risk a single file in that folder
-#    becoming ambiguously part of both — and since the marker is a
-#    folder of one fixed reserved name, of which a directory can hold
-#    only one, that is structurally impossible rather than merely
-#    forbidden.
-#    A cell's structured content lives inside the app, not in the
-#    folder. This repo carries it on disk instead, as a cell-databook
-#    file in each cell's folder; that file is development scaffolding
-#    and will not exist in a running v4 filesystem (cell-databook.md's
-#    Development Scaffolding section).
+#    A cell is the atomic unit of the user's tree — cells nest inside
+#    cells, forming the tree. cell:Cell is the self-contained content
+#    record the app holds for one. It stores no property recording
+#    the cell's own tree position: a cell's parent is per-member
+#    state in that member's own store, never shared content, which is
+#    what lets two members of a shared cell each file it wherever
+#    they like without touching what the other sees.
+#    A cell's content lives entirely inside the app, in a protected
+#    store, encrypted at rest — V4 persists nothing in the user's
+#    filesystem: no folder stands for a cell, no file holds its note,
+#    and no directory holds its attachments (storage.md).
+#    This repo carries the example tree on disk instead, as one
+#    folder per cell holding a cell-databook file, a note file, a
+#    _cell-attachments folder and the member's own private files. All
+#    of that is development scaffolding and none of it exists in a
+#    running v4 (cell-databook.md's Development Scaffolding section).
 #
 #    cell:Cell itself carries only what's common to every cell
 #    regardless of facet: inherent classification (cell:category).
@@ -79,7 +70,7 @@ cell:abstract rdf:type owl:AnnotationProperty ;
 cell:Cell rdf:type owl:Class ;
     cell:abstract true ;
     rdfs:label "Cell"@en ;
-    rdfs:comment """Superclass of every cell individual, carrying only what's common regardless of kind: inherent classification (cell:category). cell:Cell — the RDF content facet of a cell — stores no property recording its own tree position: a cell's position is simply whichever folder it (folder + this cell-databook) currently occupies, and moving that folder is a pure filesystem operation requiring no triple to change, which is what keeps a cell robust under PDN sync. cell:category does not violate this: its range is skos:Concept — a category concept scoped to cat:CategoryScheme (category.ttl), not a tree position — so it records what kind of thing the cell is, never where it currently lives. Creator and ownership metadata (cell:creator, cell:owner), the tag properties (cell:userTag, cell:serviceTag), the graph link cell:member and the tool link cell:tool live on the cell:InstanceCell kind, not directly here — tags in particular are deliberately not hoisted up to cell:Cell the way cell:category is, since a cell:TemplateCell seeds none; validation shape is not stored on either kind, only derived (see cell:InstanceCell's own comment)."""@en .
+    rdfs:comment """Superclass of every cell individual, carrying only what's common regardless of kind: inherent classification (cell:category). cell:Cell — the RDF content facet of a cell — stores no property recording its own tree position: a cell's parent is per-member state in that member's own store rather than shared content, so refiling a cell requires no triple to change, which is what keeps a cell robust under PDN sync. cell:category does not violate this: its range is skos:Concept — a category concept scoped to cat:CategoryScheme (category.ttl), not a tree position — so it records what kind of thing the cell is, never where it currently lives. Creator and ownership metadata (cell:creator, cell:owner), the tag properties (cell:userTag, cell:serviceTag), the graph link cell:member and the tool link cell:tool live on the cell:InstanceCell kind, not directly here — tags in particular are deliberately not hoisted up to cell:Cell the way cell:category is, since a cell:TemplateCell seeds none; validation shape is not stored on either kind, only derived (see cell:InstanceCell's own comment)."""@en .
 
 
 #################################################################
@@ -629,66 +620,28 @@ cell:member rdf:type owl:ObjectProperty ;
 
 
 #################################################################
-#    Cell Folders and Content (the Attachments Tab)
+#    Cell Content (the Attachments Tab)
 #
-#    A cell IS its folder — not a folder and a separately-associated
-#    record. Since a folder carries at most one _cell-attachments
-#    marker (see the Cell section above), this folder<->cell mapping
-#    is always unambiguous, with nothing left to store, detect
-#    divergence in, or keep in sync. cell:Cell itself still stores no
-#    path back to this folder — there is no RDF individual
-#    representing the folder as something separate from the cell to
-#    point at.
+#    A cell's content lives entirely inside the app, in a protected
+#    store, encrypted at rest. V4 persists nothing in the user's
+#    filesystem, so there is no folder standing for a cell and
+#    nothing for cell:Cell to point back at; see storage.md.
 #
 #    A cell's attachments, shown in the app's Attachments tab, are
-#    the plain files inside its own _cell-attachments folder: a
-#    reserved subfolder sitting directly inside the cell's own
-#    folder, exactly one per cell, holding plain files only — never
-#    a subfolder and never a cell-databook. They are the part of a
-#    cell's folder that travels with it when it is shared, and they
-#    are flat, like email attachments, on disk and in the model
-#    alike.
-#    Every OTHER plain file loose in the cell's own folder is that
-#    member's own private file: it stays in their copy of the cell
-#    and never reaches another member. Two such files keep special
-#    roles of their own rather than being private content:
-#      1. the cell-databook file itself; and
-#      2. the one file named X.md (matching the folder's own name X),
-#         recognized by convention as the folder note for that cell —
-#         matching the Obsidian Folder Notes plugin convention, and
-#         directly compatible with other PKM folder-note tools such
-#         as Logseq or Foam.
-#    The folder is named for the cell rather than for sharing
-#    because most cells have a single member and share nothing at
-#    all; there the distinction is inert but still real, recording
-#    what would travel if the cell were ever shared later. No cell
-#    may be named _cell-attachments. Every cell has exactly one,
-#    created with the cell and never removed, so an empty one is the
-#    ordinary case rather than an anomaly — it is what a cell with
-#    no attachments looks like, and it gives someone working outside
-#    the app a drop target already in place, with no reserved name
-#    to type correctly. Hidden files — any whose name begins with a
-#    dot — are neither attachments nor private files wherever they
-#    sit: the app passes over them as filesystem noise (.DS_Store, a
-#    version-control placeholder) and never shows them.
-#    A subfolder found directly inside a cell's own folder is
-#    accordingly one of four things: the reserved _cell-attachments
-#    folder above; a descendant cell (it directly contains a
-#    _cell-attachments folder of its own — a separate, distinct node
-#    in the tree of cells, never part of its ancestor's own content;
-#    see the cell ownership boundary rule below); a bare pass-through
-#    directory with no marker of its own, existing only to reach a
-#    descendant cell nested deeper still (integrity.md's Check 11);
-#    or private content, a subfolder with no cell anywhere beneath
-#    it, which the member may nest however they like — the flatness
-#    above is about what travels, and nothing that stays put needs
-#    it. The middle two are never shown in the Attachments tab; the
-#    first and last both are, the private files marked as such.
-#    (2) above is a naming convention only, discovered by looking
-#    inside the folder — it is not tracked by a separate ontology
-#    property, and neither is the reserved folder name. (1) is not
-#    part of a running v4 filesystem at all: it is this repo's
-#    development scaffolding.
+#    the files every member of the cell receives. They are the part
+#    of a cell's content that travels with it when it is shared, and
+#    they are flat, like email attachments.
+#    A file a member adds to the cell without attaching it is
+#    instead their own private file: it stays in their copy of the
+#    cell and never reaches another member. Both sets are shown in
+#    the Attachments tab, the private ones marked as such. The
+#    distinction is about propagation and nothing else, which is why
+#    it is still real for a single-member cell that shares nothing:
+#    it records what would travel if the cell were ever shared
+#    later. A descendant cell is never part of its ancestor's own
+#    content, even though it sits beneath it in the tree.
+#    The cell's note keeps its own separate role and its own Note
+#    area, and is neither an attachment nor a private file.
 #    The diagram (images/cell-ontology/cell.png)
 #    additionally sketches cell:note, cell:attachment, and cell:chat
 #    as arrows off Cell for documentation purposes only — none of the
@@ -696,53 +649,35 @@ cell:member rdf:type owl:ObjectProperty ;
 #    reified as a triple in any real graph (see integrity.md's Check 12
 #    and README.md's Documentation-only Properties section).
 #
-#    Cell ownership boundary: a subfolder is a separate, descendant
-#    cell of its own — excluded from its ancestor's Attachments-tab
-#    content — if and only if it directly contains a
-#    _cell-attachments folder. Every cell carries one, empty or not,
-#    serving double duty as both the cell's attachments and its
-#    tree-node marker; no other marker is needed. This makes
-#    ownership resolvable one folder at a time — check what's
-#    directly inside a subfolder, not the whole tree of cells — and
-#    robust to the user moving folders around outside the app, since
-#    the marker travels inside whatever folder it's in; there is no
-#    separately recorded path to reconcile against. Telling a
-#    pass-through directory from a private-content one is the one
-#    judgment above that does
-#    need a look further down, but it leaves this rule intact: the
-#    cell/not-cell test that decides tree structure stays strictly
-#    local, and the deeper look only picks a label between two kinds
-#    of not-a-cell.
-#
-#    Because a cell's own note and its other files share one folder,
-#    the single Cells root can be opened directly as a PKM vault
-#    (e.g. an Obsidian vault) without hiding anything from it: modern
-#    PKM tools handle non-Markdown files natively, so there is no need
-#    for a second, notes-only hierarchy kept separate from arbitrary
-#    files.
-#
-#    A folder note's Markdown content may link to any other note
-#    anywhere in the user's own tree of cells, not just within its own
-#    cell's folder — the same vault-wide linking a PKM tool like
-#    Obsidian supports. When a cell is shared, the note's own text
-#    (including any links it contains) travels with it like any other
-#    cell content, but a link's target does not: if that target lies
-#    outside this cell's own boundary (i.e. it isn't part of this
-#    cell's own Attachments-tab content or its own folder note), the
-#    recipient's tree may not contain that other cell at all, or may
-#    organize it completely differently, so the link simply won't
-#    resolve on their side. This is an accepted limitation of
-#    cross-cell linking, not a defect — nothing in this ontology
-#    tracks link targets or attempts to keep them resolvable across a
-#    share, consistent with the "no ontology property" treatment of
-#    the folder note itself above. That boundary has an inner
+#    A note's Markdown content may link to any other note anywhere in
+#    the user's own tree of cells, not just within its own cell — the
+#    same tree-wide linking a PKM tool supports. When a cell is
+#    shared, the note's own text (including any links it contains)
+#    travels with it like any other cell content, but a link's target
+#    does not: if that target lies outside this cell's own boundary
+#    (i.e. it isn't part of this cell's own Attachments-tab content or
+#    its own note), the recipient's tree may not contain that other
+#    cell at all, or may organize it completely differently, so the
+#    link simply won't resolve on their side. This is an accepted
+#    limitation of cross-cell linking, not a defect — nothing in this
+#    ontology tracks link targets or attempts to keep them resolvable
+#    across a share, consistent with the "no ontology property"
+#    treatment of the note itself above. That boundary has an inner
 #    edge as well: a link whose target is one of the member's own
 #    private files resolves in their own copy and fails closed on
 #    every other member's side, since a private file never travels.
+#
+#    This repo carries all of the above on disk as development
+#    scaffolding — one folder per cell, holding a cell-databook file,
+#    a note file named after the folder, a reserved _cell-attachments
+#    folder and the member's own private files loose beside it — which
+#    is where the folder-shaped vocabulary in this project's checks
+#    and helper scripts comes from. None of it exists in a running v4
+#    (cell-databook.md's Development Scaffolding section).
 #################################################################
 
 cell:category rdf:type owl:ObjectProperty ;
     rdfs:domain cell:Cell ;
     rdfs:range skos:Concept ;
     rdfs:label "category"@en ;
-    rdfs:comment """The category concept this cell was originally instantiated as — a genuine skos:Concept individual (e.g. cat:Others, cat:BankingPayments) scoped to a concept scheme via its own skos:inScheme value, not a string and not a class — category.ttl's tree is a SKOS concept scheme (skos:broader edges), not an OWL class hierarchy, so no class-value punning is involved here (contrast other/vehicles.ttl's vehicles:hasVehicleType, which does pun a real class hierarchy). Domain cell:Cell (not narrowed to cell:InstanceCell) deliberately, since cell:category is asserted on both kinds: for one of the templated concepts (cat:Passport/cat:BirthCertificate/cat:DriversLicense/cat:MedicalAppointment/cat:Vehicles/cat:Pets/cat:PetsMedical), the same category concept is asserted both on the cell:TemplateCell that was cloned (cat-templates.ttl) and on the resulting cell:InstanceCell clone; for any other cell, it is simply the category the cell was created to represent, asserted directly with no template involved. At most one value (0..1), on any cell:Cell regardless of kind, matching cell.png's category arrow off Cell. Absent exactly when the cell is of the UserDefined category — a category folder the user created without picking any existing category concept, identified precisely by the cell carrying no category value at all, not by a vague 'no canonical counterpart' judgment call. This repo's scaffolding makes that visible on disk by giving such a cell's cell-databook the literal (custom) disambiguator in place of a category-derived <catType> (e.g. Friends(custom).databook.md); the two must agree, but the filename is a scaffolding convention rather than the test. This is a different fact from whether the folder's own name matches its category's skos:prefLabel verbatim — see the green ('Predefined')/purple ('UserDefined') folder-name-text convention documented in app-behavior.md and integrity.md's Check 15/10j, which only applies when a category IS present; a UserDefined (no-category) cell's name is trivially always 'UserDefined' text too, since there is no label to possibly match. This value is fixed at the point the cell was created — it is not re-derived from the folder's current name, so it needs no update if the folder is later moved or renamed, keeping a cell:Cell robust under PDN sync exactly as its own class comment already promises (no stored tree-position property). That scheme is normally cat:CategoryScheme (category.ttl), the app's own curated taxonomy. It may instead be a category extension's own scheme (category-ext/), published by an organization for a category the app's taxonomy does not define — bhscat:BostonHubSociety, say. An extension concept is linked to the core taxonomy with skos:broadMatch rather than skos:broader, SKOS reserving the latter for hierarchy within a single scheme and providing the skos:mappingRelation family for links between schemes; every extension concept carries exactly one such broadMatch into a cat:CategoryScheme concept (integrity.md's Check 39), so a recipient whose app lacks the extension can still file an incoming cell under the core category it maps to. Purpose: when a cell is shared with another PDN member, the recipient's app can use this value, if present, as a hint for which folder in the recipient's own tree the incoming cell should be filed under — a snapshot of the sender's original classification, robust to either side's tree being organized differently. A folder's own filesystem position has no RDF representation at all — UserDefined is a filename/display convention only, never a category concept. Range skos:Concept is referenced by name without owl:imports, the same by-name pattern already used for cat:CategoryScheme/category.ttl's own concepts and mirroring cell:creator's identical pattern for p:Person (persona.ttl)."""@en .
+    rdfs:comment """The category concept this cell was originally instantiated as — a genuine skos:Concept individual (e.g. cat:Others, cat:BankingPayments) scoped to a concept scheme via its own skos:inScheme value, not a string and not a class — category.ttl's tree is a SKOS concept scheme (skos:broader edges), not an OWL class hierarchy, so no class-value punning is involved here (contrast other/vehicles.ttl's vehicles:hasVehicleType, which does pun a real class hierarchy). Domain cell:Cell (not narrowed to cell:InstanceCell) deliberately, since cell:category is asserted on both kinds: for one of the templated concepts (cat:Passport/cat:BirthCertificate/cat:DriversLicense/cat:MedicalAppointment/cat:Vehicles/cat:Pets/cat:PetsMedical), the same category concept is asserted both on the cell:TemplateCell that was cloned (cat-templates.ttl) and on the resulting cell:InstanceCell clone; for any other cell, it is simply the category the cell was created to represent, asserted directly with no template involved. At most one value (0..1), on any cell:Cell regardless of kind, matching cell.png's category arrow off Cell. Absent exactly when the cell is of the UserDefined category — a cell the user created without picking any existing category concept, identified precisely by the cell carrying no category value at all, not by a vague 'no canonical counterpart' judgment call. This repo's scaffolding makes that visible on disk by giving such a cell's cell-databook the literal (custom) disambiguator in place of a category-derived <catType> (e.g. Friends(custom).databook.md); the two must agree, but the filename is a scaffolding convention rather than the test. This is a different fact from whether the cell's own name matches its category's skos:prefLabel verbatim — see the green ('Predefined')/black ('User-defined') name-text convention documented in app-behavior.md and integrity.md's Check 15/10i, which only applies when a category IS present; a UserDefined (no-category) cell's name is trivially always user-defined text too, since there is no label to possibly match. This value is fixed at the point the cell was created — it is not re-derived from the cell's current name or position, so neither needs to stay in step with it, keeping a cell:Cell robust under PDN sync exactly as its own class comment already promises (no stored tree-position property). That scheme is normally cat:CategoryScheme (category.ttl), the app's own curated taxonomy. It may instead be a category extension's own scheme (category-ext/), published by an organization for a category the app's taxonomy does not define — bhscat:BostonHubSociety, say. An extension concept is linked to the core taxonomy with skos:broadMatch rather than skos:broader, SKOS reserving the latter for hierarchy within a single scheme and providing the skos:mappingRelation family for links between schemes; every extension concept carries exactly one such broadMatch into a cat:CategoryScheme concept (integrity.md's Check 39), so a recipient whose app lacks the extension can still file an incoming cell under the core category it maps to. Purpose: when a cell is shared with another PDN member, the recipient's app can use this value, if present, as a hint for where in the recipient's own tree the incoming cell should be filed — a snapshot of the sender's original classification, robust to either side's tree being organized differently. A cell's own tree position has no RDF representation at all — UserDefined is a display convention only, never a category concept. Range skos:Concept is referenced by name without owl:imports, the same by-name pattern already used for cat:CategoryScheme/category.ttl's own concepts and mirroring cell:creator's identical pattern for p:Person (persona.ttl)."""@en .

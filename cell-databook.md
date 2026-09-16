@@ -2,10 +2,12 @@
 
 ## Development Scaffolding
 
-**This file specifies an artifact that will not exist on disk once the v4 app ships.** The app stores
-a cell's structured content — everything this document describes: the frontmatter, the `v4:` block,
-and the graphs — internally, not as a file in the cell's folder. A running v4 filesystem contains no
-`.databook.md` file anywhere.
+**This file specifies an artifact that will not exist once the v4 app ships, and describes a
+filesystem layout that will not exist either.** V4 persists no data in the user's filesystem at all:
+a cell's entire content — everything this document describes, plus the note, the attachments, the
+chat and the member's own private files — lives in a protected, app-managed store, encrypted at
+rest. See [storage.md](storage.md) for that decision and the reasoning behind it. A running v4
+produces no folders, no `.databook.md` file, and no files of any kind.
 
 The app does not exist yet, and `example/Cells/` is how this project carries, validates and diagrams
 real cell content in the meantime. So the DataBook lives on disk here, as **development
@@ -14,27 +16,42 @@ scaffolding**: three helpers read those files (`helpers/validate.py`, `helpers/y
 `helpers/draw.py` take one as an argument), and seventeen of integrity.md's checks do too. When the
 app ships, all of that has to move to whatever the app exposes instead.
 
-Everything below therefore describes the repo's filesystem, not a user's. Where the two differ, this
-document is the one to read; every other file in the project describes the runtime filesystem and
-points back here. Two differences are worth naming up front, because they are the ones that mislead:
+The scaffolding is not only the file. The folder around it is scaffolding too, and so is everything
+in that folder:
 
-- **This file is not what makes its folder a cell.** At runtime the marker is the cell's
-  `_cell-attachments` folder — see [Filesystem Persistence](app-behavior.md#filesystem-persistence)
-  in app-behavior.md. In this repo both markers are present and integrity.md's Check 11 requires them
-  to agree, which is what keeps the scaffolding from drifting away from the tree it represents.
+- **A folder stands for a cell, and the reserved `_cell-attachments` folder directly inside it is
+  what marks the folder as one.** This gives the repo a cell/not-a-cell test decidable from a single
+  folder's immediate contents, with no tree walk — which is what [integrity.md](integrity.md)'s
+  Check 11 relies on. Both markers are present here, the folder's and the file's, and Check 11
+  requires them to agree; that is what keeps the scaffolding from drifting away from the tree it
+  represents. At runtime nothing marks a cell, because there is no folder to mark.
+- **A cell's note is a file named after its folder** (`X.md` inside the folder `X`), the folder-note
+  convention PKM tools such as Obsidian use. At runtime the note is app-internal and has no name of
+  its own.
+- **A cell's attachments are the plain files inside its `_cell-attachments` folder, and the member's
+  own private files are the ones loose beside it.** At runtime the same distinction is a rule about
+  what propagates on a share, decided by how the member filed the file in the app, not by which
+  directory it sits in.
 - **The [Filename Convention](#filename-convention) below is scaffolding-only.** At runtime there is
   no file, so there is no filename, and nothing depends on one.
+- **Nothing records a cell's position in the tree.** Here that is because the position is simply
+  wherever the folder currently sits; at runtime it is because a cell's parent is per-member state
+  in that member's own store. The invariant holds either way, and `c:Cell` asserts no tree position
+  in either case.
 
-What does not change when the app ships: the cell's folder, its note, its `_cell-attachments` folder,
-its attachments and the member's own private files all stay exactly where they are on disk.
+Everything below therefore describes the repo's filesystem, not a user's. Where this repo's layout
+and the model appear to disagree, this document is the one to read; [storage.md](storage.md) draws
+the boundary, and every other file in the project describes the model and points back here for the
+layout.
 
 ## What a Cell DataBook Is
 
 A **cell DataBook** is the file that carries a cell's structured content. It is a
 [DataBook](https://github.com/w3c-cg/holon/tree/main/architectures/databook) — a Markdown file with
-YAML frontmatter, extension `.databook.md` — sitting directly inside the folder of the cell whose
-content it carries. See [Filesystem Persistence](app-behavior.md#filesystem-persistence) in
-app-behavior.md for how the app persists a cell as a folder, and what marks one.
+YAML frontmatter, extension `.databook.md` — sitting directly inside the folder this repo uses to
+stand for the cell whose content it carries. See [Cell Contents](app-behavior.md#cell-contents) in
+app-behavior.md for what a cell actually holds, and [Development Scaffolding](#development-scaffolding)
+above for why it is a folder here and nothing at all at runtime.
 
 One cell DataBook carries three things:
 
@@ -51,21 +68,22 @@ A graph has no file of its own: it lives inside the cell DataBook that links it,
 
 **Nothing in the file records where the cell sits.** There is no tree-position field, no parent
 link, and no back-pointer from a graph to the cell that links it — a cell asserts `v4.member` and
-`v4.tool`, and that is the only direction the link runs. A cell's position is simply wherever its
-folder currently sits; a graph's containing cell is simply wherever its entry physically lives.
-That is what makes moving or renaming a folder a pure filesystem operation with nothing in any file
-to update, and what lets two members of a shared cell each file it wherever they like in their own
-tree without touching content the other sees. It is also why two cells can never share a folder: a
-file sitting in it would be ambiguously part of both. At runtime that is not merely forbidden but
-structurally impossible, the marker being a folder of one fixed reserved name, of which a directory
-can hold only one.
+`v4.tool`, and that is the only direction the link runs. In this repo a cell's position is simply
+wherever its folder currently sits, and a graph's containing cell is simply wherever its entry
+physically lives, so moving or renaming a folder is a pure filesystem operation with nothing in any
+file to update. The invariant is the same one the model asserts for its own reason — a cell's parent
+is per-member state in that member's own store, never shared content — which is what lets two members
+of a shared cell each file it wherever they like without touching content the other sees. It is also
+why two cells can never share a folder here: a file sitting in it would be ambiguously part of both,
+and the marker being a folder of one fixed reserved name, of which a directory can hold only one,
+makes that structurally impossible rather than merely forbidden.
 
 **The rest of a cell's content is not in this file.** The DataBook holds the structured content and
 the metadata about the cell itself; a cell's unstructured content sits beside it:
 
 - **the note** — one Markdown file named after the folder (`X.md` inside the folder `X`), shown in
   the app's Note area. Naming it after its folder is the folder-note convention PKM tools such as
-  Obsidian already use, which is what lets a cell tree double as a vault;
+  Obsidian use, which is what lets this repo's tree be browsed in one;
 - **the attachments** — the plain files inside the folder's own `_cell-attachments` subfolder, flat,
   like email attachments. Every cell has that subfolder, empty or not, and its contents are the part
   of a cell's folder that travels when the cell is shared;
@@ -78,34 +96,33 @@ the metadata about the cell itself; a cell's unstructured content sits beside it
   file's own content, it lives inside the app.
 
 None of these is named or listed anywhere in the DataBook. There is no attachment manifest and
-no note-filename field: the note is found by its name and the attachments by reading one reserved
-folder, so adding a file to a cell is just putting a file in that cell's folder — and attaching it,
-so that every member gets it, is just putting it in `_cell-attachments` instead — whether the app or
-the user does it. `c:note`, `c:attachment` and `c:chat` are documentation-only properties — described in
+no note-filename field: here the note is found by its name and the attachments by reading one
+reserved folder, so adding a file to a cell is just putting a file in that cell's folder — and
+attaching it, so that every member gets it, is just putting it in `_cell-attachments` instead. At
+runtime the same two acts are ordinary app operations, and the attached/private distinction is a rule
+about what propagates rather than about where a file sits. `c:note`, `c:attachment` and `c:chat` are documentation-only properties — described in
 README.md's [Documentation-only Properties](README.md#documentation-only-properties), declared in no
 ontology, and never written as a triple by anything (integrity.md's Check 12).
 
-This document specifies the DataBook file and nothing else; for how a cell's folder is laid out
-around it, see [Filesystem Persistence](app-behavior.md#filesystem-persistence) in app-behavior.md.
-For real files, see `example/Cells/` and [example.md](example.md).
+This document specifies the DataBook file and the scaffolding folder around it; for what a cell
+holds in the app, see [Cell Contents](app-behavior.md#cell-contents) in app-behavior.md, and for the
+boundary between the two, [storage.md](storage.md). For real files, see `example/Cells/` and
+[example.md](example.md).
 
 ## Why This Format
 
-This is how the app persists a cell. Three properties are what make the format the right shape for
-it.
+This is not how the app persists a cell — nothing is persisted as a file at all (see
+[storage.md](storage.md)). It is how *this repo* carries one, and two properties are what make the
+format the right shape for that job.
 
-**It is human-readable.** A cell DataBook is Markdown with YAML frontmatter, so a cell can be
-navigated, inspected, and edited with ordinary tools rather than only through the app. Maintaining
-this repo's own example tree in VS Code and Claude Code is the demonstration: everything the format
-carries is legible as text, and anything wrong with it is visible in a diff.
-
-**It blends into the user's existing files and folders.** A cell *is* a folder, and most of what it
-holds is the ordinary files in it — the note and the attachments above, in the places a PKM tool
-already looks for them. The result is that v4's storage is interoperable with a PKM vault rather
-than parallel to it — Obsidian in particular. Running v4 alongside an existing
-vault is a supported workflow, not a migration away from one: the two are built for different
-requirements — a PKM tool for a single author's own knowledge, v4 for sharing cells with friends,
-family, and groups — and adopting the second should not cost the user the first.
+**It is human-readable.** A cell DataBook is Markdown with YAML frontmatter, so a cell's content can
+be navigated, inspected, and edited with ordinary tools, which is the only way it can be worked on
+before there is an app. Maintaining this repo's own example tree in VS Code and Claude Code is the
+demonstration: everything the format carries is legible as text, and anything wrong with it is
+visible in a diff. That property belongs to the scaffolding rather than to v4, and it is worth being
+clear about what it does not buy: a format made of ordinary files in ordinary folders was once also
+an argument that v4's storage could interoperate with a PKM vault such as Obsidian. It cannot, and
+that argument is retired — v4 writes no files for a vault to see.
 
 **It is machine-verifiable.** The format is constrained from three directions: SHACL shapes
 validate a cell's synthesized triples, [integrity.md](integrity.md)'s checks cover what SHACL cannot
@@ -141,9 +158,10 @@ DataBook is its cell-databook, see [Cell/Category split](CLAUDE.md#key-architect
 whatever case/spacing/punctuation the folder itself has (e.g. `Acme`, `Paula Walker`, `ATT`). There
 is no `-cell` token: cell-databook is the sole DataBook type in a user's instance tree, so nothing
 needs to be disambiguated by it. There is also no numeric disambiguator of any kind (no `-2`, `-N`,
-etc.): a folder holds **at most one** cell-databook, ever — a folder is a **cell** only when it
-holds exactly one such matching file, and a folder with no matching cell-databook is simply a plain
-filesystem folder, not a cell at all. `<catType>` is the folder's own category classification,
+etc.): a folder holds **at most one** cell-databook, ever. (What marks a folder as a cell
+in this repo is its `_cell-attachments` folder, not this file; Check 11 requires the two markers to
+agree, so in practice a cell folder carries exactly one matching cell-databook and a folder with
+neither marker is simply a plain filesystem folder.) `<catType>` is the folder's own category classification,
 kebab-cased (e.g. `Employees` → `employees`, `ImmediateFamily` → `immediate-family`, `SSN` → `ssn` —
 kebab-casing is acronym-aware: a hyphen is inserted only at a lowercase→uppercase boundary or an
 uppercase-run→lowercase boundary, so consecutive capitals stay together). If the matched category
@@ -261,10 +279,11 @@ to many different users' independent instances.
 ### `title`
 
 The cell's own name, and always exactly the name of the filesystem folder holding the DataBook —
-verbatim, same case, spacing and punctuation. The folder is authoritative: renaming the folder means
-updating `title:` to match, never the reverse, and `title:` is never an independent display-name
-override (integrity.md's Check 19, which also treats it as authoritative for what a cell "is called"
-when matching diagram box labels). It is shared, synced cell content, kept identical across every
+verbatim, same case, spacing and punctuation. Within this scaffolding the folder is authoritative:
+renaming the folder means updating `title:` to match, never the reverse, and `title:` is never an
+independent display-name override (integrity.md's Check 19, which also treats it as authoritative
+for what a cell "is called" when matching diagram box labels). At runtime the app's own record of
+the name is authoritative outright, there being no folder to mirror. It is shared, synced cell content, kept identical across every
 member's copy, and any member may rename the cell — see
 [Naming, Renaming, and Sharing](app-behavior.md#naming-renaming-and-sharing) in app-behavior.md for
 the one exception, a bare two-member cell, whose name is instead independent per member.
@@ -273,7 +292,7 @@ the one exception, a bare two-member cell, whose name is instead independent per
 
 Always the literal `cell-databook` — the only DataBook type in this repo's instance tree, so no
 `-cell` token is needed to tell one DataBook kind from another. It does not identify a cell: that is
-the `_cell-attachments` folder's job (see [Filesystem Persistence](app-behavior.md#filesystem-persistence)
+the `_cell-attachments` folder's job (see [Cell Contents](app-behavior.md#cell-contents)
 in app-behavior.md). It is also the tooling's file filter: both
 `helpers/yaml-to-rdf.py` and `helpers/validate.py` skip any DataBook whose `type` is anything else,
 so a wrong value silently drops the cell from RDF synthesis and validation alike rather than
@@ -626,10 +645,9 @@ share, `c:serviceTag` and a member's own private files, so the precedent exists;
 here is that the split runs *within* one feature rather than between two properties.
 
 What is genuinely still open is the storage format the app uses for it, which is an app-internal
-question this document does not reach. Dropping a transcript into the cell's folder as a plain file
-is no longer one of the options: it would make the transcript one of the member's own private files,
-or an attachment if it went in `_cell-attachments`, and put it in the user's PKM vault — which may be
-a feature or a mess, but is not a choice anyone has made.
+question this document does not reach. Nothing about it is a filesystem question any more: a
+transcript is not a file anywhere, so the only thing left to settle is how the app's own store holds
+an append-only, mostly-read-at-the-tail stream with two propagation rules inside it.
 
 ### Where a non-form tool's content goes
 
@@ -647,12 +665,13 @@ drawing surface is plausibly not, which runs into the next question.
 ### Where a tool's binary content goes
 
 A drawing surface, a scanned document, a map's cached tiles — some of what a tool holds will not be
-text. It belongs in **its own file in the cell's folder, referenced from the graph**, not encoded
-into a body section. The example tree already works this way for the one binary-ish thing it
-carries: a passport photo and a driver's license photo, each an `xsd:anyURI` value on `p:hasPhoto`
-rather than image data. Git, a diff, and the sync layer all get to treat a PNG as a PNG.
+text. At runtime it is a blob in the app's own store like everything else, **referenced from the
+graph rather than encoded into it**. The example tree already works this way for the one binary-ish
+thing it carries: a passport photo and a driver's license photo, each an `xsd:anyURI` value on
+`p:hasPhoto` rather than image data. In this repo's scaffolding such a blob is a file in the cell's
+folder, so that git, a diff and the tooling all get to treat a PNG as a PNG.
 
-Putting it in the DataBook instead spends most of what recommends this format in the first place.
+Encoding it into the DataBook instead spends most of what recommends this format in the first place.
 There are two ways to try, and the objection to both is the same:
 
 - **Base64 inside the Turtle**, as an `xsd:base64Binary` literal, is legal RDF and needs no format
@@ -668,24 +687,27 @@ Either could still be right for something small and genuinely inseparable from t
 — a signature, a thumbnail — but not for a tool's working data, and the threshold at which "small"
 stops applying is itself unset.
 
-What stays open is the reference rather than the storage. A relative path is the obvious thing for a
-graph to hold, but a graph is claim content that propagates between members on a share, so whatever
-it holds has to still resolve in a recipient's own copy of the cell — after the folder has been
-renamed, renested, or received under a collision-suffixed name (see
+What stays open is the reference rather than the storage. A graph is claim content that propagates
+between members on a share, so whatever it holds has to still resolve in a recipient's own copy of
+the cell — after the cell has been renamed, refiled, or received under a collision-suffixed name (see
 [Naming, Renaming, and Sharing](app-behavior.md#naming-renaming-and-sharing) in app-behavior.md).
-A path relative to the cell's own folder survives all three; anything anchored higher does not.
+An identifier scoped to the cell itself survives all three; anything anchored outside it does not. In
+this repo a path relative to the cell's own folder is the scaffolding form of exactly that.
 
 ### How a tool's own files are told apart from the user's
 
-This follows directly from preferring option 1 above. Every plain file sitting in a cell's folder is
-already one of two things — an **attachment**, if it sits in `_cell-attachments`, or one of the
-member's own private files if it sits loose — and both are shown to the user in the Attachments
-area. That is the whole definition, and it is what makes adding a file to a cell as simple as putting
-a file in its folder. But a canvas's backing image is not something the user attached, nor something
-they chose to keep back, and showing it in either set alongside the files they did misrepresents
-both. Telling them apart needs a rule the format does not have: a reserved filename prefix, a second
-reserved subdirectory beside `_cell-attachments`, or an explicit manifest — the last of which would
-cost the property that adding a file requires no DataBook edit. `_cell-attachments` is a precedent
-for the second, being exactly a subdirectory that is neither a descendant cell nor a pass-through,
-but it does not settle the question: a tool's own files are neither the cell's attachments nor the
-member's private files, so a third disposition is still needed.
+A cell's files are already one of two things — an **attachment**, which every member receives, or one
+of the member's own private files, which no one else does — and both are shown to the user in the
+Attachments area. That is the whole definition. But a canvas's backing image is not something the
+user attached, nor something they chose to keep back, and showing it in either set alongside the
+files they did misrepresents both. So a tool's own files need a third disposition: neither the
+cell's attachments nor the member's private files, and not shown in that area at all.
+
+Now that a cell's content is app-internal, this is easier than it was — the app can simply hold a
+tool's blobs outside both sets, with no reserved name or manifest needed to keep them apart, because
+there is no shared directory for them to be found in by accident. What is still unsettled is the
+propagation rule: a tool's blob plainly has to travel with the cell the way an attachment does,
+without being one, and nothing yet says whether it follows the attachment rules exactly (immutable,
+deletable by any member) or rules of its own. In this repo's scaffolding the question stays open in
+its original form, since a file here does sit in a folder and would need a reserved prefix or a
+second reserved subdirectory beside `_cell-attachments` to be told apart.

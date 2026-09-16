@@ -8,8 +8,8 @@
 @base <http://mee.foundation/ontologies/category> .
 
 <http://mee.foundation/ontologies/category> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/category/2.8.0> ;
-    dc:date "2026-09-13"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/category/2.8.1> ;
+    dc:date "2026-09-16"^^xsd:date ;
     rdfs:label "Category Taxonomy"@en ;
     rdfs:comment """Category Taxonomy for the V4 App."""@en .
 
@@ -20,7 +20,7 @@
 
 cat:CategoryScheme rdf:type skos:ConceptScheme ;
     rdfs:label "Category Scheme"@en ;
-    rdfs:comment """The SKOS concept scheme holding every category of information a user tracks about a person or organization. Every cat: concept in this file carries skos:inScheme cat:CategoryScheme — this is what identifies a concept as one of this app's own category concepts; there is no dedicated OWL class for that purpose any more (skos:Concept is the sole rdf:type every concept carries). Rooted at two top concepts, cat:Person and cat:Organization (skos:hasTopConcept), with every other concept reachable from one of the two by following skos:broader (asserted child → parent, at most one step at a time — the same direction rdfs:subClassOf used to be asserted in). skos:broader is a topical/thesaurus relation, not OWL subsumption: cat:Pets skos:broader cat:Person does not mean a pet is a kind of person, only that Pets is a narrower topic within the Person-rooted branch of information a user tracks about themselves — the same is true of every other skos:broader edge in this scheme. cell:category (cell.ttl) is the sole RDF-level record of which concept in this scheme, if any, a given cell's content matches — it records classification, not tree position (see cell.ttl/README.md for a cell's actual tree position, which is purely a filesystem fact)."""@en ;
+    rdfs:comment """The SKOS concept scheme holding every category of information a user tracks about a person or organization. Every cat: concept in this file carries skos:inScheme cat:CategoryScheme — this is what identifies a concept as one of this app's own category concepts; there is no dedicated OWL class for that purpose any more (skos:Concept is the sole rdf:type every concept carries). Rooted at two top concepts, cat:Person and cat:Organization (skos:hasTopConcept), with every other concept reachable from one of the two by following skos:broader (asserted child → parent, at most one step at a time — the same direction rdfs:subClassOf used to be asserted in). skos:broader is a topical/thesaurus relation, not OWL subsumption: cat:Pets skos:broader cat:Person does not mean a pet is a kind of person, only that Pets is a narrower topic within the Person-rooted branch of information a user tracks about themselves — the same is true of every other skos:broader edge in this scheme. cell:category (cell.ttl) is the sole RDF-level record of which concept in this scheme, if any, a given cell's content matches — it records classification, not tree position (see cell.ttl/README.md for a cell's actual tree position, which is per-member state in that member's own store rather than anything recorded here)."""@en ;
     skos:hasTopConcept cat:Person, cat:Organization .
 
 
