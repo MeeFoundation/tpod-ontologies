@@ -6,7 +6,7 @@
 #
 # helpers/draw.py takes a cell-databook plus one graph id and always writes
 # <graph-NN>.mmd/.png into example/graphs/images/, so this hook enumerates each
-# staged databook's own v4.member/v4.topic graph ids and draws them one by one,
+# staged databook's own v4.member and v4.tool[].graph ids and draws them one by one,
 # from the repo root (draw.py resolves its output path relative to the cwd).
 #
 # Note: draw.py is not byte-deterministic — its literal node ids are rehashed on
@@ -34,8 +34,12 @@ import sys, yaml
 from databook_graphs import as_list, split_frontmatter
 fm_text, _, _ = split_frontmatter(open(sys.argv[1]).read())
 v4 = (yaml.safe_load(fm_text) or {}).get("v4") or {}
-for e in as_list(v4.get("member")) + as_list(v4.get("topic")):
-    if isinstance(e, dict) and e.get("id"):
+entries = [e for e in as_list(v4.get("member")) if isinstance(e, dict)]
+for tool in as_list(v4.get("tool")):
+    if isinstance(tool, dict):
+        entries += [g for g in as_list(tool.get("graph")) if isinstance(g, dict)]
+for e in entries:
+    if e.get("id"):
         print(e["id"].rsplit("/", 1)[-1])
 ' "$f")
 

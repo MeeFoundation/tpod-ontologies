@@ -272,6 +272,16 @@ shaclvalidate -datafile /tmp/data.ttl -shapesfile shacl/persona-shacl.ttl
 
 **Protégé**: Load `persona.ttl`; Protégé will import the domain ontologies via IRI resolution. Use the reasoner (HermiT/Pellet) to check consistency.
 
+## Diagrams and the Pre-Commit Hook
+
+`hooks/pre-commit` (installed with `cp hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit`) regenerates the `.mmd` and `.png` for every graph in a staged cell DataBook and stages the results alongside it, so a diagram never drifts from the graph it draws.
+
+**`helpers/draw.py` is not byte-deterministic**: it rehashes its literal node ids on every run, so a regenerated `.mmd` diffs even when the diagram is structurally identical (`n655e442e50be -->|"GivenName"| ndc1b5183f88e` becomes the same edge with a different hash). Staging a DataBook therefore redraws its diagrams whether or not their content changed.
+
+**Use `SKIP_DRAW=1 git commit` for a commit that edits DataBook prose without changing any graph's triples** — a reworded Overview, a corrected cross-reference, a typo fix. Without it, such a commit carries dozens of regenerated images whose only difference is the rehash, burying the real change and making the commit message's account of what moved inaccurate. Redraw deliberately instead, by running `helpers/draw.py` on the graphs whose Turtle actually changed (see [example.md](example.md#diagrams)).
+
+Two things to know about installing it. `.git/hooks/` holds a *copy*, not a link, so **reinstall after any change to `hooks/pre-commit`** or commits keep running the old one. And `mmdc` must be on `PATH` for the `.png` half; without it the `.mmd` is still rewritten, with a warning and no image.
+
 ## README Coverage
 
 **README is theory; example.md is the worked example.** `README.md` describes what a term or mechanism *is* and why it exists, in the general case. The Alice Walker scenario — her cells, her graphs, the specific people, organizations and documents in it — lives in `example.md`, and `README.md` links to it rather than retelling it. Concretely, when documenting something new in `README.md`:
