@@ -11,9 +11,9 @@
 @base <http://mee.foundation/ontologies/service> .
 
 <http://mee.foundation/ontologies/service> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/service/2.5.0> ;
-    dc:date "2026-09-13"^^xsd:date ;
-    owl:versionInfo "Version 2.5.0 - comments aligned on cell.ttl's cell:subject (cell:MemberGraph) and cell:formTopic (cell:Tool)"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/service/2.6.0> ;
+    dc:date "2026-09-16"^^xsd:date ;
+    owl:versionInfo "Version 2.6.0 - service:Service definition harmonized with README.md and the v4 Product Strategy wiki page"@en ;
     owl:imports <https://w3id.org/cco-domains/cco/AgentOntology> ,
                 <http://mee.foundation/ontologies/prov-upper-subset> ;
     rdfs:label "Service Ontology"@en ;
@@ -52,9 +52,12 @@ service:Service rdf:type owl:Class ;
     rdfs:subClassOf cco:ont00001017 ,  # CCO Agent (a Material Entity bearing an Agent Capability)
                     prov:Agent ;
     rdfs:label "Service"@en ;
-    rdfs:comment """A non-human participant a p:Person has invited to collaborate inside a
-                    shared cell — the member-capable class for every cell participant that is
-                    not a person. Unlike p:Person, a service:Service is never a cell:creator,
+    rdfs:comment """A software module that integrates some local or remote system into a cell, and in doing so becomes
+                    a genuine non-human member of it — the member-capable class for every cell participant that is not
+                    a person, the second kind of first-class, member-capable participant, peer to p:Person. A cell's
+                    members are only ever p:Person or service:Service individuals; an o:Organization is not member-
+                    capable, participating in a cell through the service:ServiceProvider it provides and otherwise
+                    reaching it only as a cell:formTopic or a cell:claimant. Unlike p:Person, a service:Service is never a cell:creator,
                     and can never be promoted to cell:owner either — a cell is always created
                     by, and only ever owned by, a p:Person — but it can be a genuine
                     cell:member participant (see cell.ttl's cell:member comment) and a
@@ -62,7 +65,10 @@ service:Service rdf:type owl:Class ;
                     about whatever the cell's relationship concerns (e.g. a trip being
                     planned). Where an o:Organization stands behind the service in the
                     relationship, that organization claims on the service's behalf instead —
-                    see cell:claimant's own comment for which of the two a graph names. It branches in two on the
+                    see cell:claimant's own comment for which of the two a graph names. Whatever it does outside the
+                    cell, every service:Service reaches the cell itself through one surface — the Cell Interface, the
+                    same read/write surface a human member's own UI uses (app-behavior.md), which is why an invited
+                    service needs no special-case permission logic. It branches in two on the
                     question of whom the service acts for: service:AgentService acts on
                     behalf of exactly one p:Person member of the cell (service:actsFor), and
                     service:ServiceProvider acts on behalf of the o:Organization that
