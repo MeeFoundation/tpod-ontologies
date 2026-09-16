@@ -68,6 +68,6 @@ This graph is the cell's required tool graph — required since `cat:TravelProvi
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-travel-provider-topic-graph -->
+<!-- databook:id: alice-travel-provider-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-56#graph -->
 ```

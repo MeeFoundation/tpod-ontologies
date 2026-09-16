@@ -68,6 +68,6 @@ This graph is the cell's required tool graph — required since `cat:Home`'s own
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-home-topic-graph -->
+<!-- databook:id: alice-home-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-87#graph -->
 ```

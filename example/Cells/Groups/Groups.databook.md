@@ -69,6 +69,6 @@ This graph is the cell's required tool graph — required since `cat:Groups`'s o
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-groups-topic-graph -->
+<!-- databook:id: alice-groups-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-93#graph -->
 ```

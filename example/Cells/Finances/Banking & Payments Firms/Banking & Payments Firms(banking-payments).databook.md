@@ -68,6 +68,6 @@ This graph is the cell's required tool graph — required since `cat:BankingPaym
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-banking-payments-topic-graph -->
+<!-- databook:id: alice-banking-payments-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-86#graph -->
 ```

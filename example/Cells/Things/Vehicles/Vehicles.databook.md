@@ -67,6 +67,6 @@ This graph is the cell's required tool graph — required since `cat:Vehicles`'s
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-vehicles-topic-graph -->
+<!-- databook:id: alice-vehicles-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-89#graph -->
 ```

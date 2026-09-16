@@ -2,7 +2,7 @@
 
 This file continues [README.md](README.md) and [example.md](example.md), which describe the Category, Cell, Graph, Persona, Organization, and Service ontologies and illustrate them with a worked example. This file documents how the app behaves *on top of* that data — cell lifecycle, storage, sharing, permissions, naming/renaming, what actions a user can take on a cell, what happens when a shared cell arrives somewhere new, and so on.
 
-Nothing in this file changes any `.ttl` file or DataBook triple — every rule here is app-level behavior, not an ontology rule. This file is also written at the **user level** throughout: it describes what a member can do and sees in the app, not how the PDN layer beneath implements it. The two can legitimately differ, and where they do this file follows the user's view — see [Topic & Member Info Permissions](#tool--member-info-permissions) for the case where they diverge most visibly.
+Nothing in this file changes any `.ttl` file or DataBook triple — every rule here is app-level behavior, not an ontology rule. This file is also written at the **user level** throughout: it describes what a member can do and sees in the app, not how the PDN layer beneath implements it. The two can legitimately differ, and where they do this file follows the user's view — see [Tool & Member Info Permissions](#tool--member-info-permissions) for the case where they diverge most visibly.
 
 ## Cell Storage
 
@@ -230,7 +230,7 @@ The app might look at the chat and/or Note and say "Hmmm...this looks like it's 
 
 The app looks at the Note, and moves chunks of content out it, leaving behind a link where the chunk was. It then creates a new categorized cell from this chunk of content. The category would come from an examination of the contents. 
 
-Here's an example. Imagine a cell that contained lots of notes about Alice's mother Paula. In that stream of notes was Paula's credit card info (name, number, expiration date, CVV, etc.). The app removes this chunk of content leaving behind a link called "Paula's Credit Card". If Alice taps this link it brings her to a new cell called "Paula's Credit Card" of type `cat:BankingPayments` with a Topic area that contains the credit card info, but parsed into fields and values. It automatically files this new cell under Cells > Immediate Family > Paula Walker > Finances > Banking & Payments.
+Here's an example. Imagine a cell that contained lots of notes about Alice's mother Paula. In that stream of notes was Paula's credit card info (name, number, expiration date, CVV, etc.). The app removes this chunk of content leaving behind a link called "Paula's Credit Card". If Alice taps this link it brings her to a new cell called "Paula's Credit Card" of type `cat:BankingPayments` with a Form tool that contains the credit card info, but parsed into fields and values. It automatically files this new cell under Cells > Immediate Family > Paula Walker > Finances > Banking & Payments.
 
 It could then ask some questions, do you know the name of the bank that issued this card? (to which Alice answers "GiantBank"). Would you like me to rename this new cell "GiantBank - Mastercard"? etc. 
 
@@ -250,7 +250,7 @@ Results are scoped to the searching member's own tree.
 
 Tags are not the only way to gather cells. The user — or their own AI agent, working on their behalf — can also search for every cell whose tool graph carries a given **property**, and get back the same flat list of cell links a tag search returns.
 
-The worked example is the one a tag would otherwise have handled: "show me every cell where I hold a loyalty program." That is a search for `sa:loyaltyProgramID` (see [Service Accounts Ontology](README.md#service-accounts-ontology) in README.md), and it returns Alice's `Hilton` cell because that cell's topic graph records her Hilton Honors membership number. Nobody had to label the cell for this to work.
+The worked example is the one a tag would otherwise have handled: "show me every cell where I hold a loyalty program." That is a search for `sa:loyaltyProgramID` (see [Service Accounts Ontology](README.md#service-accounts-ontology) in README.md), and it returns Alice's `Hilton` cell because that cell's tool graph records her Hilton Honors membership number. Nobody had to label the cell for this to work.
 
 The two searches complement each other rather than competing. A property search needs no one to have remembered to tag anything and cannot drift out of date, since it reads the same fact the cell already stores for its own sake — but it only reaches what the data actually models. A tag reaches anything at all, including a grouping that exists only in the user's head ("Ginger"), at the cost of someone having to apply it. So a fact with a property of its own is found by that property, and a tag is for what the data does not already model — which is why the app ships no built-in tag vocabulary.
 
@@ -318,7 +318,7 @@ The Note area is a Markdown editor for the cell's one note, providing the functi
 
 ### Chat Area
 
-Chat is one feature with two visibility modes, not two separate concepts. By default, every message posts to the cell's one shared group stream, visible to every member. Any message can additionally be *directed* at a specific named member — human or agent — while staying in the shared stream (e.g. Alice @-mentions her agent; every member sees both her prompt and the agent's reply). Separately, a true private 1:1 thread between a member and their own agent is also supported, whose transcript is not visible to other members — only the *resulting* committed changes (note edits, topic-graph revisions, new attachments) surface into the shared cell.
+Chat is one feature with two visibility modes, not two separate concepts. By default, every message posts to the cell's one shared group stream, visible to every member. Any message can additionally be *directed* at a specific named member — human or agent — while staying in the shared stream (e.g. Alice @-mentions her agent; every member sees both her prompt and the agent's reply). Separately, a true private 1:1 thread between a member and their own agent is also supported, whose transcript is not visible to other members — only the *resulting* committed changes (note edits, tool-graph revisions, new attachments) surface into the shared cell.
 
 ### Inviting services
 
@@ -358,7 +358,7 @@ Three are documented below. All three are `s:AgentService`s, meaning each acts f
 
 | Service | Class | What it does |
 |---|---|---|
-| ChatGPT | `s:ChatGPT` | An LLM assistant that collaborates in the cell's chat, note, and topic graphs |
+| ChatGPT | `s:ChatGPT` | An LLM assistant that collaborates in the cell's chat, note, and tool graphs |
 | Apple Contacts | `s:AppleContacts` | Syncs a member's address book into and out of cells |
 | Arca Backup | `s:ArcaBackup` | Backs up the member's own copy of a cell |
 
@@ -398,7 +398,7 @@ Each turn of a member's conversation with the agent proceeds as follows:
    - the agent's tool graph revised in place to fold in this turn's new facts/decisions — a single evolving graph, not a new one per turn, mirroring how the note itself is one living document rather than a new file per edit;
    - optionally, a direct edit to the shared note, and/or a new attachment (e.g. a fetched photo of a hotel or landscape) added to the cell's flat set of attachments.
 
-Nothing currently records *which* conversation (group vs. private) produced a given note edit or topic-graph revision — an accepted limitation, not a defect, worth knowing if audit-level provenance ever matters.
+Nothing currently records *which* conversation (group vs. private) produced a given note edit or tool-graph revision — an accepted limitation, not a defect, worth knowing if audit-level provenance ever matters.
 
 ### ChatGPT Service
 
@@ -411,7 +411,7 @@ This module lets a member invite OpenAI's ChatGPT into a cell as a real `s:ChatG
     - **Its own `c:member` entry** — the self-claimed graph proving its membership (e.g. [graph 67](<example/Cells/Travel/Trips/Kyoto Trip 2027/Kyoto Trip 2027(trips).databook.md#graph-67>)'s `s:actsFor` claim) — content *about itself*.
     - **Its own tool graph (or graphs)** — content about whatever the cell's relationship concerns (e.g. [graph 70](<example/Cells/Travel/Trips/Kyoto Trip 2027/Kyoto Trip 2027(trips).databook.md#graph-70>)'s evolving itinerary) — content about *the cell's topic*, distinct from any other member's or party's own topic claims about that same subject.
 
-   It never writes to a graph claimed by someone else — not another member's `c:member` entry, not a topic graph another party claims — read access is unrestricted, but write access is always scoped to the module's own claimant identity. In the steady state this means revising its topic graph in place turn by turn (see [The Iterative Prompt/Response Loop](#the-iterative-promptresponse-loop)); "create" and "delete" cover the initial contribution and retracting a claim that's no longer accurate (e.g. a cancelled leg of an itinerary), respectively. Each of those revisions is a delete-and-re-issue at the PDN layer, exactly as for a human member's own edit (see [Topic & Member Info Permissions](#tool--member-info-permissions) above).
+   It never writes to a graph claimed by someone else — not another member's `c:member` entry, not a tool graph another party claims — read access is unrestricted, but write access is always scoped to the module's own claimant identity. In the steady state this means revising its tool graph in place turn by turn (see [The Iterative Prompt/Response Loop](#the-iterative-promptresponse-loop)); "create" and "delete" cover the initial contribution and retracting a claim that's no longer accurate (e.g. a cancelled leg of an itinerary), respectively. Each of those revisions is a delete-and-re-issue at the PDN layer, exactly as for a human member's own edit (see [Tool & Member Info Permissions](#tool--member-info-permissions) above).
 
 ### Apple Contacts Service
 

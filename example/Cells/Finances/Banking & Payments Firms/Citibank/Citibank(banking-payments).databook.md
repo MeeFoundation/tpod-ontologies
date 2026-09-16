@@ -6,11 +6,11 @@ version: 2.1.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "Citibank" (cell:category: cat:BankingPayments). It is a two-member
-  cell (member entries about :Citibank_Service and :Self) with two topic graphs about :Self — one
+  cell (member entries about :Citibank_Service and :Self) with two tool graphs about :Self — one
   Alice's own self-asserted service-account username/password, the other Citibank's own claimed
   record (debit card, checking account, online service account). An o:Organization is not
   member-capable, so the bank participates through :Citibank_Service, the service:ServiceProvider
-  it provides; both that member graph and the topic graph are claimed by :Citibank itself, the
+  it provides; both that member graph and the tool graph are claimed by :Citibank itself, the
   party really making those claims.
 v4:
   category: "cat:BankingPayments"

@@ -14,7 +14,7 @@ description: >
   declares a form tool carrying cell:formShape sashapes:ServiceAccountShape, so
   that tool is template-driven and the cell carries it from the start.
   The cell carries no tag: what makes it findable is the loyaltyProgramID in its
-  own topic graph, which a search for that property returns directly.
+  own tool graph, which a search for that property returns directly.
 v4:
   category: "cat:TravelProvider"
   creator: ":Self"

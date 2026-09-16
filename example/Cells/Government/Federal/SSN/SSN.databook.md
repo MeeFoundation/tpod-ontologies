@@ -6,7 +6,7 @@ version: 2.0.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "SSN" (cell:category: cat:SSN). It is a one-member cell with one
-  member entry about :Self and one topic graph about :Self (the cell's subject), carrying
+  member entry about :Self and one tool graph about :Self (the cell's subject), carrying
   Alice's Social Security number.
 v4:
   category: "cat:SSN"

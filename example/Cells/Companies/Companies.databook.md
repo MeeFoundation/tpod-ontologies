@@ -68,6 +68,6 @@ This graph is the cell's required tool graph — required since `cat:Companies`'
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-companies-topic-graph -->
+<!-- databook:id: alice-companies-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-85#graph -->
 ```

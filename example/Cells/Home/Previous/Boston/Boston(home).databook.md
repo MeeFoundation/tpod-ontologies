@@ -6,7 +6,7 @@ version: 2.0.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "Boston" (cell:category: cat:Home). It is a one-member cell with one
-  member entry about :Self and one topic graph about :Self (the cell's subject), typed
+  member entry about :Self and one tool graph about :Self (the cell's subject), typed
   residences:Residence, carrying Alice's previous Boston address.
 v4:
   category: "cat:Home"

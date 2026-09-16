@@ -6,7 +6,7 @@ version: 2.0.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "Birth Certificate" (cell:category: cat:BirthCertificate). It is a
-  one-member cell with one member entry about :Self and one topic graph about :Self (the cell's
+  one-member cell with one member entry about :Self and one tool graph about :Self (the cell's
   subject), typed identitydocuments:BirthCertificate, carrying Alice's Texas birth certificate
   identity data.
 v4:

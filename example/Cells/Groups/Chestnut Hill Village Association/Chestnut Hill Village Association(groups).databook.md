@@ -7,7 +7,7 @@ created: 2026-09-13
 description: >
   Cell DataBook for folder "Chestnut Hill Village Association" (cell:category: cat:Groups). It is a
   multi-member cell with three members about :Self, :Marcy, and :Henry — three of the homeowners on the
-  three streets that make up Chestnut Hill Village — plus one topic graph about :CHVA itself, the
+  three streets that make up Chestnut Hill Village — plus one tool graph about :CHVA itself, the
   association's own organizational profile. Unlike the Boston Hub Society, the association runs no PDN
   node of its own, so it joins the cell through no service:ServiceProvider of its own and Alice
   self-enters its profile: every one of this cell's graphs is claimed by one of its three human members.

@@ -10,7 +10,7 @@ description: >
   specific trip Alice is planning with her spouse Dave. A three-member cell demonstrating
   service:ChatGPT as a real cell member: Alice's own AI travel agent joins alongside Alice and Dave,
   each with a self-claimed member entry (graph-66, graph-67, graph-68). The trip itself is backed
-  by three topic graphs sharing one subject (:Kyoto_Trip_2027), one per member, each with a
+  by three tool graphs sharing one subject (:Kyoto_Trip_2027), one per member, each with a
   distinct claimant — Alice's own basic claim (graph-69), her agent's own evolving,
   collaboratively-drafted itinerary (graph-70), and Dave's own contribution (graph-91) — reaching
   cell:formGraph's real upper bound (one graph per member, see YAML-8) and mirroring how a
@@ -157,12 +157,12 @@ This graph is the cell's third required `member` entry — Dave's own self-claim
 
 #### Overview
 
-This graph is one of the cell's two `topic` entries — Alice's own basic claim identifying the trip itself, backing the cell's derived subject `:Kyoto_Trip_2027` with a real graph claimed by her directly (see YAML-4), distinct from her agent's own more substantive contribution ([graph 70](#graph-70)). Both topic graphs share the same subject but a different claimant — mirroring the Medical Appointment cell's two "Med. Appt mt." squares (see README.md's Representative Cells diagram), where one topic subject is claimed from each side.
+This graph is one of the cell's three tool graphs — Alice's own basic claim identifying the trip itself, backing the cell's derived subject `:Kyoto_Trip_2027` with a real graph claimed by her directly (see YAML-4), distinct from her agent's own more substantive contribution ([graph 70](#graph-70)). Both tool graphs share the same subject but a different claimant — mirroring the Medical Appointment cell's two "Med. Appt mt." squares (see README.md's Representative Cells diagram), where one topic subject is claimed from each side.
 
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-kyoto-trip-topic-graph -->
+<!-- databook:id: alice-kyoto-trip-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-69#graph -->
 @prefix : <http://www.example.org/v4#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
@@ -181,12 +181,12 @@ This graph is one of the cell's two `topic` entries — Alice's own basic claim 
 
 #### Overview
 
-This graph is one of the cell's three `topic` entries — Alice's travel agent's own evolving understanding of the trip, claimed by the agent rather than by Alice, Dave, or a third `p:Person`/`o:Organization`. This is the agent's single evolving graph — revised in place turn by turn as Alice and her agent go back and forth (see app-behavior.md's Agent Collaboration section), rather than a new graph per conversation turn. Typed `itineraries:Itinerary` (no existing CCO/domain class to multi-type alongside — there is no dedicated trip-planning domain ontology yet), validated by the `ItineraryShape` per-template SHACL shape, which requires only a human-readable label or description rather than any structured trip-planning fields.
+This graph is one of the cell's three tool graphs — Alice's travel agent's own evolving understanding of the trip, claimed by the agent rather than by Alice, Dave, or a third `p:Person`/`o:Organization`. This is the agent's single evolving graph — revised in place turn by turn as Alice and her agent go back and forth (see app-behavior.md's Agent Collaboration section), rather than a new graph per conversation turn. Typed `itineraries:Itinerary` (no existing CCO/domain class to multi-type alongside — there is no dedicated trip-planning domain ontology yet), validated by the `ItineraryShape` per-template SHACL shape, which requires only a human-readable label or description rather than any structured trip-planning fields.
 
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-travel-agent-kyoto-trip-topic-graph -->
+<!-- databook:id: alice-travel-agent-kyoto-trip-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-70#graph -->
 @prefix : <http://www.example.org/v4#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
@@ -205,12 +205,12 @@ This graph is one of the cell's three `topic` entries — Alice's travel agent's
 
 #### Overview
 
-This graph is the cell's third `topic` entry — Dave's own contribution to the trip, claimed by him directly rather than routed through Alice or her travel agent. With this graph, the cell reaches `cell:formGraph`'s real upper bound: one graph per member, each with a distinct claimant (Self, the agent, and now Dave — see YAML-8), the same subject `:Kyoto_Trip_2027` claimed from all three sides at once.
+This graph is the cell's third tool graph — Dave's own contribution to the trip, claimed by him directly rather than routed through Alice or her travel agent. With this graph, the cell reaches `cell:formGraph`'s real upper bound: one graph per member, each with a distinct claimant (Self, the agent, and now Dave — see YAML-8), the same subject `:Kyoto_Trip_2027` claimed from all three sides at once.
 
 #### Graph
 
 ```turtle
-<!-- databook:id: dave-kyoto-trip-topic-graph -->
+<!-- databook:id: dave-kyoto-trip-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-91#graph -->
 @prefix : <http://www.example.org/v4#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .

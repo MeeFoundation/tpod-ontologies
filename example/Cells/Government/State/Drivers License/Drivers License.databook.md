@@ -6,7 +6,7 @@ version: 2.0.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "Drivers License" (cell:category: cat:DriversLicense). It is a
-  one-member cell with one member entry about :Self and one topic graph about :Self (the cell's
+  one-member cell with one member entry about :Self and one tool graph about :Self (the cell's
   subject), typed identitydocuments:DriversLicense, carrying Alice's California driver's license
   identity data.
 v4:

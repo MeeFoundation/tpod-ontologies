@@ -66,6 +66,6 @@ This graph is the cell's required tool graph — required since `cat:Trips`'s ow
 #### Graph
 
 ```turtle
-<!-- databook:id: alice-trips-topic-graph -->
+<!-- databook:id: alice-trips-tool-graph -->
 <!-- databook:graph: http://www.example.org/v4/graphs/graph-90#graph -->
 ```

@@ -9,9 +9,9 @@
 @base <http://mee.foundation/ontologies/banking> .
 
 <http://mee.foundation/ontologies/banking> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/banking/1.3.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
-    owl:versionInfo "Version 1.3.0 - initial extraction of banking:DebitCard out of persona-extensions.ttl, and banking:CheckingAccount/banking:accessesBankAccount out of persona.ttl, into their own other/ peer ontology."@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/banking/1.3.1> ;
+    dc:date "2026-09-16"^^xsd:date ;
+    owl:versionInfo "Version 1.3.1 - comment wording aligned on the repo-wide \"tool graph\" term"@en ;
     rdfs:label "Banking Ontology"@en ;
     rdfs:comment """A small other/ peer ontology (see other/pets.ttl's own rdfs:comment for the
                     general pattern) for a domain a person merely *has* — a debit card and the
@@ -34,7 +34,7 @@
                     (the validating shape, not the content's own class). Both are linked from
                     cat:BankingPayments's own class-level cell (cat-templates.ttl) via
                     cell:formShape, alongside serviceaccounts:ServiceAccount
-                    (other/service-accounts.ttl) — a single Citibank-claimed topic graph holds all
+                    (other/service-accounts.ttl) — a single Citibank-claimed tool graph holds all
                     three templates' content together."""@en .
 
 

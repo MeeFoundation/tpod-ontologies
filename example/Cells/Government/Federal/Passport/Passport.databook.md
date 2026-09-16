@@ -6,7 +6,7 @@ version: 2.0.0
 created: 2026-07-10
 description: >
   Cell DataBook for folder "Passport" (cell:category: cat:Passport). It is a one-member cell with
-  one member entry about :Self and one topic graph about :Self (the cell's subject), typed
+  one member entry about :Self and one tool graph about :Self (the cell's subject), typed
   identitydocuments:Passport, carrying Alice's US passport identity data.
 v4:
   category: "cat:Passport"
