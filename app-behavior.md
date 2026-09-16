@@ -270,9 +270,10 @@ A form type *is* a SHACL node shape: picking one in the **Add Tool** dialog stam
 
 The last column names the categories whose template declares that shape up front, so a cell of that category is created carrying the form already (see [Lazy Instantiation](#lazy-instantiation) above). A dash means no template declares it — the shape is reachable only by adding the tool by hand, which is exactly what the dialog is for. Either way the full list is offered regardless of the cell's own category.
 
+<!-- BEGIN GENERATED: form-types (helpers/form-types.py) -->
 | Form type | `c:shape` value | What the form records | Declared by |
 |---|---|---|---|
-| **Contact Info** | `pshapes:ContactInfoShape` | A person's names, organization name and unit, job title, emails and phones, postal addresses, online services, anniversaries, personal info and photo. Given name required, at most one of each component. The dialog's default, and the same shape every template names as its `c:memberShape` | `cat:PrimaryCarePhysician` (alongside Primary Care Physician) |
+| **Contact Info** | `pshapes:ContactInfoShape` | A person's names, organization name and unit, job title, emails and phones, postal addresses, online services, anniversaries, personal info and photo. Given name required, at most one of each component. The dialog's default, and the same shape every template names as its `c:memberShape` | `cat:PrimaryCarePhysician` |
 | **Health & Wellness** | `pshapes:HealthWellnessShape` | A person's physical characteristics — height, eye color, hair color; all optional | `cat:HealthWellness` |
 | **Primary Care Physician** | `pshapes:PrimaryCarePhysicianShape` | A physician's medical specialty; optional, and paired with Contact Info on the same form | `cat:PrimaryCarePhysician` |
 | **Directory Profile** | `dpshapes:DirectoryProfileShape` | What a membership directory asks of a member — member since, sponsor, industry, previous positions, directorships, non-profit positions, recognitions, spouse or partner, family, hometown, dietary restrictions, personal goals, life experiences; nothing required | — |
@@ -281,7 +282,7 @@ The last column names the categories whose template declares that shape up front
 | **Passport** | `idocshapes:PassportShape` | Name, date of birth, passport number and expiration date (all required); additional name, issue date, issuing country, place of birth, gender marker and photo | `cat:Passport` |
 | **Driver's License** | `idocshapes:DriversLicenseShape` | Name, date of birth, license number and expiration date (all required); additional name, postal address, issuing jurisdiction and photo | `cat:DriversLicense` |
 | **Birth Certificate** | `idocshapes:BirthCertificateShape` | A full name, or a given plus family name; additional name, alternate name, nickname and legal name are optional | `cat:BirthCertificate` |
-| **Service Account** | `sashapes:ServiceAccountShape` | An online account — username and password (required); service name, service URI and loyalty program ID | `cat:Companies`, `cat:BankingPayments`, `cat:TravelProvider` |
+| **Service Account** | `sashapes:ServiceAccountShape` | An online account — username and password (required); service name, service URI and loyalty program ID | `cat:BankingPayments`, `cat:Companies`, `cat:TravelProvider` |
 | **Debit Card** | `bankingshapes:DebitCardShape` | Card number and expiration date (required); CVV, and a link to the checking account it draws on | `cat:BankingPayments` |
 | **Checking Account** | `bankingshapes:CheckingAccountShape` | Exactly one account number and one routing number | `cat:BankingPayments` |
 | **Residence** | `residenceshapes:ResidenceShape` | A place lived in — exactly one address and one temporal interval (an open-ended one meaning current), plus the resident | `cat:Home` |
@@ -291,9 +292,14 @@ The last column names the categories whose template declares that shape up front
 | **Pet Medications** | `petshapes:PetMedicationRecordShape` | At least one medication, each with its active ingredients, dosage amount and administration schedule | `cat:PetsMedical` |
 | **Medical Appointment** | `mashapes:MedicalAppointmentRecordShape` | Patient, insurance provider and policy number (required); primary care physician, insurance group number, preferred pharmacy and medical history notes | `cat:MedicalAppointment` |
 | **Trip Itinerary** | `itineraryshapes:ItineraryShape` | A trip's plan as free text — at least a human-readable label or description, the itinerary being drafted and revised in prose rather than in fixed fields | `cat:Trips` |
-| **Organization** | `oshapes:OrganizationShape` | An organization's own profile — website and member or employee count, alongside its name and self-description | `cat:Organization`, `cat:Groups` |
+| **Organization** | `oshapes:OrganizationShape` | An organization's own profile — website and member or employee count, alongside its name and self-description | `bhscat:BostonHubSociety`, `cat:Groups`, `cat:Organization` |
+<!-- END GENERATED: form-types -->
 
-Two things the list does not include. A shape an installed [category extension](README.md#category-extensions) publishes joins the dialog alongside these, since an extension is free to name any shape it likes — though a shape it publishes as its template's `c:memberShape` (`bhsshapes:MemberShape` is the one example) governs that category's member graphs rather than a form, and is not offered here. And the other three tool kinds — `c:Calendar`, `c:Canvas`, `c:Map` — have no content model yet, so they have no type list of their own: the dialog asks which template to follow only for a **Form**.
+An installed [category extension](README.md#category-extensions) can reach this list from either side. Its template may declare a shape already here — `bhscat:BostonHubSociety` declares `oshapes:OrganizationShape`, which is why that row's last column names a concept outside `cat:CategoryScheme` — or it may publish a shape of its own, which then joins the dialog alongside these. What an extension publishes as its template's `c:memberShape` is a different matter: `bhsshapes:MemberShape` governs that category's member graphs rather than a form, so it is not a form type and is not offered here.
+
+The other three tool kinds — `c:Calendar`, `c:Canvas`, `c:Map` — have no content model yet, so they have no type list of their own: the dialog asks which template to follow only for a **Form**.
+
+The table above is generated from the `.ttl` files by `helpers/form-types.py` — the shapes and the last column come from `helpers/validate.py`'s own shape registry and from every `c:formShape` in `cat-templates.ttl` and `category-ext/`, so a new shape or a newly-declaring template shows up as drift rather than being missed. The names and descriptions are written by hand. Run `python3 helpers/form-types.py --check`, or `/sync-form-types`, to reconcile the two.
 
 ### Note Area
 
