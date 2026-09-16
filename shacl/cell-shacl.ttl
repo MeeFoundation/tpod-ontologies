@@ -13,7 +13,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <http://mee.foundation/ontologies/cell/shapes> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/cell/shapes/9.2.2> ;
+    owl:versionIRI <http://mee.foundation/ontologies/cell/shapes/9.2.3> ;
     dc:date "2026-09-16"^^xsd:date ;
     rdfs:label "Cell Ontology SHACL Validation Shapes"@en ;
     rdfs:comment "SHACL validation shapes for cell:Cell DataBook instances (the content facet of a cell) the cell:Tool nodes a cell carries, and the graph DataBook instances a cell links to — cell:MemberGraph via cell:member, cell:FormGraph via a tool's own cell:formGraph — in the Cell Ontology."@en .
@@ -305,7 +305,8 @@
 #  Tools
 #  A cell:Tool node appears in two roles, told apart by which property
 #  points at it rather than by its class, since both roles use the same
-#  tool classes (cell:Form, cell:Calendar, cell:Canvas, cell:Map).
+#  tool classes (cell:Form, cell:Calendar, cell:Canvas, cell:Contacts,
+#  cell:Map).
 #  So these two shapes target sh:targetObjectsOf, never sh:targetClass:
 #
 #    :LiveToolShape     — a live tool, reached by cell:tool from a
@@ -335,7 +336,7 @@
     # (cell.ttl), the one tool class with a content model, so the
     # requirements below are conditioned on the tool's class rather than
     # asserted outright: this shape targets every live tool, and a
-    # cell:Calendar, cell:Canvas or cell:Map legitimately carries none
+    # cell:Calendar, cell:Canvas, cell:Contacts or cell:Map legitimately carries none
     # of them. A blanket sh:minCount here would fail those three.
     #
     # A live cell:Form carries cell:formTopic exactly once — what its

@@ -11,8 +11,8 @@
 
 <http://mee.foundation/ontologies/service/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/service> ;
-    owl:versionIRI <http://mee.foundation/ontologies/service/shapes/2.0.0> ;
-    dc:date "2026-09-12"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/service/shapes/2.0.1> ;
+    dc:date "2026-09-16"^^xsd:date ;
     rdfs:label "Service Ontology SHACL Validation Shapes"@en ;
     rdfs:comment "SHACL validation shapes for the Service Ontology."@en .
 
@@ -32,10 +32,9 @@
 #  against :AgentServiceShape's own sh:minCount 1 for any service
 #  typed both an agent service and a provider.
 #
-#  service:ChatGPT and service:AppleContacts get no shape of their
-#  own: they add no constraint beyond the :AgentServiceShape they
-#  already inherit by rdfs:subClassOf, and an empty shape would be
-#  noise. service:ArcaBackup gets one only because it additionally
+#  service:ChatGPT gets no shape of its own: it adds no constraint
+#  beyond the :AgentServiceShape it already inherits by
+#  rdfs:subClassOf, and an empty shape would be noise. service:ArcaBackup gets one only because it additionally
 #  requires service:providedBy.
 #################################################################
 
@@ -74,8 +73,8 @@
 
     # service:actsFor — required, exactly one value: an agent service is always
     # invited by, and acts on behalf of, exactly one person. Inherited by
-    # service:ChatGPT, service:AppleContacts and service:ArcaBackup, which is
-    # why none of the three needs a shape of its own for it.
+    # service:ChatGPT and service:ArcaBackup, which is why neither needs a
+    # shape of its own for it.
     sh:property [
         sh:path service:actsFor ;
         sh:minCount 1 ;

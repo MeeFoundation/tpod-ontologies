@@ -354,19 +354,18 @@ Every service the app offers *is* one of the classes in README.md's [Service Ont
 
 Each principal runs their own services independently — their own credentials, their own connection to the underlying external system — the same way each peer already manages their own tree position for a shared cell independently (see [Cell Storage](#cell-storage) above). An AI agent runs whenever a message addressed to it arrives (matched via `s:actsFor`); a contact sync or a backup service runs on its own schedule instead. Because a service acts for exactly one member, everything it records privately stays on that member's side — which is the whole reason a hidden [service tag](README.md#tags) never propagates on a share.
 
-Three are documented below. All three are `s:AgentService`s, meaning each acts for exactly one member:
+Two are documented below. Both are `s:AgentService`s, meaning each acts for exactly one member:
 
 | Service | Class | What it does |
 |---|---|---|
 | ChatGPT | `s:ChatGPT` | An LLM assistant that collaborates in the cell's chat, note, and tool graphs |
-| Apple Contacts | `s:AppleContacts` | Syncs a member's address book into and out of cells |
 | Arca Backup | `s:ArcaBackup` | Backs up the member's own copy of a cell |
 
 An `s:ServiceProvider` — an organization's own service, such as Citibank's — is equally a service by this definition; it simply acts for the organization that provides it rather than for a member, and the app does not ship its code.
 
 ### Cell Interface
 
-Every `s:Service` reaches a cell through one and the same surface, the **Cell Interface**: the read and write operations over a cell's [note](#note-area), [attachments](#cell-contents), [chat](#chat-area), and `c:member`/tool claims. There is no side door — no service reaches a cell's content by any other route, or writes to another member's claims directly, and none gets an API of its own.
+Every module reaches a cell through one and the same surface, the **Cell Interface** — every `s:Service`, and the module behind a tool such as `c:Contacts` (see [Tool Modules](#tool-modules) below) alike: the read and write operations over a cell's [note](#note-area), [attachments](#cell-contents), [chat](#chat-area), and `c:member`/tool claims. There is no side door — no service reaches a cell's content by any other route, or writes to another member's claims directly, and none gets an API of its own.
 
 This is why an invited service needs no special-case permission logic anywhere in this document. The Cell Interface is the same surface a human member's own UI uses, and it enforces the same rules for both, already set out in [Permissions](#permissions) above:
 
@@ -382,7 +381,7 @@ What a service does *beyond* the cell — call an LLM, read an address book, wri
 
 A module reaches the [hidden service tags](README.md#tags) it has written through the [Cell Interface](#cell-interface), like everything else it touches in a cell. This is not the user's tag search under another name: the user's search never matches these tags at all (see [Finding Cells by Tag](#finding-cells-by-tag) above), and a module does not search them by free text but by `c:tagNamespace` and `c:tagKey` — which is what those two parts are for.
 
-The interface scopes **every** service-tag operation — search, read, add, delete alike — to the namespace the calling module's developer controls. The Apple Contacts module therefore searches, reads, adds and removes `foundation.mee.applecontacts` tags and nothing else: another module's tags are not merely absent from its results, they are unreadable and unwritable. That isolation between services is the namespace's whole job; it is not a display convention layered over one shared pool.
+The interface scopes **every** service-tag operation — search, read, add, delete alike — to the namespace the calling module's developer controls. The Apple Contacts module (a `c:Contacts` tool, not a service — see [Apple Contacts](#apple-contacts) below) therefore searches, reads, adds and removes `foundation.mee.applecontacts` tags and nothing else: another module's tags are not merely absent from its results, they are unreadable and unwritable. That isolation between services is the namespace's whole job; it is not a display convention layered over one shared pool.
 
 Two practical consequences for a module. First, results are scoped to its own member's tree, so a tag is only ever reachable in the instance that wrote it — consistent with its never being shared. Second, two identical tags are two separate tags, not one: nothing deduplicates them, so a module adding a tag checks whether the cell already carries that exact namespace/key/value combination before writing another.
 
@@ -413,12 +412,16 @@ This module lets a member invite OpenAI's ChatGPT into a cell as a real `s:ChatG
 
    It never writes to a graph claimed by someone else — not another member's `c:member` entry, not a tool graph another party claims — read access is unrestricted, but write access is always scoped to the module's own claimant identity. In the steady state this means revising its tool graph in place turn by turn (see [The Iterative Prompt/Response Loop](#the-iterative-promptresponse-loop)); "create" and "delete" cover the initial contribution and retracting a claim that's no longer accurate (e.g. a cancelled leg of an itinerary), respectively. Each of those revisions is a delete-and-re-issue at the PDN layer, exactly as for a human member's own edit (see [Tool & Member Info Permissions](#tool--member-info-permissions) above).
 
-### Apple Contacts Service
+## Tool Modules
 
-This module lets a member sync their Apple Contacts address book into and out of cells, as an `s:AppleContacts` member. It has no LLM in it at all — what makes it an agent service is simply that it acts for exactly one member, syncing that member's own address book and answering to nobody else in the cell.
+A tool can have a module behind it too. Where a service's module acts for a member inside the cell as a member in its own right, a tool's module backs a capability the cell carries, and reaches the cell through the same [Cell Interface](#cell-interface) under the same rules. One is shipped.
+
+### Apple Contacts
+
+This module lets a member sync their Apple Contacts address book into and out of a cell. It is a **tool** (`c:Contacts`), not a service: it never joins the cell as a member, because no claim in the cell is the address book's and there is no party for a `c:member` entry to name. What it adds is a capability the cell carries — a sync action in the app's UI and the correspondence behind it — which is what a tool is.
 
 On **import**, each contact record becomes a graph, its vCard fields mapping onto the Persona ontology's own names, phone numbers, addresses, organization, job title, birthday, photo and so on. On **export**, the direction reverses: all of a person's graphs merge into a single vCard, each field value carrying the label of the graph it came from, since vCard's own model is one card per person with repeatable labelled fields.
 
 The piece the cell model has nowhere else to put is an Apple Contacts **Group**. A group is not a category, not a topic, and not a member, so the module records it as a [hidden service tag](README.md#tags) on the cell — namespace `foundation.mee.applecontacts`, key `group`, value `Christmas List` for a contact that sat in a group of that name. Holding it on the cell is what makes the round trip **lossless** and the sync **bidirectional**: a later edit on either side can be carried back to the other, because the module can still tell which group the contact came from. Alice's `Bob Johnson` and `Fred Flintstone` cells both carry it.
 
-That tag stays in the syncing member's own copy and is never shared, for the reason [Services](#services) gives: a service acts for one member, and a member whose instance runs a different service, or none, could neither interpret nor clear the value.
+That tag stays in the syncing member's own copy and is never shared: it is that member's own bookkeeping, and a member whose instance runs a different module, or none, could neither interpret nor clear the value.

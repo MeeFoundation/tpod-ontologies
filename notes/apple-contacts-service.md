@@ -1,6 +1,8 @@
-# Apple Contacts Service Notes
+# Apple Contacts Tool Notes
 
 ## Overview
+
+Apple Contacts is a **tool** (`c:Contacts`), not a service: the module never joins a cell as a member, it backs a capability the cell carries. See app-behavior.md's Tool Modules section.
 
 V4 is a strict superset of Apple Contacts in every dimension. This means importing from Apple Contacts into the app is straightforward, but exporting from the app back to Apple Contacts requires explicit design decisions. Round-tripping losslessly is achievable but requires an anchor strategy (see below).
 
