@@ -5,7 +5,7 @@ type: cell-databook
 version: 2.2.0
 created: 2026-08-21
 description: >
-  Cell DataBook for folder "Medical" (cell:category: cat:PetsMedical). Formerly two nested cells — an organizational "Medical" scaffold (cell-38, retired) wrapping a "Medications" content cell (this cell, cell-40) — now flattened into one, since cat:PetsMedications was merged into cat:PetsMedical and the extra nesting no longer served a purpose. It is a two-member cell, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the cell's subject).
+  Cell DataBook for folder "Medical" (cell:category: cat:PetsMedical). It is a two-member cell, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the cell's subject).
 v4:
   category: "cat:PetsMedical"
   creator: ":Self"

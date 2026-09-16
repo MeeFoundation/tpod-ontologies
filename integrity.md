@@ -170,8 +170,8 @@ import glob, re, yaml
 
 text = open('category.ttl').read()
 concepts, labels = {}, {}
-# category.ttl's tree is a SKOS concept scheme (skos:broader, child -> parent,
-# same direction rdfs:subClassOf used to be), not an OWL class hierarchy —
+# category.ttl's tree is a SKOS concept scheme (skos:broader, child -> parent),
+# not an OWL class hierarchy —
 # cat:Person/cat:Organization are top concepts with no skos:broader value of
 # their own, so that group is optional in the pattern below.
 pattern = re.compile(
