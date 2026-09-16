@@ -12,7 +12,7 @@
 @base <http://mee.foundation/ontologies/cell> .
 
 <http://mee.foundation/ontologies/cell> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/cell/9.2.0> ;
+    owl:versionIRI <http://mee.foundation/ontologies/cell/9.3.0> ;
     dc:date "2026-09-15"^^xsd:date ;
     rdfs:label "Cell Ontology"@en ;
     rdfs:comment """Cell Ontology for the V4 App. A cell is the atomic unit of the user's tree: a filesystem folder holding exactly one cell-databook file, folder and file together forming one tree node. Defines cell:Cell — the self-contained content facet of a cell, carried by that cell-databook file's own triples. cell:Cell stores no property recording the cell's own tree position: that position is simply whichever folder the cell-databook currently lives in, not a fact this RDF individual needs to carry. cell:Cell splits into two disjoint kinds: cell:TemplateCell (a reusable, class-level template) and cell:InstanceCell (an actual cell instantiated in a user's own tree) — a cell is always exactly one of the two, never both. There are no further kinds of cell: an instance cell that carries anything beyond its cell:member baseline carries it as a cell:Tool — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI (cell:Form, cell:Calendar, cell:Canvas, cell:Map), zero or more per cell, rather than in a subclass of its own. cell:InstanceCell also carries the two tag properties — cell:userTag, a plain xsd:string, and cell:serviceTag, whose values are cell:ServiceTag nodes (also defined here) carrying a namespace, a key and a label — each zero or more values, a retrieval dimension orthogonal to cell:category's single filing hint. Also defines the graph-DataBook classes cell:member/cell:formGraph link to — cell:Graph, its abstract cell:CGraph subclass, and that class's two disjoint leaves cell:MemberGraph (cell:member's range) and cell:FormGraph (cell:formGraph's range) — along with their cell:shape/cell:claimant/cell:subject annotation properties, since a graph DataBook only ever exists to be linked from a cell. cell:MemberGraph and cell:FormGraph are split apart because a cell:subject value always maps to a PDN node subject identity while a cell:formTopic value — the tool-level statement of what the tool's content is about — need not."""@en .
@@ -637,7 +637,7 @@ cell:member rdf:type owl:ObjectProperty ;
 #    A cell's attachments, shown in the app's Attachments tab, are
 #    the plain files inside its own _cell-attachments folder: a
 #    reserved subfolder sitting directly inside the cell's own
-#    folder, at most one per cell, holding plain files only — never
+#    folder, exactly one per cell, holding plain files only — never
 #    a subfolder and never a cell-databook. They are the part of a
 #    cell's folder that travels with it when it is shared, and they
 #    are flat, like email attachments, on disk and in the model
@@ -656,8 +656,15 @@ cell:member rdf:type owl:ObjectProperty ;
 #    because most cells have a single member and share nothing at
 #    all; there the distinction is inert but still real, recording
 #    what would travel if the cell were ever shared later. No cell
-#    may be named _cell-attachments, and an empty _cell-attachments
-#    folder is legal — the app creates it on demand.
+#    may be named _cell-attachments. Every cell has exactly one,
+#    created with the cell and never removed, so an empty one is the
+#    ordinary case rather than an anomaly — it is what a cell with
+#    no attachments looks like, and it gives someone working outside
+#    the app a drop target already in place, with no reserved name
+#    to type correctly. Hidden files — any whose name begins with a
+#    dot — are neither attachments nor private files wherever they
+#    sit: the app passes over them as filesystem noise (.DS_Store, a
+#    version-control placeholder) and never shows them.
 #    A subfolder found directly inside a cell's own folder is
 #    accordingly one of four things: the reserved _cell-attachments
 #    folder above; a descendant cell (it directly contains its own

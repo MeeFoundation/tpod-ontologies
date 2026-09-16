@@ -37,7 +37,8 @@ the metadata about the cell itself; a cell's unstructured content sits beside it
   the app's Note area. Naming it after its folder is the folder-note convention PKM tools such as
   Obsidian already use, which is what lets a cell tree double as a vault;
 - **the attachments** — the plain files inside the folder's own `_cell-attachments` subfolder, flat,
-  like email attachments. They are the part of a cell's folder that travels when the cell is shared;
+  like email attachments. Every cell has that subfolder, empty or not, and its contents are the part
+  of a cell's folder that travels when the cell is shared;
 - **the member's own private files** — every other plain file loose in the folder, and any subfolder
   with no cell anywhere beneath it. These stay in that member's copy of the cell and never reach
   another member. The remaining two kinds of subfolder are not the cell's content at all: a
