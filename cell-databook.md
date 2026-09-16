@@ -104,7 +104,7 @@ about what propagates rather than about where a file sits. `c:note`, `c:attachme
 README.md's [Documentation-only Properties](README.md#documentation-only-properties), declared in no
 ontology, and never written as a triple by anything (integrity.md's Check 12).
 
-This document specifies the DataBook file and the scaffolding folder around it; for what a cell
+This document specifies the DataBook file and the folder this repo wraps it in; for what a cell
 holds in the app, see [Cell Contents](app-behavior.md#cell-contents) in app-behavior.md, and for the
 boundary between the two, [storage.md](storage.md). For real files, see `example/Cells/` and
 [example.md](example.md).
