@@ -1144,7 +1144,7 @@ Membership is not an editorial judgment. It is exactly `helpers/validate.py`'s o
 The last column names the categories whose template declares that shape up front, so a cell of that category is created carrying the form already (see [Lazy Instantiation](app-behavior.md#lazy-instantiation) in app-behavior.md). A dash means no template declares it — the shape is reachable only by adding the tool by hand, which is exactly what the dialog is for. Either way the full list is offered regardless of the cell's own category.
 
 <!-- BEGIN GENERATED: form-types (helpers/form-types.py) -->
-| Form type | `c:shape` value, definition | What the form records | Declared by |
+| Form type | `c:shape` value — file | What the form records | Declared by |
 |---|---|---|---|
 | **Contact Info** | `pshapes:ContactInfoShape` — [`shacl/contactinfo-shacl.ttl`](shacl/contactinfo-shacl.ttl) | A person's names, organization name and unit, job title, emails and phones, postal addresses, online services, anniversaries, personal info and photo. Given name required, at most one of each component. The dialog's default, and the same shape every template names as its `c:memberShape` | `cat:PrimaryCarePhysician` |
 | **Health & Wellness** | `pshapes:HealthWellnessShape` — [`shacl/persona-shacl.ttl`](shacl/persona-shacl.ttl) | A person's physical characteristics — height, eye color, hair color; all optional | `cat:HealthWellness` |
@@ -1170,7 +1170,7 @@ The last column names the categories whose template declares that shape up front
 
 An installed [category extension](#category-extensions) can reach this list from either side. Its template may declare a shape already here — `bhscat:BostonHubSociety` declares `oshapes:OrganizationShape`, which is why that row's last column names a concept outside `cat:CategoryScheme` — or it may publish a shape of its own, which then joins the dialog alongside these. What an extension publishes as its template's `c:memberShape` is a different matter: `bhsshapes:MemberShape` governs that category's member graphs rather than a form, so it is not a form type and is not offered here.
 
-The table above is generated from the `.ttl` files by `helpers/form-types.py` — the shape CURIEs, their definition links and the last column all come from `helpers/validate.py`'s own shape registry and from every `c:formShape` in `cat-templates.ttl` and `category-ext/`, so a new shape or a newly-declaring template shows up as drift rather than being missed. The names and descriptions are written by hand. Run `python3 helpers/form-types.py --check`, or `/sync-form-types`, to reconcile the two.
+The table above is generated from the `.ttl` files by `helpers/form-types.py` — the shape CURIEs, their file links and the last column all come from `helpers/validate.py`'s own shape registry and from every `c:formShape` in `cat-templates.ttl` and `category-ext/`, so a new shape or a newly-declaring template shows up as drift rather than being missed. The names and descriptions are written by hand. Run `python3 helpers/form-types.py --check`, or `/sync-form-types`, to reconcile the two.
 
 ---
 
