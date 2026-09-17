@@ -256,7 +256,7 @@ The two searches complement each other rather than competing. A property search 
 
 ### Adding a Tool
 
-Every cell offers an **Add Tool** action, whether or not it already carries one — a cell cloned from a template that declares no tool starts with none (see [Lazy Instantiation](#lazy-instantiation) above). The user selects the cell, taps **Add Tool**, and a modal dialog asks them which tool to add and, for a **Form**, which template the new form's information should follow. The default selection is **Contact Info** (`pshapes:ContactInfoShape`) — the same contact-info shape every cell's `c:member` graph already uses — since a form about a person who is not themselves a member of the cell is the commonest case by far. The dialog offers many other choices alongside it, one per SHACL shape a tool's graph can be validated against — **Passport**, **Debit Card**, **Vehicle**, **Trip Itinerary**, and the rest; [Form Types](#form-types) below lists all of them.
+Every cell offers an **Add Tool** action, whether or not it already carries one — a cell cloned from a template that declares no tool starts with none (see [Lazy Instantiation](#lazy-instantiation) above). The user selects the cell, taps **Add Tool**, and a modal dialog asks them which tool to add and, for a **Form**, which template the new form's information should follow. The default selection is **Contact Info** (`pshapes:ContactInfoShape`) — the same contact-info shape every cell's `c:member` graph already uses — since a form about a person who is not themselves a member of the cell is the commonest case by far. The dialog offers many other choices alongside it, one per SHACL shape a tool's graph can be validated against — **Passport**, **Debit Card**, **Vehicle**, **Trip Itinerary**, and the rest; README.md's [Form Shapes](README.md#form-shapes) lists all of them, and [Form Types](#form-types) below says what the dialog does with the pick.
 
 Whichever template the user picks is stamped directly onto the new graph as its `c:shape` value — the same value Lazy Instantiation would have stamped automatically had the category's own template declared the tool up front — and the form the app renders for filling it in is derived from that same shape (see [Form Fields from SHACL Shapes](#form-fields-from-shacl-shapes) below). The user also names what the tool is about, which becomes its single `c:formTopic`.
 
@@ -266,40 +266,11 @@ Nothing caps how many tools a cell may hold. What the cell's own member count do
 
 #### Form Types
 
-A form type *is* a SHACL node shape: picking one in the **Add Tool** dialog stamps that shape's IRI onto the new graph as its `c:shape` value, and the fields the app renders are derived from it (see [Form Fields from SHACL Shapes](#form-fields-from-shacl-shapes) below). The table is the complete list the app ships — the same shapes a `c:TemplateCell` draws on for its `c:formShape`, offered to the user directly. Each is defined in the `*-shacl.ttl` file paired with the ontology that declares the class it targets; see [core-files.md](core-files.md) for those files.
+A form type *is* a SHACL node shape. Picking one in the **Add Tool** dialog stamps that shape's IRI onto the new graph as its `c:shape` value, and the fields the app renders are derived from it (see [Form Fields from SHACL Shapes](#form-fields-from-shacl-shapes) below). The dialog offers one entry per shape the app ships — the same shapes a `c:TemplateCell` draws on for its `c:formShape`, offered to the user directly — and it offers the full list regardless of the cell's own category.
 
-The last column names the categories whose template declares that shape up front, so a cell of that category is created carrying the form already (see [Lazy Instantiation](#lazy-instantiation) above). A dash means no template declares it — the shape is reachable only by adding the tool by hand, which is exactly what the dialog is for. Either way the full list is offered regardless of the cell's own category.
+What each form type records, which shape backs it, and which categories declare one up front are properties of the ontologies rather than of the app, so the list itself lives in README.md's [Form Shapes](README.md#form-shapes) section. *Form shape* is that section's name for what this dialog calls a *form type*; they are one thing named from two sides.
 
-<!-- BEGIN GENERATED: form-types (helpers/form-types.py) -->
-| Form type | `c:shape` value | What the form records | Declared by |
-|---|---|---|---|
-| **Contact Info** | `pshapes:ContactInfoShape` | A person's names, organization name and unit, job title, emails and phones, postal addresses, online services, anniversaries, personal info and photo. Given name required, at most one of each component. The dialog's default, and the same shape every template names as its `c:memberShape` | `cat:PrimaryCarePhysician` |
-| **Health & Wellness** | `pshapes:HealthWellnessShape` | A person's physical characteristics — height, eye color, hair color; all optional | `cat:HealthWellness` |
-| **Primary Care Physician** | `pshapes:PrimaryCarePhysicianShape` | A physician's medical specialty; optional, and paired with Contact Info on the same form | `cat:PrimaryCarePhysician` |
-| **Directory Profile** | `dpshapes:DirectoryProfileShape` | What a membership directory asks of a member — member since, sponsor, industry, previous positions, directorships, non-profit positions, recognitions, spouse or partner, family, hometown, dietary restrictions, personal goals, life experiences; nothing required | — |
-| **Education Record** | `educationshapes:EducationRecordShape` | One stage of a person's schooling — school name (required), education level, school city and state, year graduated, degree | — |
-| **Social Security Number** | `pshapes:SSNShape` | A US Social Security Number, in `NNN-NN-NNNN` form | `cat:SSN` |
-| **Passport** | `idocshapes:PassportShape` | Name, date of birth, passport number and expiration date (all required); additional name, issue date, issuing country, place of birth, gender marker and photo | `cat:Passport` |
-| **Driver's License** | `idocshapes:DriversLicenseShape` | Name, date of birth, license number and expiration date (all required); additional name, postal address, issuing jurisdiction and photo | `cat:DriversLicense` |
-| **Birth Certificate** | `idocshapes:BirthCertificateShape` | A full name, or a given plus family name; additional name, alternate name, nickname and legal name are optional | `cat:BirthCertificate` |
-| **Service Account** | `sashapes:ServiceAccountShape` | An online account — username and password (required); service name, service URI and loyalty program ID | `cat:BankingPayments`, `cat:Companies`, `cat:TravelProvider` |
-| **Debit Card** | `bankingshapes:DebitCardShape` | Card number and expiration date (required); CVV, and a link to the checking account it draws on | `cat:BankingPayments` |
-| **Checking Account** | `bankingshapes:CheckingAccountShape` | Exactly one account number and one routing number | `cat:BankingPayments` |
-| **Residence** | `residenceshapes:ResidenceShape` | A place lived in — exactly one address and one temporal interval (an open-ended one meaning current), plus the resident | `cat:Home` |
-| **Vehicle** | `vehicleshapes:VehicleShape` | Vehicle type, make, model and model year (all required); VIN, color, body type, fuel type, drive wheel configuration, odometer reading and engine specification | `cat:Vehicles` |
-| **Pet** | `petshapes:PetShape` | A pet's name and species (required); breed, birth date, body weight, sex and spay/neuter status | `cat:Pets` |
-| **Pet Care & Feeding** | `petshapes:PetsCareAndFeedingShape` | The same fields as Pet, every one optional, so day-to-day care instructions may identify the pet by any subset of them or none | `cat:PetsCareAndFeeding` |
-| **Pet Medications** | `petshapes:PetMedicationRecordShape` | At least one medication, each with its active ingredients, dosage amount and administration schedule | `cat:PetsMedical` |
-| **Medical Appointment** | `mashapes:MedicalAppointmentRecordShape` | Patient, insurance provider and policy number (required); primary care physician, insurance group number, preferred pharmacy and medical history notes | `cat:MedicalAppointment` |
-| **Trip Itinerary** | `itineraryshapes:ItineraryShape` | A trip's plan as free text — at least a human-readable label or description, the itinerary being drafted and revised in prose rather than in fixed fields | `cat:Trips` |
-| **Organization** | `oshapes:OrganizationShape` | An organization's own profile — website and member or employee count, alongside its name and self-description | `bhscat:BostonHubSociety`, `cat:Groups`, `cat:Organization` |
-<!-- END GENERATED: form-types -->
-
-An installed [category extension](README.md#category-extensions) can reach this list from either side. Its template may declare a shape already here — `bhscat:BostonHubSociety` declares `oshapes:OrganizationShape`, which is why that row's last column names a concept outside `cat:CategoryScheme` — or it may publish a shape of its own, which then joins the dialog alongside these. What an extension publishes as its template's `c:memberShape` is a different matter: `bhsshapes:MemberShape` governs that category's member graphs rather than a form, so it is not a form type and is not offered here.
-
-The other three tool kinds — `c:Calendar`, `c:Canvas`, `c:Map` — have no content model yet, so they have no type list of their own: the dialog asks which template to follow only for a **Form**.
-
-The table above is generated from the `.ttl` files by `helpers/form-types.py` — the shapes and the last column come from `helpers/validate.py`'s own shape registry and from every `c:formShape` in `cat-templates.ttl` and `category-ext/`, so a new shape or a newly-declaring template shows up as drift rather than being missed. The names and descriptions are written by hand. Run `python3 helpers/form-types.py --check`, or `/sync-form-types`, to reconcile the two.
+The other four tool kinds — `c:Calendar`, `c:Canvas`, `c:Contacts` and `c:Map` — have no content model yet, so they have no type list of their own: the dialog asks which template to follow only for a **Form**.
 
 ### Note Area
 

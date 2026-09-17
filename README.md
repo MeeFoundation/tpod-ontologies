@@ -225,13 +225,13 @@ A cell holds various kinds of information:
 - **Attachments** (📎) — an optional set of one or more files shared with every member. A file the user adds to the cell without attaching it is private to them and never propagates, though both sets are shown in this same area. Some common filetypes (images, video, PDFs, Markdown) will show previews whereas others (Excel spreadsheets, Word documents, etc.) might not.
 - **Tags** — an optional set of short text labels for finding the cell again later. Tags cut across the tree rather than placing the cell in it, so they are independent of the cell's category; see [Tags](#tags) below, and [Finding Cells by Tag](app-behavior.md#finding-cells-by-tag) in app-behavior.md.
 
-Cells can have one or more kinds of **tools**. The most common is the Form tool that allows the entry of structured data according to a one of a set of pre-defined form "shapes" (schemas of fields and values). By "structured" we mean fields and values. For example, if the topic is taking care of a pet, the structured information might include species:dog, breed:Labradoodle, weight:26 pounds, and so on. If the topic is a credit card, it would have fields like name, card number, expiration date, and CVV code. Other planned tools include calendar and drawing canvas tools. 
+Cells may include **Form** elements. These contain editable data structured according to one of a set of pre-defined **form shapes** (schemas of fields and values) — see [Form Shapes](#form-shapes) below for the full list. For example, if the topic is taking care of a pet, the structured information might include species:dog, breed:Labradoodle, weight:26 pounds, and so on. If the topic is a credit card, it would have fields like name, card number, expiration date, and CVV code. Other planned tools include calendar and drawing canvas tools. 
 
 The app contains two pre-defined, non-user-editable taxonomies of **categories**. One is focused on helping organize the information in a person's personal life (Family, Home, Pets, etc.), and the other on their work life (Employer, Employees, etc.). For some of these categories, the app includes a *template cell* that may contain some starter content (or may be empty) and/or may have a schema for the structured fields and values that a cell of this category might contain.
 
 A cell has a **name**. Often this name is just a copy of the name of the category. For example, if the category is "People", the cell might be called "People". However, the user can give the cell a name of their own choosing.
 
-A cell may have been assigned a **category** — a `skos:Concept` individual in the app's pre-defined scheme, identifying which kind of personal information (e.g. "People", "Pets", "Things") the cell holds. Some categories come with a pre-defined template cell supplying starter content for the note, and predefined form types.
+A cell may have been assigned a **category** — a `skos:Concept` individual in one of the app's pre-defined schemes that categorizes the cell's main topic (e.g. "People", "Pets", "Things"). Some categories come with a pre-defined template cell that supplies starter content for the note, and may include one or more predefined form types.
 
 A cell has a **creator**, which is the identity of the user who created it. This creator is automatically considered to be a cell **owner**. Any owner can invite a new member as an owner, or promote an existing member to owner. A cell owner has an elevated set of permissions for managing cell contents.
 
@@ -347,7 +347,7 @@ A **tool** is an object a cell can carry that adds a new capability to it — a 
 
 <p align="center"><img src="images/cell-ontology/tool.png" alt="tool hierarchy"></p>
 
-Five tool classes are defined. `c:Form` is the one whose format is settled: its data is graph DataBooks — one or more `c:FormGraph` values, whose fields the app renders as a form from the SHACL shape governing the tool (see [Form Fields from SHACL Shapes](app-behavior.md#form-fields-from-shacl-shapes) in app-behavior.md). `c:Calendar`, `c:Canvas`, `c:Contacts` and `c:Map` carry no properties of their own yet — they are defined so the extension point is visibly plural, and so that adding a tool later is a new subclass rather than a new property on `c:InstanceCell`. `c:Contacts` is the address-book tool: it syncs the cell's member info with Apple Contacts, its Android equivalent or Windows People. It is a tool rather than a service because it never joins the cell as a member — no claim in a cell is the address book's, so there is no party for a `c:member` entry to name.
+Five tool classes are defined. `c:Form` is the one whose format is settled: its data is graph DataBooks — one or more `c:FormGraph` values, whose fields the app renders as a form from the SHACL shape governing the tool (see [Form Shapes](#form-shapes) below for the shapes themselves, and [Form Fields from SHACL Shapes](app-behavior.md#form-fields-from-shacl-shapes) in app-behavior.md for how a shape becomes a form). `c:Calendar`, `c:Canvas`, `c:Contacts` and `c:Map` carry no properties of their own yet — they are defined so the extension point is visibly plural, and so that adding a tool later is a new subclass rather than a new property on `c:InstanceCell`. `c:Contacts` is the address-book tool: it syncs the cell's member info with Apple Contacts, its Android equivalent or Windows People. It is a tool rather than a service because it never joins the cell as a member — no claim in a cell is the address book's, so there is no party for a `c:member` entry to name.
 
 All three tool properties — `c:formTopic`, `c:formGraph` and `c:formShape` — have domain `c:Form`, and `c:Tool` itself carries none. That follows from what a tool is rather than being an oversight: each kind brings its *own* data format, so there is nothing common to hoist onto the abstract class. A form's format is graphs conforming to a shape; a calendar's would be dated entries, a canvas's a drawing surface, a contacts tool's a correspondence with an address-book entry, and a map's placed features, none of them a graph and none worked out. A property that proves common once those four have formats of their own can be hoisted up then — cheap, where retracting one asserted too early is not.
 
@@ -363,7 +363,7 @@ All three tool properties — `c:formTopic`, `c:formGraph` and `c:formShape` —
 
 - **`c:formShape`** — carried only by a *declared* tool, one reached by `c:declaresTool` from a `c:TemplateCell`: the `sh:NodeShape`(s) a live tool's graphs are expected to conform to. An `owl:ObjectProperty`, domain `c:Form`, range `sh:NodeShape`, zero or more values — the same domain as the `c:formGraph` values it governs, a shape declared one level above the thing it shapes being the wrong level. A live `c:tool` node never carries one; a declared tool never carries `c:formTopic` or `c:formGraph`, a template being in no position to know what a future cell's tool will be about.
 
-A cell that carries no tool can be given one at any time, the user picking both the tool and the shape its content should follow — see app-behavior.md's [Adding a Tool](app-behavior.md#adding-a-tool).
+A cell that carries no tool can be given one at any time, the user picking both the tool and the shape its content should follow, from the full list in [Form Shapes](#form-shapes) below — see app-behavior.md's [Adding a Tool](app-behavior.md#adding-a-tool).
 
 ### Graphs
 
@@ -626,16 +626,18 @@ Every graph is classified by a **template type label class** — a documentation
 
 `persona.ttl` itself declares exactly one such label — `p:ContactInfo`, the generic contact-info profile every cell's `c:member` graph is validated against, reused across so many unrelated tree positions that it has no single category concept of its own to attach a template cell to. Every other template label class this project defines lives in an `other/*.ttl` peer ontology alongside the rest of its own domain's modeling, each linked from its class-level `c:TemplateCell` template (in `cat-templates.ttl`) via `c:formShape` (`cell.ttl`) — so the shape is reachable by looking up the `c:TemplateCell` whose own `c:category` value names the corresponding concept, see [Lazy Instantiation](app-behavior.md#lazy-instantiation) in app-behavior.md:
 
-| Template label class | Ontology | SHACL shape | Reached via |
-|---|---|---|---|
-| `pets:Pet`, `pets:PetMedicationRecord` | [`other/pets.ttl`](#pets-ontology) | `other/shacl/pets-shacl.ttl` | `cat:Pets`, `cat:PetsMedical` |
-| `v:Vehicle` | [`other/vehicles.ttl`](#vehicles-ontology) | `other/shacl/vehicles-shacl.ttl` | `cat:Vehicles` |
-| `idoc:BirthCertificate`, `idoc:DriversLicense`, `idoc:Passport` | [`other/identity-documents.ttl`](#identity-documents-ontology) | `other/shacl/identity-documents-shacl.ttl` | `cat:BirthCertificate`, `cat:DriversLicense`, `cat:Passport` |
-| `ma:MedicalAppointmentRecord` | [`other/medical-appointments.ttl`](#medical-appointments-ontology) | `other/shacl/medical-appointments-shacl.ttl` | `cat:MedicalAppointment` |
-| `sa:ServiceAccount` | [`other/service-accounts.ttl`](#service-accounts-ontology) | `other/shacl/service-accounts-shacl.ttl` | `cat:Companies`, `cat:BankingPayments` |
-| `banking:DebitCard`, `banking:CheckingAccount` | [`other/banking.ttl`](#banking-ontology) | `other/shacl/banking-shacl.ttl` | `cat:BankingPayments` |
-| `residences:Residence` | [`other/residences.ttl`](#residences-ontology) | `other/shacl/residences-shacl.ttl` | `cat:Home` |
-| `itineraries:Itinerary` | [`other/itineraries.ttl`](#itineraries-ontology) | `other/shacl/itineraries-shacl.ttl` | `cat:Trips` |
+| Template label class | Ontology |
+|---|---|
+| `pets:Pet`, `pets:PetMedicationRecord` | [`other/pets.ttl`](#pets-ontology) |
+| `v:Vehicle` | [`other/vehicles.ttl`](#vehicles-ontology) |
+| `idoc:BirthCertificate`, `idoc:DriversLicense`, `idoc:Passport` | [`other/identity-documents.ttl`](#identity-documents-ontology) |
+| `ma:MedicalAppointmentRecord` | [`other/medical-appointments.ttl`](#medical-appointments-ontology) |
+| `sa:ServiceAccount` | [`other/service-accounts.ttl`](#service-accounts-ontology) |
+| `banking:DebitCard`, `banking:CheckingAccount` | [`other/banking.ttl`](#banking-ontology) |
+| `residences:Residence` | [`other/residences.ttl`](#residences-ontology) |
+| `itineraries:Itinerary` | [`other/itineraries.ttl`](#itineraries-ontology) |
+
+Which SHACL shape validates each of these, which `*-shacl.ttl` file defines it, and which categories declare it up front are all in [Form Shapes](#form-shapes) below, generated from the `.ttl` files rather than maintained here.
 
 The SSN designator class `cco:ent00000008` has no template label class of its own — it's just a designator on `:Self` directly — so `cat:SSN` reuses `pshapes:SSNShape` from `shacl/persona-shacl.ttl` rather than adding one.
 
@@ -1126,6 +1128,49 @@ See example.md's [Planning a Trip with an Agent](example.md#planning-a-trip-with
 
 `shacl/service-shacl.ttl` targets each class in turn. `:ServiceShape` (target `s:Service`) constrains `s:providedBy` and `s:actsFor` to at most one value each, an `o:Organization` and a `p:Person` respectively. `:AgentServiceShape` (target `s:AgentService`) raises `s:actsFor` to exactly one value, inherited by both of its leaves; `:ServiceProviderShape` and `:ArcaBackupShape` each raise `s:providedBy` to exactly one value. `s:ChatGPT` gets no shape of its own, since it adds no constraint beyond the one it already inherits. No shape forbids `s:actsFor` on `s:ServiceProvider` — since no class is disjoint from any other, that would be unsatisfiable against `:AgentServiceShape`'s own minimum for any service typed both an agent service and a provider.
 
+
+## Form Shapes
+
+A **form shape** is an `sh:NodeShape` that the content of a `c:Form` tool's `c:FormGraph` conforms to — the value a graph carries as its `c:shape`, and the value a category's `c:TemplateCell` declares on its tool as `c:formShape` (see [Tools](#tools) above). The app presents this same set to the user as **form types**, one entry per shape in its **Add Tool** dialog; what the app does with the user's pick — stamping the shape onto the new graph and rendering its fields — is app behavior, described in app-behavior.md's [Adding a Tool](app-behavior.md#adding-a-tool) and [Form Fields from SHACL Shapes](app-behavior.md#form-fields-from-shacl-shapes). The two words name one thing from two sides: *form shape* is what it is, *form type* is what the user picks.
+
+Each shape is defined in the `*-shacl.ttl` file paired with the ontology that declares the class it targets — described in that ontology's own *Validation* section above, and listed in [core-files.md](core-files.md). The repo declares many more `sh:NodeShape`s than appear here; three kinds are deliberately not form shapes:
+
+- **Component shapes**, which validate a node nested inside a form rather than the form itself — `petshapes:BodyWeightShape`, `petshapes:MedicationShape`, `vehicleshapes:OdometerReadingShape`, and the name-, address- and physical-trait-component shapes in `shacl/persona-shacl.ttl`. A parent shape reaches them; the user never picks one.
+- **Structural shapes**, which validate the cell, tool and graph skeleton or a service rather than any form's content — all of `shacl/cell-shacl.ttl` (see [Cell Ontology Validation](#cell-ontology-validation) above) and all of `shacl/service-shacl.ttl`.
+- **A shape named only as a template's `c:memberShape`**, which governs that category's member graphs rather than a form — today `bhsshapes:MemberShape` alone. The converse is not an exclusion: `pshapes:ContactInfoShape` is both every template's `c:memberShape` *and* a form shape, so it is listed.
+
+Membership is not an editorial judgment. It is exactly `helpers/validate.py`'s own shape registry — the registry that resolves a graph's `c:shape` value — minus the member-shape-only entries, which is what generates the table below.
+
+The last column names the categories whose template declares that shape up front, so a cell of that category is created carrying the form already (see [Lazy Instantiation](app-behavior.md#lazy-instantiation) in app-behavior.md). A dash means no template declares it — the shape is reachable only by adding the tool by hand, which is exactly what the dialog is for. Either way the full list is offered regardless of the cell's own category.
+
+<!-- BEGIN GENERATED: form-types (helpers/form-types.py) -->
+| Form type | `c:shape` value | What the form records | Declared by |
+|---|---|---|---|
+| **Contact Info** | `pshapes:ContactInfoShape` | A person's names, organization name and unit, job title, emails and phones, postal addresses, online services, anniversaries, personal info and photo. Given name required, at most one of each component. The dialog's default, and the same shape every template names as its `c:memberShape` | `cat:PrimaryCarePhysician` |
+| **Health & Wellness** | `pshapes:HealthWellnessShape` | A person's physical characteristics — height, eye color, hair color; all optional | `cat:HealthWellness` |
+| **Primary Care Physician** | `pshapes:PrimaryCarePhysicianShape` | A physician's medical specialty; optional, and paired with Contact Info on the same form | `cat:PrimaryCarePhysician` |
+| **Directory Profile** | `dpshapes:DirectoryProfileShape` | What a membership directory asks of a member — member since, sponsor, industry, previous positions, directorships, non-profit positions, recognitions, spouse or partner, family, hometown, dietary restrictions, personal goals, life experiences; nothing required | — |
+| **Education Record** | `educationshapes:EducationRecordShape` | One stage of a person's schooling — school name (required), education level, school city and state, year graduated, degree | — |
+| **Social Security Number** | `pshapes:SSNShape` | A US Social Security Number, in `NNN-NN-NNNN` form | `cat:SSN` |
+| **Passport** | `idocshapes:PassportShape` | Name, date of birth, passport number and expiration date (all required); additional name, issue date, issuing country, place of birth, gender marker and photo | `cat:Passport` |
+| **Driver's License** | `idocshapes:DriversLicenseShape` | Name, date of birth, license number and expiration date (all required); additional name, postal address, issuing jurisdiction and photo | `cat:DriversLicense` |
+| **Birth Certificate** | `idocshapes:BirthCertificateShape` | A full name, or a given plus family name; additional name, alternate name, nickname and legal name are optional | `cat:BirthCertificate` |
+| **Service Account** | `sashapes:ServiceAccountShape` | An online account — username and password (required); service name, service URI and loyalty program ID | `cat:BankingPayments`, `cat:Companies`, `cat:TravelProvider` |
+| **Debit Card** | `bankingshapes:DebitCardShape` | Card number and expiration date (required); CVV, and a link to the checking account it draws on | `cat:BankingPayments` |
+| **Checking Account** | `bankingshapes:CheckingAccountShape` | Exactly one account number and one routing number | `cat:BankingPayments` |
+| **Residence** | `residenceshapes:ResidenceShape` | A place lived in — exactly one address and one temporal interval (an open-ended one meaning current), plus the resident | `cat:Home` |
+| **Vehicle** | `vehicleshapes:VehicleShape` | Vehicle type, make, model and model year (all required); VIN, color, body type, fuel type, drive wheel configuration, odometer reading and engine specification | `cat:Vehicles` |
+| **Pet** | `petshapes:PetShape` | A pet's name and species (required); breed, birth date, body weight, sex and spay/neuter status | `cat:Pets` |
+| **Pet Care & Feeding** | `petshapes:PetsCareAndFeedingShape` | The same fields as Pet, every one optional, so day-to-day care instructions may identify the pet by any subset of them or none | `cat:PetsCareAndFeeding` |
+| **Pet Medications** | `petshapes:PetMedicationRecordShape` | At least one medication, each with its active ingredients, dosage amount and administration schedule | `cat:PetsMedical` |
+| **Medical Appointment** | `mashapes:MedicalAppointmentRecordShape` | Patient, insurance provider and policy number (required); primary care physician, insurance group number, preferred pharmacy and medical history notes | `cat:MedicalAppointment` |
+| **Trip Itinerary** | `itineraryshapes:ItineraryShape` | A trip's plan as free text — at least a human-readable label or description, the itinerary being drafted and revised in prose rather than in fixed fields | `cat:Trips` |
+| **Organization** | `oshapes:OrganizationShape` | An organization's own profile — website and member or employee count, alongside its name and self-description | `bhscat:BostonHubSociety`, `cat:Groups`, `cat:Organization` |
+<!-- END GENERATED: form-types -->
+
+An installed [category extension](#category-extensions) can reach this list from either side. Its template may declare a shape already here — `bhscat:BostonHubSociety` declares `oshapes:OrganizationShape`, which is why that row's last column names a concept outside `cat:CategoryScheme` — or it may publish a shape of its own, which then joins the dialog alongside these. What an extension publishes as its template's `c:memberShape` is a different matter: `bhsshapes:MemberShape` governs that category's member graphs rather than a form, so it is not a form type and is not offered here.
+
+The table above is generated from the `.ttl` files by `helpers/form-types.py` — the shapes and the last column come from `helpers/validate.py`'s own shape registry and from every `c:formShape` in `cat-templates.ttl` and `category-ext/`, so a new shape or a newly-declaring template shows up as drift rather than being missed. The names and descriptions are written by hand. Run `python3 helpers/form-types.py --check`, or `/sync-form-types`, to reconcile the two.
 
 ---
 

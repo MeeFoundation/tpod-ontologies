@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Regenerate app-behavior.md's Form Types table from the ontology.
+"""Regenerate README.md's Form Shapes table from the ontology.
 
 A form type *is* a SHACL node shape: the Add Tool dialog offers one entry per
 shape a tool's graph can be validated against, and the picked shape's IRI is
 stamped onto the new graph as its cell:shape value (app-behavior.md's "Adding a
-Tool"). Which shapes those are, and which categories declare one up front via
+Tool"); README.md's "Form Shapes" section is where the list itself lives. Which shapes those are, and which categories declare one up front via
 cell:formShape, are both facts of the .ttl files — so the table's row set, its
 shape column and its "Declared by" column are generated here rather than
 maintained by hand.
@@ -35,7 +35,7 @@ with new rows appended at the end, so the generated block diffs cleanly.
 Usage (from the repo root):
     python3 helpers/form-types.py            # same as --check
     python3 helpers/form-types.py --check    # diff the file against the ontology; exit 1 on drift
-    python3 helpers/form-types.py --write    # splice the regenerated table into app-behavior.md
+    python3 helpers/form-types.py --write    # splice the regenerated table into README.md
     python3 helpers/form-types.py --report   # per-shape facts for writing a description
 """
 
@@ -57,7 +57,7 @@ from validate import PREFIX_TO_FILES, SHAPE_NS, SHAPE_TO_FILE  # noqa: E402
 SH = Namespace("http://www.w3.org/ns/shacl#")
 CELL = Namespace("http://mee.foundation/ontologies/cell#")
 
-DOC = os.path.join(REPO, "app-behavior.md")
+DOC = os.path.join(REPO, "README.md")
 
 # The two shapes files that hold no form shape at all: they constrain the
 # cell/graph/tool scaffolding and the service hierarchy themselves, never the
@@ -180,7 +180,7 @@ def split_doc(text):
     """(before, block, after) around the generated fences."""
     if BEGIN not in text or END not in text:
         sys.exit(
-            "app-behavior.md has no generated form-types block. Expected the fences:\n"
+            "README.md has no generated form-types block. Expected the fences:\n"
             "  %s\n  %s" % (BEGIN, END)
         )
     before, rest = text.split(BEGIN, 1)
@@ -299,7 +299,7 @@ def report(rows, member_only):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--check", action="store_true", help="diff the file against the ontology (default)")
-    ap.add_argument("--write", action="store_true", help="splice the regenerated table into app-behavior.md")
+    ap.add_argument("--write", action="store_true", help="splice the regenerated table into README.md")
     ap.add_argument("--report", action="store_true", help="print the per-shape facts a description is written from")
     args = ap.parse_args()
 
@@ -318,11 +318,11 @@ def main():
 
     if args.write:
         if regenerated == block:
-            print("Form Types table already matches the ontology — nothing written.")
+            print("Form Shapes table already matches the ontology — nothing written.")
             return 0
         with open(DOC, "w", encoding="utf-8") as fh:
             fh.write(before + BEGIN + "\n" + regenerated + "\n" + END + after)
-        print("Rewrote app-behavior.md's Form Types table (%d rows)." % len(rows))
+        print("Rewrote README.md's Form Shapes table (%d rows)." % len(rows))
         if TODO in regenerated:
             print("NOTE: a new row carries a TODO description — write it before committing.")
         return 0
@@ -340,14 +340,14 @@ def main():
     if regenerated == block:
         if stray:
             return 1
-        print("Form Types table matches the ontology (%d form types; member-shape-only: %s)."
+        print("Form Shapes table matches the ontology (%d form types; member-shape-only: %s)."
               % (len(rows), ", ".join(member_only) or "none"))
         return 0
 
-    print("Form Types table has drifted from the ontology:\n")
+    print("Form Shapes table has drifted from the ontology:\n")
     for line in difflib.unified_diff(
         block.splitlines(), regenerated.splitlines(),
-        fromfile="app-behavior.md", tofile="generated", lineterm="",
+        fromfile="README.md", tofile="generated", lineterm="",
     ):
         print(line)
     print("\nRun `python3 helpers/form-types.py --write` to regenerate it.")
