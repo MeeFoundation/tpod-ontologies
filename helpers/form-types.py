@@ -74,7 +74,7 @@ BEGIN = "<!-- BEGIN GENERATED: form-types (helpers/form-types.py) -->"
 END = "<!-- END GENERATED: form-types -->"
 
 HEADER = [
-    "| Form type | `c:shape` value | What the form records | Declared by |",
+    "| Form type | `c:shape` value, definition | What the form records | Declared by |",
     "|---|---|---|---|",
 ]
 
@@ -99,6 +99,14 @@ def shape_curie(local_name):
         if shapes_file in files:
             return "%s:%s" % (prefix, local_name)
     raise KeyError("no CURIE prefix maps to %s" % shapes_file)
+
+
+def shape_cell(curie):
+    """Column two: the CURIE a graph's cell:shape carries, plus a link to the
+    shapes file that defines it. Both halves are facts of the registry, so the
+    link can never drift from the shape it points at."""
+    shapes_file = SHAPE_TO_FILE[curie.split(":", 1)[1]]
+    return "`%s` — [`%s`](%s)" % (curie, shapes_file, shapes_file)
 
 
 def shape_iri(local_name):
@@ -197,7 +205,7 @@ def parse_block(block):
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
         if len(cells) != 4 or cells[0] == "Form type":
             continue
-        m = re.match(r"`([^`]+)`$", cells[1])
+        m = re.match(r"`([^`]+)`", cells[1])
         if not m:
             continue
         existing.append((m.group(1), cells[0], cells[2]))
@@ -213,13 +221,13 @@ def build_block(existing, rows):
         if curie not in rows:
             continue  # shape left the registry, or became member-shape-only
         seen.add(curie)
-        lines.append("| %s | `%s` | %s | %s |" % (display, curie, description, rows[curie]))
+        lines.append("| %s | %s | %s | %s |" % (display, shape_cell(curie), description, rows[curie]))
     for curie in sorted(rows):
         if curie in seen:
             continue
         local = curie.split(":", 1)[1]
         display = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", local[: -len("Shape")])
-        lines.append("| **%s** | `%s` | %s | %s |" % (display, curie, TODO, rows[curie]))
+        lines.append("| **%s** | %s | %s | %s |" % (display, shape_cell(curie), TODO, rows[curie]))
     return "\n".join(lines)
 
 

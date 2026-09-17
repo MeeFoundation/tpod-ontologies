@@ -6,7 +6,7 @@ Reconcile the **Form Shapes** table in `README.md`'s [Form Shapes](../../README.
 
 **The `.ttl` files are authoritative.** Where the table and the ontology disagree, the table is wrong. This is a one-directional sync: ontology → `README.md`.
 
-`helpers/form-types.py` does the mechanical half. It owns the table's **row set**, its **shape CURIE** column and its **Declared by** column, reading them from `helpers/validate.py`'s `SHAPE_TO_FILE` registry and from every `cell:formShape`/`cell:memberShape` in `cat-templates.ttl` and `category-ext/*.ttl`. It does **not** write the display name or the description — those are the app's own UI wording, and your job here.
+`helpers/form-types.py` does the mechanical half. It owns the table's **row set**, its **shape** column (the CURIE plus a link to the `*-shacl.ttl` file defining it) and its **Declared by** column, reading them from `helpers/validate.py`'s `SHAPE_TO_FILE` registry and from every `cell:formShape`/`cell:memberShape` in `cat-templates.ttl` and `category-ext/*.ttl`. It does **not** write the display name or the description — those are the app's own UI wording, and your job here.
 
 ## Method
 
