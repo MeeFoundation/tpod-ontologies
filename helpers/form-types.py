@@ -74,7 +74,7 @@ BEGIN = "<!-- BEGIN GENERATED: form-types (helpers/form-types.py) -->"
 END = "<!-- END GENERATED: form-types -->"
 
 HEADER = [
-    "| Form type | `c:shape` value — file | What the form records | Declared by |",
+    "| Form type | `pod:shape` value — file | What the form records | Declared by |",
     "|---|---|---|---|",
 ]
 
