@@ -39,7 +39,7 @@ Applied **only** to the two Person-designating ID numbers: Drivers License Numbe
 
 - `example/contexts/self.self(passport)(federal)(19).databook.md` — passport number → two-relation form (`:Alice_Passport_Number`).
 - `example/contexts/self.self(california-dmv)(state)(15).databook.md` — DL number → two-relation form (`:Alice_DL_Number`).
-- `cell-templates-shacl.ttl` — the `DriversLicenseDocumentShape` and `PassportDocumentShape` number constraints: the `sh:path` for the number changed from `ont00001879` (designated by) to `BFO_0000101` (is carrier of), since the document now *carries* the number rather than *designating* it. Cardinality (exactly 1) unchanged.
+- `pod-templates-shacl.ttl` — the `DriversLicenseDocumentShape` and `PassportDocumentShape` number constraints: the `sh:path` for the number changed from `ont00001879` (designated by) to `BFO_0000101` (is carrier of), since the document now *carries* the number rather than *designating* it. Cardinality (exactly 1) unchanged.
 
 All three files parse clean (rdflib 7.x).
 
@@ -55,7 +55,7 @@ If you'd rather the shapes accept **either** form (a one-line `sh:or` change so 
 
 ```bash
 # both databooks + shapes parse
-python3 -c "from rdflib import Graph; [Graph().parse(f, format='turtle') for f in ['cell-templates-shacl.ttl']]; print('shapes OK')"
+python3 -c "from rdflib import Graph; [Graph().parse(f, format='turtle') for f in ['pod-templates-shacl.ttl']]; print('shapes OK')"
 
 # confirm the two relations are present on each number node
 grep -n "BFO_0000101\|:Alice_Passport_Number\|:Alice_DL_Number" example/contexts/self.self*.databook.md

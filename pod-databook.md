@@ -1,16 +1,16 @@
-# Cell DataBook File Format
+# Pod DataBook File Format
 
 ## Development Scaffolding
 
 **This file specifies an artifact that will not exist once the v4 app ships, and describes a
 filesystem layout that will not exist either.** V4 persists no data in the user's filesystem at all:
-a cell's entire content — everything this document describes, plus the note, the attachments, the
+a pod's entire content — everything this document describes, plus the note, the attachments, the
 chat and the member's own private files — lives in a protected, app-managed store, encrypted at
 rest. See [storage.md](storage.md) for that decision and the reasoning behind it. A running v4
 produces no folders, no `.databook.md` file, and no files of any kind.
 
-The app does not exist yet, and `example/Cells/` is how this project carries, validates and diagrams
-real cell content in the meantime. So the DataBook lives on disk here, as **development
+The app does not exist yet, and `example/Pods/` is how this project carries, validates and diagrams
+real pod content in the meantime. So the DataBook lives on disk here, as **development
 scaffolding**: three helpers read those files (`helpers/validate.py`, `helpers/yaml-to-rdf.py` and
 `helpers/extract-all.py` discover them by globbing `*.databook.md`; `helpers/extract-graph.py` and
 `helpers/draw.py` take one as an argument), and seventeen of integrity.md's checks do too. When the
@@ -19,24 +19,24 @@ app ships, all of that has to move to whatever the app exposes instead.
 The scaffolding is not only the file. The folder around it is scaffolding too, and so is everything
 in that folder:
 
-- **A folder stands for a cell, and the reserved `_cell-attachments` folder directly inside it is
-  what marks the folder as one.** This gives the repo a cell/not-a-cell test decidable from a single
+- **A folder stands for a pod, and the reserved `_pod-attachments` folder directly inside it is
+  what marks the folder as one.** This gives the repo a pod/not-a-pod test decidable from a single
   folder's immediate contents, with no tree walk — which is what [integrity.md](integrity.md)'s
   FS-5 relies on. Both markers are present here, the folder's and the file's, and FS-5
   requires them to agree; that is what keeps the scaffolding from drifting away from the tree it
-  represents. At runtime nothing marks a cell, because there is no folder to mark.
-- **A cell's note is a file named after its folder** (`X.md` inside the folder `X`), the folder-note
+  represents. At runtime nothing marks a pod, because there is no folder to mark.
+- **A pod's note is a file named after its folder** (`X.md` inside the folder `X`), the folder-note
   convention PKM tools such as Obsidian use. At runtime the note is app-internal and has no name of
   its own.
-- **A cell's attachments are the plain files inside its `_cell-attachments` folder, and the member's
+- **A pod's attachments are the plain files inside its `_pod-attachments` folder, and the member's
   own private files are the ones loose beside it.** At runtime the same distinction is a rule about
   what propagates on a share, decided by how the member filed the file in the app, not by which
   directory it sits in.
 - **The [Filename Convention](#filename-convention) below is scaffolding-only.** At runtime there is
   no file, so there is no filename, and nothing depends on one.
-- **Nothing records a cell's position in the tree.** Here that is because the position is simply
-  wherever the folder currently sits; at runtime it is because a cell's parent is per-member state
-  in that member's own store. The invariant holds either way, and `c:Cell` asserts no tree position
+- **Nothing records a pod's position in the tree.** Here that is because the position is simply
+  wherever the folder currently sits; at runtime it is because a pod's parent is per-member state
+  in that member's own store. The invariant holds either way, and `pod:Pod` asserts no tree position
   in either case.
 
 Everything below therefore describes the repo's filesystem, not a user's. Where this repo's layout
@@ -44,78 +44,78 @@ and the model appear to disagree, this document is the one to read; [storage.md]
 the boundary, and every other file in the project describes the model and points back here for the
 layout.
 
-## What a Cell DataBook Is
+## What a Pod DataBook Is
 
-A **cell DataBook** is the file that carries a cell's structured content. It is a
+A **pod DataBook** is the file that carries a pod's structured content. It is a
 [DataBook](https://github.com/w3c-cg/holon/tree/main/architectures/databook) — a Markdown file with
 YAML frontmatter, extension `.databook.md` — sitting directly inside the folder this repo uses to
-stand for the cell whose content it carries. See [Cell Contents](app-behavior.md#cell-contents) in
-app-behavior.md for what a cell actually holds, and [Development Scaffolding](#development-scaffolding)
+stand for the pod whose content it carries. See [Pod Contents](app-behavior.md#pod-contents) in
+app-behavior.md for what a pod actually holds, and [Development Scaffolding](#development-scaffolding)
 above for why it is a folder here and nothing at all at runtime.
 
-One cell DataBook carries three things:
+One pod DataBook carries three things:
 
 - **document fields** — six YAML keys describing the file itself, above the `v4:` block;
-- **the `v4:` block** — the cell's category, its creator and owners, its tags, and its links to the
-  graphs below, whose keys map onto properties defined in `cell.ttl`. See
-  [Cell Ontology](README.md#cell-ontology) in README.md for what each property *means*; this
+- **the `v4:` block** — the pod's category, its creator and owners, its tags, and its links to the
+  graphs below, whose keys map onto properties defined in `pod.ttl`. See
+  [Pod Ontology](README.md#pod-ontology) in README.md for what each property *means*; this
   document says how each is *written*;
 - **the body** — one `### Graph NN` section per graph the `v4:` block links, each holding that
   graph's own Turtle.
 
-A graph has no file of its own: it lives inside the cell DataBook that links it, as one
+A graph has no file of its own: it lives inside the pod DataBook that links it, as one
 `v4.member`/`v4.tool[].graph` entry plus one body section.
 
-**Nothing in the file records where the cell sits.** There is no tree-position field, no parent
-link, and no back-pointer from a graph to the cell that links it — a cell asserts `v4.member` and
-`v4.tool`, and that is the only direction the link runs. In this repo a cell's position is simply
-wherever its folder currently sits, and a graph's containing cell is simply wherever its entry
+**Nothing in the file records where the pod sits.** There is no tree-position field, no parent
+link, and no back-pointer from a graph to the pod that links it — a pod asserts `v4.member` and
+`v4.tool`, and that is the only direction the link runs. In this repo a pod's position is simply
+wherever its folder currently sits, and a graph's containing pod is simply wherever its entry
 physically lives, so moving or renaming a folder is a pure filesystem operation with nothing in any
-file to update. The invariant is the same one the model asserts for its own reason — a cell's parent
+file to update. The invariant is the same one the model asserts for its own reason — a pod's parent
 is per-member state in that member's own store, never shared content — which is what lets two members
-of a shared cell each file it wherever they like without touching content the other sees. It is also
-why two cells can never share a folder here: a file sitting in it would be ambiguously part of both,
+of a shared pod each file it wherever they like without touching content the other sees. It is also
+why two pods can never share a folder here: a file sitting in it would be ambiguously part of both,
 and the marker being a folder of one fixed reserved name, of which a directory can hold only one,
 makes that structurally impossible rather than merely forbidden.
 
-**The rest of a cell's content is not in this file.** The DataBook holds the structured content and
-the metadata about the cell itself; a cell's unstructured content sits beside it:
+**The rest of a pod's content is not in this file.** The DataBook holds the structured content and
+the metadata about the pod itself; a pod's unstructured content sits beside it:
 
 - **the note** — one Markdown file named after the folder (`X.md` inside the folder `X`), shown in
   the app's Note area. Naming it after its folder is the folder-note convention PKM tools such as
   Obsidian use, which is what lets this repo's tree be browsed in one;
-- **the attachments** — the plain files inside the folder's own `_cell-attachments` subfolder, flat,
-  like email attachments. Every cell has that subfolder, empty or not, and its contents are the part
-  of a cell's folder that travels when the cell is shared;
+- **the attachments** — the plain files inside the folder's own `_pod-attachments` subfolder, flat,
+  like email attachments. Every pod has that subfolder, empty or not, and its contents are the part
+  of a pod's folder that travels when the pod is shared;
 - **the member's own private files** — every other plain file loose in the folder, and any subfolder
-  with no cell anywhere beneath it. These stay in that member's copy of the cell and never reach
-  another member. The remaining two kinds of subfolder are not the cell's content at all: a
-  descendant cell, holding its own `_cell-attachments` folder, and a bare pass-through directory on
+  with no pod anywhere beneath it. These stay in that member's copy of the pod and never reach
+  another member. The remaining two kinds of subfolder are not the pod's content at all: a
+  descendant pod, holding its own `_pod-attachments` folder, and a bare pass-through directory on
   the way to one (integrity.md's FS-5);
-- **the chat** — a stream shared by the cell's members, not a file in the folder at all; like this
+- **the chat** — a stream shared by the pod's members, not a file in the folder at all; like this
   file's own content, it lives inside the app.
 
 None of these is named or listed anywhere in the DataBook. There is no attachment manifest and
 no note-filename field: here the note is found by its name and the attachments by reading one
-reserved folder, so adding a file to a cell is just putting a file in that cell's folder — and
-attaching it, so that every member gets it, is just putting it in `_cell-attachments` instead. At
+reserved folder, so adding a file to a pod is just putting a file in that pod's folder — and
+attaching it, so that every member gets it, is just putting it in `_pod-attachments` instead. At
 runtime the same two acts are ordinary app operations, and the attached/private distinction is a rule
-about what propagates rather than about where a file sits. `c:note`, `c:attachment` and `c:chat` are documentation-only properties — described in
+about what propagates rather than about where a file sits. `pod:note`, `pod:attachment` and `pod:chat` are documentation-only properties — described in
 README.md's [Documentation-only Properties](README.md#documentation-only-properties), declared in no
 ontology, and never written as a triple by anything (integrity.md's PNG-3).
 
-This document specifies the DataBook file and the folder this repo wraps it in; for what a cell
-holds in the app, see [Cell Contents](app-behavior.md#cell-contents) in app-behavior.md, and for the
-boundary between the two, [storage.md](storage.md). For real files, see `example/Cells/` and
+This document specifies the DataBook file and the folder this repo wraps it in; for what a pod
+holds in the app, see [Pod Contents](app-behavior.md#pod-contents) in app-behavior.md, and for the
+boundary between the two, [storage.md](storage.md). For real files, see `example/Pods/` and
 [example.md](example.md).
 
 ## Why This Format
 
-This is not how the app persists a cell — nothing is persisted as a file at all (see
+This is not how the app persists a pod — nothing is persisted as a file at all (see
 [storage.md](storage.md)). It is how *this repo* carries one, and two properties are what make the
 format the right shape for that job.
 
-**It is human-readable.** A cell DataBook is Markdown with YAML frontmatter, so a cell's content can
+**It is human-readable.** A pod DataBook is Markdown with YAML frontmatter, so a pod's content can
 be navigated, inspected, and edited with ordinary tools, which is the only way it can be worked on
 before there is an app. Maintaining this repo's own example tree in VS Code and Claude Code is the
 demonstration: everything the format carries is legible as text, and anything wrong with it is
@@ -125,7 +125,7 @@ an argument that v4's storage could interoperate with a PKM vault such as Obsidi
 that argument is retired — v4 writes no files for a vault to see.
 
 **It is machine-verifiable.** The format is constrained from three directions: SHACL shapes
-validate a cell's synthesized triples, [integrity.md](integrity.md)'s checks cover what SHACL cannot
+validate a pod's synthesized triples, [integrity.md](integrity.md)'s checks cover what SHACL cannot
 express, and [CLAUDE.md](CLAUDE.md) records the conventions behind both. Together they are a
 diagnostic independent of the app — a second reading of the same rules, against which whatever
 validation v4 implements internally can be checked. A single implementation has nothing to disagree
@@ -134,12 +134,12 @@ with.
 The format will change, though. It has so far been exercised by one worked example and the
 validation pipeline around it, not by an implementation, and the v4 implementation team will find
 requirements it does not yet meet — a field that has to be added, a convention that holds across the
-example tree but not across a real user's, a distinction that only matters once cells are syncing
+example tree but not across a real user's, a distinction that only matters once pods are syncing
 between real instances. The largest known gap is tools: three of the four kinds have no data format
 at all yet. See [Open Questions](#open-questions) at the end for that and the rest of what is
 still unsettled. This document tracks the format as it stands rather than freezing it; what
 keeps a proposed change honest is that [integrity.md](integrity.md)'s checks and the tree under
-`example/Cells/` make its blast radius visible before it is made.
+`example/Pods/` make its blast radius visible before it is made.
 
 ## Filename Convention
 
@@ -147,20 +147,20 @@ keeps a proposed change honest is that [integrity.md](integrity.md)'s checks and
 depends on any of this section. It governs the DataBooks in this repo, and it is what integrity.md's
 FS-5, YAML-5 and PNG-9 read.
 
-Cell-databook filenames follow (there is no separate category-databook file — a folder's sole
-DataBook is its cell-databook, see [Cell/Category split](CLAUDE.md#key-architectural-patterns)):
+Pod-databook filenames follow (there is no separate category-databook file — a folder's sole
+DataBook is its pod-databook, see [Pod/Category split](CLAUDE.md#key-architectural-patterns)):
 
 ```
-<local>(<catType>).databook.md  — cell-databook
+<local>(<catType>).databook.md  — pod-databook
 ```
 
 `<local>` is an **exact copy of the folder's own name** — verbatim, no kebab-casing, no lowercasing,
 whatever case/spacing/punctuation the folder itself has (e.g. `Acme`, `Paula Walker`, `ATT`). There
-is no `-cell` token: cell-databook is the sole DataBook type in a user's instance tree, so nothing
+is no `-pod` token: pod-databook is the sole DataBook type in a user's instance tree, so nothing
 needs to be disambiguated by it. There is also no numeric disambiguator of any kind (no `-2`, `-N`,
-etc.): a folder holds **at most one** cell-databook, ever. (What marks a folder as a cell
-in this repo is its `_cell-attachments` folder, not this file; FS-5 requires the two markers to
-agree, so in practice a cell folder carries exactly one matching cell-databook and a folder with
+etc.): a folder holds **at most one** pod-databook, ever. (What marks a folder as a pod
+in this repo is its `_pod-attachments` folder, not this file; FS-5 requires the two markers to
+agree, so in practice a pod folder carries exactly one matching pod-databook and a folder with
 neither marker is simply a plain filesystem folder.) `<catType>` is the folder's own category classification,
 kebab-cased (e.g. `Employees` → `employees`, `ImmediateFamily` → `immediate-family`, `SSN` → `ssn` —
 kebab-casing is acronym-aware: a hyphen is inserted only at a lowercase→uppercase boundary or an
@@ -170,24 +170,24 @@ same-named Person-side sibling concept, e.g. `cat:BankingPayments` vs. `cat:Bank
 that suffix is dropped before kebab-casing — `<catType>` only ever needs to disambiguate a
 *recurring folder name* by role (e.g. were the same person to appear both as a leaf under
 `Employees` and as one under `ImmediateFamily`, both Person-side), never the Person/Organization
-split itself, which is already carried by the folder's own tree position and by `c:category`'s
-actual asserted value, never by the filename. So a bank cell whose `c:category` is
+split itself, which is already carried by the folder's own tree position and by `pod:category`'s
+actual asserted value, never by the filename. So a bank pod whose `pod:category` is
 `cat:BankingPayments` (Person-side, since it's the person's own relationship with the bank, not
 company business filed under `Work`) is named `<local>(banking-payments).databook.md` with no `-org`
-marker, and the same bare `banking-payments` `<catType>` would apply identically if a cell's
-`c:category` were instead the org-side `cat:BankingPayments(org)`, since nothing in the filename
+marker, and the same bare `banking-payments` `<catType>` would apply identically if a pod's
+`pod:category` were instead the org-side `cat:BankingPayments(org)`, since nothing in the filename
 needs to tell the two apart.
 
-A cell-databook's `<catType>` parenthetical is purely a filename-level disambiguator — `cat:catType`
+A pod-databook's `<catType>` parenthetical is purely a filename-level disambiguator — `cat:catType`
 does not exist in RDF at all, so nothing in RDF records it, and nothing reverse-matches the filename
-to derive it. The one RDF-level echo of a folder's classification is `c:category`, read directly
-from the cell-databook's own explicit `v4.category` field (see [The `v4` Block](#the-v4-block)), not
-derived from the filename at all. Unlike the filename, a cell-databook's `id:` is deliberately *not*
-derived from the folder name either — see [`id`](#cell-id) below.
+to derive it. The one RDF-level echo of a folder's classification is `pod:category`, read directly
+from the pod-databook's own explicit `v4.category` field (see [The `v4` Block](#the-v4-block)), not
+derived from the filename at all. Unlike the filename, a pod-databook's `id:` is deliberately *not*
+derived from the folder name either — see [`id`](#pod-id) below.
 
-**UserDefined folders — `<catType>` is the literal `custom`**: a cell may legally carry no
-`c:category` at all — this is the UserDefined category, for a cell the user created without picking
-any existing category concept. What identifies such a cell is simply that it carries no `category`
+**UserDefined folders — `<catType>` is the literal `custom`**: a pod may legally carry no
+`pod:category` at all — this is the UserDefined category, for a pod the user created without picking
+any existing category concept. What identifies such a pod is simply that it carries no `category`
 value; the filename literal below is this repo's way of making that visible on disk, not the test
 itself. Since there is no category concept to kebab-case into `<catType>`, the filename uses the
 fixed literal string `custom` in its place, e.g. a folder named `Friends` with no category is
@@ -213,89 +213,89 @@ non-compressing case: normalized `Banking & Payments Firms` (`banking-payments-f
 `skos:prefLabel` ("Banking & Payments Firms") rather than a shortened form.
 
 Folder naming is standardized as the category's own display label (the OS folder name is used
-verbatim, with no override field anywhere — the cell-databook's own `title:` field mirrors this name
+verbatim, with no override field anywhere — the pod-databook's own `title:` field mirrors this name
 exactly rather than overriding it, see integrity.md's YAML-5), but a folder's own name alone can't
 disambiguate a repeated name's *role* — the same person can legitimately appear at two different
 tree positions, e.g. as a leaf under `Immediate Family` and again as a leaf under an employer's
 `Employees`, both folders literally named after them — so `catType` carries that role encoding in
 the filename instead, not derived from folder position. Such a pair never collides: one would be
 `<name>(immediate-family).databook.md` and the other `<name>(employees).databook.md` (an employee
-cell reuses the "Employees" scaffold's own category directly, the same "child folder reuses its
-parent's category" pattern a pet's own cell under `Pets` already uses — there is no separate
+pod reuses the "Employees" scaffold's own category directly, the same "child folder reuses its
+parent's category" pattern a pet's own pod under `Pets` already uses — there is no separate
 narrower "Employee" category).
 
 ## Frontmatter
 
-Every cell DataBook opens with the same six YAML fields, above its `v4:` block and in this order:
+Every pod DataBook opens with the same six YAML fields, above its `v4:` block and in this order:
 `id`, `title`, `type`, `version`, `created`, `description`. They describe the DataBook itself rather
-than the cell's content — only `id` reaches RDF at all, and none of the six corresponds to a
-property in `cell.ttl`. The cell's content proper is the `v4:` block below them, documented in
+than the pod's content — only `id` reaches RDF at all, and none of the six corresponds to a
+property in `pod.ttl`. The pod's content proper is the `v4:` block below them, documented in
 [The `v4` Block](#the-v4-block).
 
-<a id="cell-id"></a>
+<a id="pod-id"></a>
 
 ### `id`
 
-The cell's own id, and the RDF subject every triple synthesized from this DataBook hangs off —
-`helpers/databook_graphs.py` reads it directly as the subject IRI of the `c:Cell` individual. It is
+The pod's own id, and the RDF subject every triple synthesized from this DataBook hangs off —
+`helpers/databook_graphs.py` reads it directly as the subject IRI of the `pod:Pod` individual. It is
 the one frontmatter field with ontology weight, and the one field a DataBook cannot omit. It is
 deliberately *not* derived from the folder name or the filename (see
 [Filename Convention](#filename-convention)): encoding a name into it would risk a collision the
 moment two folders elsewhere in the tree shared both a name and a category, and nothing depends on
 the id's string structure.
 
-A cell's id is globally unique across every user's independent tree, not merely within one person's
-own. It is flat and opaque, never derived from the cell's own name or category, and no registry or
-central coordination assigns it — consistent with no cell, and nothing about it, ever being held by
-a cloud provider or third party (see [Cell Storage](app-behavior.md#cell-storage)), and with
+A pod's id is globally unique across every user's independent tree, not merely within one person's
+own. It is flat and opaque, never derived from the pod's own name or category, and no registry or
+central coordination assigns it — consistent with no pod, and nothing about it, ever being held by
+a cloud provider or third party (see [Pod Storage](app-behavior.md#pod-storage)), and with
 `:Self`'s purely-local identifier (see
 [`:Self` IRI convention](CLAUDE.md#key-architectural-patterns)). Instead, it is derived from its
 creator's identity and freshly generated random bytes (`‖` is byte concatenation):
 
 ```
 nonce     = 16 random bytes
-cell_id   = BLAKE3 derive_key("pdn/cell-id/v1", pdn_id ‖ announcement_pubkey ‖ nonce), first 16 bytes
-signature = sign(announcement_secret, "pdn/cell-founding/v1" ‖ pdn_id ‖ announcement_pubkey ‖ nonce)
+pod_id    = BLAKE3 derive_key("pdn/pod-id/v1", pdn_id ‖ announcement_pubkey ‖ nonce), first 16 bytes
+signature = sign(announcement_secret, "pdn/pod-founding/v1" ‖ pdn_id ‖ announcement_pubkey ‖ nonce)
 ```
 
 `pdn_id` is the creator's PDN ID; the announcement key pair belongs to their identity, shared by all
 their devices, not to one device. The id is written as 32 lowercase hex characters. `pdn_id`,
-`announcement_pubkey`, `nonce` and `signature` are stored in the cell's founding event — the first
-event in the cell's membership store; the id itself is not stored.
+`announcement_pubkey`, `nonce` and `signature` are stored in the pod's founding event — the first
+event in the pod's membership store; the id itself is not stored.
 
 A founding event is valid only when the id recomputed from its fields matches and its signature
-verifies (see [Deriving and Checking a Cell Id](app-behavior.md#deriving-and-checking-a-cell-id)).
+verifies (see [Deriving and Checking a Pod Id](app-behavior.md#deriving-and-checking-a-pod-id)).
 This is what prevents a member from feeding a device that already knows the id (from its identity's
 records or a note link) a forged history with a different founder — a random id such as a v4 UUID
 names no one and cannot. The context strings keep this hash and signature apart from any other made
 over the same bytes; without the founding event, which only members hold, the id reveals neither
 creator nor creation time.
 
-This repo's own example data uses sequential `http://www.example.org/v4/cells/cell-<NN>` ids instead
+This repo's own example data uses sequential `http://www.example.org/v4/pods/pod-<NN>` ids instead
 (see integrity.md's YAML-3) — the same flat, opaque shape, deliberately simple for one worked
-example living entirely under a single shared example domain, and not unique once real cells belong
+example living entirely under a single shared example domain, and not unique once real pods belong
 to many different users' independent instances.
 
 ### `title`
 
-The cell's own name, and always exactly the name of the filesystem folder holding the DataBook —
+The pod's own name, and always exactly the name of the filesystem folder holding the DataBook —
 verbatim, same case, spacing and punctuation. Within this scaffolding the folder is authoritative:
 renaming the folder means updating `title:` to match, never the reverse, and `title:` is never an
 independent display-name override (integrity.md's YAML-5, which also treats it as authoritative
-for what a cell "is called" when matching diagram box labels). At runtime the app's own record of
-the name is authoritative outright, there being no folder to mirror. It is shared, synced cell content, kept identical across every
-member's copy, and any member may rename the cell — see
+for what a pod "is called" when matching diagram box labels). At runtime the app's own record of
+the name is authoritative outright, there being no folder to mirror. It is shared, synced pod content, kept identical across every
+member's copy, and any member may rename the pod — see
 [Naming, Renaming, and Sharing](app-behavior.md#naming-renaming-and-sharing) in app-behavior.md for
-the one exception, a bare two-member cell, whose name is instead independent per member.
+the one exception, a bare two-member pod, whose name is instead independent per member.
 
 ### `type`
 
-Always the literal `cell-databook` — the only DataBook type in this repo's instance tree, so no
-`-cell` token is needed to tell one DataBook kind from another. It does not identify a cell: that is
-the `_cell-attachments` folder's job (see [Cell Contents](app-behavior.md#cell-contents)
+Always the literal `pod-databook` — the only DataBook type in this repo's instance tree, so no
+`-pod` token is needed to tell one DataBook kind from another. It does not identify a pod: that is
+the `_pod-attachments` folder's job (see [Pod Contents](app-behavior.md#pod-contents)
 in app-behavior.md). It is also the tooling's file filter: both
 `helpers/yaml-to-rdf.py` and `helpers/validate.py` skip any DataBook whose `type` is anything else,
-so a wrong value silently drops the cell from RDF synthesis and validation alike rather than
+so a wrong value silently drops the pod from RDF synthesis and validation alike rather than
 raising. No integrity check asserts the value.
 
 ### `version`
@@ -310,30 +310,30 @@ README.md.
 
 ### `created`
 
-An unquoted ISO 8601 calendar date, `YYYY-MM-DD`, recording when the cell was created. Hand-entered:
+An unquoted ISO 8601 calendar date, `YYYY-MM-DD`, recording when the pod was created. Hand-entered:
 no check reads it, nothing derives it from the filesystem or from git, and it is not synthesized
 into RDF.
 
 ### `description`
 
-A prose summary of the cell, written as a folded block scalar (`description: >`). Not used by any
+A prose summary of the pod, written as a folded block scalar (`description: >`). Not used by any
 tooling and not synthesized into RDF. Throughout the example tree it follows one house style: it
-opens `Cell DataBook for folder "<title>" (cell:category: cat:<Concept>)`, optionally noting where
-the cell is nested or whose category it reuses, then characterizes the cell's own shape — how many
+opens `Pod DataBook for folder "<title>" (pod:category: cat:<Concept>)`, optionally noting where
+the pod is nested or whose category it reuses, then characterizes the pod's own shape — how many
 members it has, and what its tool is about if it carries one.
 
 ## The `v4` Block
 
-Below the six document fields sits a single `v4:` mapping carrying the cell's own content. Its
-scalar-valued keys map one-for-one onto properties defined in `cell.ttl`:
+Below the six document fields sits a single `v4:` mapping carrying the pod's own content. Its
+scalar-valued keys map one-for-one onto properties defined in `pod.ttl`:
 
 | YAML field | Ontology property | Cardinality | Meaning |
 |------------|-------------------|-------------|---------|
-| `v4.category` | `c:category` | 0..1 | The category concept this cell was originally instantiated as — a `skos:Concept` individual in `cat:CategoryScheme` (e.g. `"cat:Others"`) or in a [category extension](README.md#category-extensions)'s own scheme (e.g. `"bhscat:BostonHubSociety"`); absent otherwise. Fixed at creation, not re-derived from the folder's current name. A hint for a recipient's app when this cell is shared with another member |
-| `v4.creator` | `c:creator` | 1 | Who created this cell's content — a `p:Person` |
-| `v4.owner` | `c:owner` | 1+ (required, no upper bound) | Which of the cell's members hold the owner role — always includes `v4.creator`'s own value; a `p:Person`, never an `s:Service` |
-| `v4.userTag` | `c:userTag` | 0..N | A free-text tag the user minted (e.g. a pet's name, to gather every cell about that pet). Shared cell content |
-| `v4.serviceTag` | `c:serviceTag` | 0..N | A tag written by this member's own service module for its own bookkeeping. Each entry is a mapping of three sub-keys — `namespace`, `key`, `value` (`c:tagNamespace`/`c:tagKey`/`c:tagValue`), e.g. `namespace: "foundation.mee.applecontacts"`, `key: "group"`, `value: "Christmas List"` — not a single string. Never displayed and never findable by the user — reachable only by the writing module, within its own namespace — and **local to this member's copy** — the one piece of cell content that does not propagate on a share |
+| `v4.category` | `pod:category` | 0..1 | The category concept this pod was originally instantiated as — a `skos:Concept` individual in `cat:CategoryScheme` (e.g. `"cat:Others"`) or in a [category extension](README.md#category-extensions)'s own scheme (e.g. `"bhscat:BostonHubSociety"`); absent otherwise. Fixed at creation, not re-derived from the folder's current name. A hint for a recipient's app when this pod is shared with another member |
+| `v4.creator` | `pod:creator` | 1 | Who created this pod's content — a `p:Person` |
+| `v4.owner` | `pod:owner` | 1+ (required, no upper bound) | Which of the pod's members hold the owner role — always includes `v4.creator`'s own value; a `p:Person`, never an `s:Service` |
+| `v4.userTag` | `pod:userTag` | 0..N | A free-text tag the user minted (e.g. a pet's name, to gather every pod about that pet). Shared pod content |
+| `v4.serviceTag` | `pod:serviceTag` | 0..N | A tag written by this member's own service module for its own bookkeeping. Each entry is a mapping of three sub-keys — `namespace`, `key`, `value` (`pod:tagNamespace`/`pod:tagKey`/`pod:tagValue`), e.g. `namespace: "foundation.mee.applecontacts"`, `key: "group"`, `value: "Christmas List"` — not a single string. Never displayed and never findable by the user — reachable only by the writing module, within its own namespace — and **local to this member's copy** — the one piece of pod content that does not propagate on a share |
 
 Values are written as quoted CURIEs (`"cat:Pets"`) or bare local names (`":Self"`); both are
 resolved to full IRIs by `helpers/databook_graphs.py`. **Any key whose cardinality allows more than
@@ -341,22 +341,22 @@ one value may be written either as a YAML list or, when it holds a single value,
 `owner: ":Self"` and a one-item list are equivalent, and the same latitude applies to `member`
 below.
 
-There is no *cell-level* `v4.subject` field — who or what a cell's content is about is derived from
+There is no *pod-level* `v4.subject` field — who or what a pod's content is about is derived from
 `v4.member`/`v4.tool` rather than asserted independently (see integrity.md's YAML-4); the
 `subject:` key that does appear sits inside each `v4.member` entry, naming that member rather than
-the cell's own subject.
+the pod's own subject.
 
 The two remaining keys, `v4.member` and `v4.tool`, are link-valued: each entry names one graph
 embedded in this same file's body. In ontology terms:
 
 | Property | Value | Cardinality | Meaning |
 |----------|-------|-------------|---------|
-| `c:member` | `c:MemberGraph` | 1+ (required, no upper bound) | The required baseline of self-vs-other classified graphs backing this cell's content — one or more per member in the relationship — distinguished by each linked graph's own `c:subject`/`c:claimant` combination rather than by separate properties or classes |
-| `c:tool` | `c:Tool` | 0..N — a cell with none is the ordinary case, and nothing caps how many it may carry (see [Tools](README.md#tools)) | Each tool brings its own data format and its own UI contribution; a form tool states, once, what its content is about (`c:formTopic`) |
-| `c:formGraph` | `c:FormGraph` | 1+ (required) on a live `c:Form`, capped in practice at the cell's own member count, per tool (see integrity.md's YAML-8) | The graphs beneath one tool, one per claiming member; a different range from `c:member`, since a tool's `c:formTopic` need not be a PDN-mappable identity |
+| `pod:member` | `pod:MemberGraph` | 1+ (required, no upper bound) | The required baseline of self-vs-other classified graphs backing this pod's content — one or more per member in the relationship — distinguished by each linked graph's own `pod:subject`/`pod:claimant` combination rather than by separate properties or classes |
+| `pod:tool` | `pod:Tool` | 0..N — a pod with none is the ordinary case, and nothing caps how many it may carry (see [Tools](README.md#tools)) | Each tool brings its own data format and its own UI contribution; a form tool states, once, what its content is about (`pod:formTopic`) |
+| `pod:formGraph` | `pod:FormGraph` | 1+ (required) on a live `pod:Form`, capped in practice at the pod's own member count, per tool (see integrity.md's YAML-8) | The graphs beneath one tool, one per claiming member; a different range from `pod:member`, since a tool's `pod:formTopic` need not be a PDN-mappable identity |
 
 Nothing in an entry marks its own kind. The list it sits in settles it: a `v4.member` entry is a
-`c:MemberGraph`, a graph under a `v4.tool` entry is a `c:FormGraph`. The two are `owl:disjointWith`,
+`pod:MemberGraph`, a graph under a `v4.tool` entry is a `pod:FormGraph`. The two are `owl:disjointWith`,
 so neither ever carries the other's fields.
 
 ### `v4.member` Entries
@@ -369,16 +369,16 @@ a bare mapping rather than a one-item list. Sub-keys:
 | `id` | yes | The graph's full IRI — see [Graph Ids and Named Graphs](#graph-ids) |
 | `claimant` | yes | Who is making the claim — see [`claimant` Vocabulary](#claimant-vocabulary) |
 | `subject` | yes | The party whose member entry this graph is — see [`subject` / `formTopic` Vocabulary](#subject--formtopic-vocabulary) |
-| `shape` | no | The `sh:NodeShape` CURIE the graph's content conforms to (`c:shape`), e.g. `"pshapes:ContactInfoShape"`. May itself be a list where one graph's content satisfies several shapes at once. A graph with no `shape:` is skipped by the template validation pass |
+| `shape` | no | The `sh:NodeShape` CURIE the graph's content conforms to (`pod:shape`), e.g. `"pshapes:ContactInfoShape"`. May itself be a list where one graph's content satisfies several shapes at once. A graph with no `shape:` is skipped by the template validation pass |
 
 ### `v4.tool` Entries
 
-One entry per tool the cell carries; zero is the ordinary case. Always written as a list. Sub-keys:
+One entry per tool the pod carries; zero is the ordinary case. Always written as a list. Sub-keys:
 
 | Sub-key | Required | Value |
 |---------|----------|-------|
-| `type` | yes | Which tool class this is: `form`, `calendar`, `canvas` or `map`, mapping to `c:Form`/`c:Calendar`/`c:Canvas`/`c:Map`. Only `form` has a content model today, and only `form` appears in the example tree |
-| `formTopic` | yes on a form | What the tool's content is about (`c:formTopic`) — any resource IRI, stated once by the tool rather than repeated on each graph beneath it |
+| `type` | yes | Which tool class this is: `form`, `calendar`, `canvas` or `map`, mapping to `pod:Form`/`pod:Calendar`/`pod:Canvas`/`pod:Map`. Only `form` has a content model today, and only `form` appears in the example tree |
+| `formTopic` | yes on a form | What the tool's content is about (`pod:formTopic`) — any resource IRI, stated once by the tool rather than repeated on each graph beneath it |
 | `graph` | yes on a form | A list of that tool's own graph entries, at least one |
 
 Each entry in `graph:` carries `id`, `claimant`, and optionally `shape`, exactly as a `v4.member`
@@ -389,12 +389,12 @@ single `formTopic`.
 
 ## Graph Ids and Named Graphs
 
-A graph lives physically inside its owning cell-databook's `v4.member`/`v4.tool[].graph` entries and
-body (see [Cell/Category split](CLAUDE.md#key-architectural-patterns)) — it has no file or
+A graph lives physically inside its owning pod-databook's `v4.member`/`v4.tool[].graph` entries and
+body (see [Pod/Category split](CLAUDE.md#key-architectural-patterns)) — it has no file or
 filename of its own. Each entry's own `id` (which doubles as the graph's
 own named-graph identity, `{id}#graph`) does not re-encode `claimant`/what the graph is about/the
-containing cell into the id string, since those facts are already carried by that same entry's own
-sibling `claimant:` and `subject:` fields, or its tool's `formTopic:`, and the containing cell is
+containing pod into the id string, since those facts are already carried by that same entry's own
+sibling `claimant:` and `subject:` fields, or its tool's `formTopic:`, and the containing pod is
 simply wherever the entry physically lives — encoding them a second time would be pure redundancy.
 It follows a single flat pattern instead:
 
@@ -449,7 +449,7 @@ claimant is a named individual of one of:
 - `o:Organization` — a company, nonprofit, or government agency that is a PDN node, claiming on
   behalf of the `s:ServiceProvider` it provides
 - `s:Service` — a service claiming under its own IRI, with no organization behind it in the
-  relationship (e.g. an invited agent service, or a cell backup service)
+  relationship (e.g. an invited agent service, or a pod backup service)
 
 An organization only ever appears as a claimant when it is PDN-interoperable. Where it is not, the
 user self-enters that data and the claimant is `:Self`. (This distinction is currently a
@@ -458,18 +458,18 @@ data-modeling convention, not something any property formally enforces.)
 ### `subject` / `formTopic` Vocabulary
 
 Which of the two about-ness fields applies is settled entirely by the list the entry sits in — a
-`v4.member` entry is a `c:MemberGraph` and carries `subject:` (the party whose member entry it is,
-always a PDN-mappable identity), a graph under a `v4.tool` entry is a `c:FormGraph` and carries no
+`v4.member` entry is a `pod:MemberGraph` and carries `subject:` (the party whose member entry it is,
+always a PDN-mappable identity), a graph under a `v4.tool` entry is a `pod:FormGraph` and carries no
 about-ness field of its own — its topic is the holding tool's single `formTopic:` (what the content
 is about, which need not be a PDN identity at all). Neither kind ever carries the other's field. See
-`cell.ttl`, and [Graphs](README.md#graphs) in README.md, for why the two are separate properties on
+`pod.ttl`, and [Graphs](README.md#graphs) in README.md, for why the two are separate properties on
 separate disjoint classes.
 
 **Examples** (id local-name, which list it sits in, and the corresponding field values found in that
 same `v4.member`/`v4.tool[].graph` entry), drawn from the worked example in
 [example.md](example.md):
 
-| Id local-name | List | About (`subject`/`formTopic`) | Claimed by | Containing cell |
+| Id local-name | List | About (`subject`/`formTopic`) | Claimed by | Containing pod |
 |----------|------|---------|-------------|---------------------|
 | `graph-76` | `tool` | Self (Alice) | Citibank | Citibank(banking-payments) |
 | `graph-07` | `tool` | Sophia Walker | Self (Alice) | Sophia Walker(immediate-family) |
@@ -528,17 +528,17 @@ own type declaration. Every substantive fact lives in the graph it belongs to.
 
 ## Skeleton
 
-A complete, minimal cell DataBook — one member entry and one form tool with one graph:
+A complete, minimal pod DataBook — one member entry and one form tool with one graph:
 
 ````markdown
 ---
-id: http://www.example.org/v4/cells/cell-NN
+id: http://www.example.org/v4/pods/pod-NN
 title: "Folder Name"
-type: cell-databook
+type: pod-databook
 version: 1.0.0
 created: 2026-01-31
 description: >
-  Cell DataBook for folder "Folder Name" (cell:category: cat:Concept). One-member cell with
+  Pod DataBook for folder "Folder Name" (pod:category: cat:Concept). One-member pod with
   one member entry about :Self and one tool graph about :Topic.
 v4:
   category: "cat:Concept"
@@ -605,12 +605,12 @@ No single tool checks the whole format. It is enforced in three places:
 
 - **[integrity.md](integrity.md)** — PNG-2 (every graph has both an entry and a body section),
   YAML-1 (`graph-<NN>` id pattern), YAML-2 (entry well-formedness: which sub-keys each kind of
-  entry carries), YAML-3 (`cell-<NN>` id pattern), FS-5 (folder ↔ cell-databook structure),
+  entry carries), YAML-3 (`pod-<NN>` id pattern), FS-5 (folder ↔ pod-databook structure),
   YAML-5 (`title:` matches the folder's OS name), TTL-3/TTL-4 (a `shape:` value against the
-  graph's own content, and against the cell's category's own template), and YAML-9
+  graph's own content, and against the pod's category's own template), and YAML-9
   (`v4.userTag`/`v4.serviceTag` well-formedness).
 - **`helpers/validate.py`** — synthesizes `c:` triples from the frontmatter and runs SHACL
-  (`shacl/cell-shacl.ttl` and friends) against them, plus a per-graph template pass driven by each
+  (`shacl/pod-shacl.ttl` and friends) against them, plus a per-graph template pass driven by each
   entry's `shape:` value. See [Validation](example.md#validation) in example.md for the commands.
 - **`helpers/databook_graphs.py`** — the parser, and the de facto machine-readable spec for which
   keys are actually consumed. It reads exactly: top-level `id` and `type`;
@@ -627,21 +627,21 @@ omission.
 
 ### Where chat content goes
 
-Every cell has one chat stream, always — `c:chat`, 1..1, present even when empty — and it lives
+Every pod has one chat stream, always — `pod:chat`, 1..1, present even when empty — and it lives
 inside the app, alongside the content this document specifies. That answers the question this section
 used to leave open. It was open because chat had no place in the folder, unlike the note and the
-attachments, and no place in the DataBook either, leaving it the one piece of a cell's content with
-no specified storage at all. Once a cell's structured content is app-internal rather than a file,
+attachments, and no place in the DataBook either, leaving it the one piece of a pod's content with
+no specified storage at all. Once a pod's structured content is app-internal rather than a file,
 chat simply goes where that content goes, and the reasons it never fit the folder stop mattering.
 
 Two constraints shaped that answer and still bound the app's own design. A chat is unlike the other
 content: a note is one document that is rewritten, while a chat is append-only, authored per message,
 potentially far larger, and read at its tail far more often than in full. And a private 1:1 thread
 between a member and their own agent is not visible to other members (see
-[Chat Area](app-behavior.md#chat-area) in app-behavior.md), so it cannot live in shared, synced cell
-content the way the group stream can — whatever holds a cell's chat has to hold at least two things
-with different propagation rules. A cell already has two pieces of content that do not propagate on a
-share, `c:serviceTag` and a member's own private files, so the precedent exists; what is particular
+[Chat Area](app-behavior.md#chat-area) in app-behavior.md), so it cannot live in shared, synced pod
+content the way the group stream can — whatever holds a pod's chat has to hold at least two things
+with different propagation rules. A pod already has two pieces of content that do not propagate on a
+share, `pod:serviceTag` and a member's own private files, so the precedent exists; what is particular
 here is that the split runs *within* one feature rather than between two properties.
 
 What is genuinely still open is the storage format the app uses for it, which is an app-internal
@@ -651,14 +651,14 @@ an append-only, mostly-read-at-the-tail stream with two propagation rules inside
 
 ### Where a non-form tool's content goes
 
-Only `c:Form` has a data format today. Its content is graphs, and a graph is Turtle, which is why
+Only `pod:Form` has a data format today. Its content is graphs, and a graph is Turtle, which is why
 every one of the 101 fences across this repo's example tree is a ```` ```turtle ```` one.
-`c:Calendar`, `c:Canvas` and `c:Map` are declared with no content model at all, so this document has
+`pod:Calendar`, `pod:Canvas` and `pod:Map` are declared with no content model at all, so this document has
 nothing to say about what a calendar's entries or a canvas's drawing surface look like on disk.
 
 Settling any of them lands in two places: a `v4.tool` entry needs whatever keys that kind's data
 calls for alongside `type`, and the body needs somewhere to put the content.
-`formTopic`/`formGraph` are scoped to `c:Form` precisely so a kind with a different shape is not
+`formTopic`/`formGraph` are scoped to `pod:Form` precisely so a kind with a different shape is not
 forced through them. A calendar's entries are plausibly still graphs, and so still Turtle; a canvas's
 drawing surface is plausibly not, which runs into the next question.
 
@@ -668,7 +668,7 @@ A drawing surface, a scanned document, a map's cached tiles — some of what a t
 text. At runtime it is a blob in the app's own store like everything else, **referenced from the
 graph rather than encoded into it**. The example tree already works this way for the one binary-ish
 thing it carries: a passport photo and a driver's license photo, each an `xsd:anyURI` value on
-`p:hasPhoto` rather than image data. In this repo's scaffolding such a blob is a file in the cell's
+`p:hasPhoto` rather than image data. In this repo's scaffolding such a blob is a file in the pod's
 folder, so that git, a diff and the tooling all get to treat a PNG as a PNG.
 
 Encoding it into the DataBook instead spends most of what recommends this format in the first place.
@@ -689,25 +689,25 @@ stops applying is itself unset.
 
 What stays open is the reference rather than the storage. A graph is claim content that propagates
 between members on a share, so whatever it holds has to still resolve in a recipient's own copy of
-the cell — after the cell has been renamed, refiled, or received under a collision-suffixed name (see
+the pod — after the pod has been renamed, refiled, or received under a collision-suffixed name (see
 [Naming, Renaming, and Sharing](app-behavior.md#naming-renaming-and-sharing) in app-behavior.md).
-An identifier scoped to the cell itself survives all three; anything anchored outside it does not. In
-this repo a path relative to the cell's own folder is the scaffolding form of exactly that.
+An identifier scoped to the pod itself survives all three; anything anchored outside it does not. In
+this repo a path relative to the pod's own folder is the scaffolding form of exactly that.
 
 ### How a tool's own files are told apart from the user's
 
-A cell's files are already one of two things — an **attachment**, which every member receives, or one
+A pod's files are already one of two things — an **attachment**, which every member receives, or one
 of the member's own private files, which no one else does — and both are shown to the user in the
 Attachments area. That is the whole definition. But a canvas's backing image is not something the
 user attached, nor something they chose to keep back, and showing it in either set alongside the
 files they did misrepresents both. So a tool's own files need a third disposition: neither the
-cell's attachments nor the member's private files, and not shown in that area at all.
+pod's attachments nor the member's private files, and not shown in that area at all.
 
-Now that a cell's content is app-internal, this is easier than it was — the app can simply hold a
+Now that a pod's content is app-internal, this is easier than it was — the app can simply hold a
 tool's blobs outside both sets, with no reserved name or manifest needed to keep them apart, because
 there is no shared directory for them to be found in by accident. What is still unsettled is the
-propagation rule: a tool's blob plainly has to travel with the cell the way an attachment does,
+propagation rule: a tool's blob plainly has to travel with the pod the way an attachment does,
 without being one, and nothing yet says whether it follows the attachment rules exactly (immutable,
 deletable by any member) or rules of its own. In this repo's scaffolding the question stays open in
 its original form, since a file here does sit in a folder and would need a reserved prefix or a
-second reserved subdirectory beside `_cell-attachments` to be told apart.
+second reserved subdirectory beside `_pod-attachments` to be told apart.

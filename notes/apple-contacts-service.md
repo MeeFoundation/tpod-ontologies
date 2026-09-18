@@ -2,7 +2,7 @@
 
 ## Overview
 
-Apple Contacts is a **tool** (`c:Contacts`), not a service: the module never joins a cell as a member, it backs a capability the cell carries. See app-behavior.md's Tool Modules section.
+Apple Contacts is a **tool** (`pod:Contacts`), not a service: the module never joins a pod as a member, it backs a capability the pod carries. See app-behavior.md's Tool Modules section.
 
 V4 is a strict superset of Apple Contacts in every dimension. This means importing from Apple Contacts into the app is straightforward, but exporting from the app back to Apple Contacts requires explicit design decisions. Round-tripping losslessly is achievable but requires an anchor strategy (see below).
 
@@ -24,7 +24,7 @@ The app follows the same design assumption. When exporting a person to Apple Con
 
 **Number of values:** the vCard spec (RFC 6350) imposes no maximum on repeatable properties — `TEL`, `EMAIL`, `ADR` etc. can appear as many times as needed. Apple Contacts also imposes no hard cap in its data model. A person with phone numbers across many graphs will export cleanly regardless of count.
 
-**Label string length:** vCard's `TYPE` parameter supports predefined types (`work`, `home`, `cell`, etc.) and custom types, stored with an `X-` prefix in vCard 3.0 (e.g. `TYPE=X-Acme-Corp`) or as free strings in vCard 4.0. The vCard spec sets no maximum length for `TYPE` values. However, Apple Contacts has an undocumented practical limit on how much of a custom label it displays in the UI — long labels (e.g. `"Boston Hub Society"`, `"California DMV"`) may be truncated visually even though the full string is preserved in the underlying vCard data. Round-trip fidelity of the data is unaffected; this is purely a display concern.
+**Label string length:** vCard's `TYPE` parameter supports predefined types (`work`, `home`, `pod`, etc.) and custom types, stored with an `X-` prefix in vCard 3.0 (e.g. `TYPE=X-Acme-Corp`) or as free strings in vCard 4.0. The vCard spec sets no maximum length for `TYPE` values. However, Apple Contacts has an undocumented practical limit on how much of a custom label it displays in the UI — long labels (e.g. `"Boston Hub Society"`, `"California DMV"`) may be truncated visually even though the full string is preserved in the underlying vCard data. Round-trip fidelity of the data is unaffected; this is purely a display concern.
 
 This display truncation limit is not publicly documented by Apple and likely varies by OS version. It should be verified empirically once an early implementation exists.
 
@@ -32,17 +32,17 @@ This display truncation limit is not publicly documented by Apple and likely var
 
 ## Level 2: Groups ↔ Hidden Service Tags
 
-An Apple Contacts **group** is not a category, not a topic, and not a member, so it does not map onto the cell tree at all. The module records it instead as a [hidden service tag](../README.md#tags) on the contact's own cell — `c:serviceTag`, namespace `foundation.mee.applecontacts`, key `group`, value the group's name verbatim.
+An Apple Contacts **group** is not a category, not a topic, and not a member, so it does not map onto the pod tree at all. The module records it instead as a [hidden service tag](../README.md#tags) on the contact's own pod — `pod:serviceTag`, namespace `foundation.mee.applecontacts`, key `group`, value the group's name verbatim.
 
-**Import (Apple Contacts → the app):** for each group a contact belongs to, write one tag. A contact in three groups gets three tags sharing one namespace and one key, differing only in value — which is exactly what a namespace/key pair is allowed to repeat for. Where the contact's cell is filed is decided independently, by the ordinary auto-filing heuristic; no cell is created, moved, or reclassified on account of a group.
+**Import (Apple Contacts → the app):** for each group a contact belongs to, write one tag. A contact in three groups gets three tags sharing one namespace and one key, differing only in value — which is exactly what a namespace/key pair is allowed to repeat for. Where the contact's pod is filed is decided independently, by the ordinary auto-filing heuristic; no pod is created, moved, or reclassified on account of a group.
 
 **Export (the app → Apple Contacts):** read back every tag in this module's namespace with key `group` and re-create the contact's group membership from the values.
 
-There is no flattening to do in either direction. Because a group never corresponds to a position in the cell tree, no hierarchy has to be encoded on the way out or reconstructed on the way back in — the group name round-trips verbatim, and a group name that happens to contain a `/` is just a group name, since the tag's structure lives in its sibling properties rather than inside the value.
+There is no flattening to do in either direction. Because a group never corresponds to a position in the pod tree, no hierarchy has to be encoded on the way out or reconstructed on the way back in — the group name round-trips verbatim, and a group name that happens to contain a `/` is just a group name, since the tag's structure lives in its sibling properties rather than inside the value.
 
 **Rename safety:** matching is by name, so a group renamed on the Apple side reads as a new group, leaving the old tag stale. A module that wants to survive renames stores the group's own identifier alongside the name under a second key — `groupID` — which is precisely what having a key rather than one opaque string buys.
 
-Note that these tags never propagate when a cell is shared: they are one member's own module's bookkeeping, and a member running a different servicn, or none, could not interpret them.
+Note that these tags never propagate when a pod is shared: they are one member's own module's bookkeeping, and a member running a different servicn, or none, could not interpret them.
 
 ---
 
@@ -52,7 +52,7 @@ vCard supports custom extension fields (`X-` prefix). Storing app IRIs in these 
 
 - `X-V4-PERSON-IRI` on a contact record — points to the `p:Person` individual IRI
 
-Groups need no anchor field of their own: the hidden service tag already holds the group's name verbatim on the cell, and re-identification is by that value (see the rename-safety note above for when a `groupID` tag is worth writing alongside it).
+Groups need no anchor field of their own: the hidden service tag already holds the group's name verbatim on the pod, and re-identification is by that value (see the rename-safety note above for when a `groupID` tag is worth writing alongside it).
 
 These fields are ignored by Apple Contacts and other vCard consumers but survive export/import cycles, making true lossless round-tripping achievable.
 
@@ -63,6 +63,6 @@ These fields are ignored by Apple Contacts and other vCard consumers but survive
 | Dimension | Import | Export | Lossless? |
 |-----------|--------|--------|-----------|
 | Contact fields | Direct field mapping | Merge all graphs into one vCard | Yes, with `X-V4-PERSON-IRI` anchor |
-| Multiple graphs per person | Each → a separate graph embedded in the person's cell DataBook | Flatten to single vCard; multiple values per label are correct | Yes |
-| Group membership | Each group → one hidden service tag on the cell | Tags in this module's namespace with key `group` → group membership | Yes — the group name round-trips verbatim |
+| Multiple graphs per person | Each → a separate graph embedded in the person's pod DataBook | Flatten to single vCard; multiple values per label are correct | Yes |
+| Group membership | Each group → one hidden service tag on the pod | Tags in this module's namespace with key `group` → group membership | Yes — the group name round-trips verbatim |
 | App-specific metadata | Stored in graph DataBook | Store IRI in `X-V4-*` vCard field | Yes, with anchor fields |
