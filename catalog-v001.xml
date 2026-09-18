@@ -8,13 +8,13 @@
          uri="shacl/persona-shacl.ttl"/>
     <uri id="contactinfo-shacl"      name="http://mee.foundation/ontologies/persona/shapes/contactinfo"
          uri="shacl/contactinfo-shacl.ttl"/>
-    <uri id="cell"                 name="http://mee.foundation/ontologies/cell"
-         uri="cell.ttl"/>
-    <uri id="cell-shacl" name="http://mee.foundation/ontologies/cell/shapes"
-         uri="shacl/cell-shacl.ttl"/>
+    <uri id="pod"                 name="http://mee.foundation/ontologies/pod"
+         uri="pod.ttl"/>
+    <uri id="pod-shacl" name="http://mee.foundation/ontologies/pod/shapes"
+         uri="shacl/pod-shacl.ttl"/>
     <uri id="category"             name="http://mee.foundation/ontologies/category"
          uri="category.ttl"/>
-    <uri id="cat-templates"        name="http://mee.foundation/ontologies/cell-templates"
+    <uri id="cat-templates"        name="http://mee.foundation/ontologies/pod-templates"
          uri="cat-templates.ttl"/>
     <!-- ── Other ontologies (peer domain ontologies for what a person merely *has*) ── -->
     <uri id="pets"                     name="http://mee.foundation/ontologies/pets"
@@ -62,7 +62,7 @@
          uri="persona-ext/shacl/directory-profile-shacl.ttl"/>
 
     <!-- Category extensions (category-ext/): a publisher's own skos:ConceptScheme,
-         its cell:TemplateCell individuals, and the member shape they name -->
+         its pod:TemplatePod individuals, and the member shape they name -->
     <uri id="bhs-category-ext"            name="http://mee.foundation/ontologies/category-ext/boston-hub-society"
          uri="category-ext/boston-hub-society.ttl"/>
     <uri id="bhs-category-ext-shacl"      name="http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes"

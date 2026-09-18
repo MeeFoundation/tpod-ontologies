@@ -12,9 +12,9 @@
     owl:imports <http://mee.foundation/ontologies/dron-upper-subset> ,
                 <http://mee.foundation/ontologies/ncbitaxon-subset> ,
                 <http://mee.foundation/ontologies/vbo-subset> ;
-    owl:versionIRI <http://mee.foundation/ontologies/pets/1.11.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
-    owl:versionInfo "Version 1.11.0 - pets:Pet/pets:PetMedicationRecord no longer rdfs:subClassOf persona:PersonaTemplate, which was removed; each is now an independent class targeted directly by its own SHACL shape."@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/pets/1.12.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 1.12.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     persona:usesDrOnClass <http://purl.obolibrary.org/obo/DRON_00000074> ,  # drug product
                     <http://purl.obolibrary.org/obo/DRON_00000028> ,  # active ingredient (role)
                     <http://purl.obolibrary.org/obo/DRON_00000022> ,  # drug tablet
@@ -32,14 +32,14 @@
                     file, so that persona.ttl stays scoped to a person's identity data.
                     persona.ttl holds only the thin link property (persona:hasPet, domain persona:Person,
                     range pets:Pet) connecting a person to this file's classes, referenced by name with no
-                    owl:imports in either direction — the same "referenced by name" pattern cell.ttl already
-                    uses for cell:category's range (skos:Concept) and cell:creator's range
+                    owl:imports in either direction — the same "referenced by name" pattern pod.ttl already
+                    uses for pod:category's range (skos:Concept) and pod:creator's range
                     (persona:Person/o:Organization).
 
                     pets:Pet and pets:PetMedicationRecord are each independent template type label classes,
                     asserted via rdf:type directly on the graph's own content individual and targeted
-                    directly by their own SHACL shape (other/shacl/pets-shacl.ttl) — independent of cell.ttl's
-                    cell:shape property, whose own range is sh:NodeShape (the validating shape, not the
+                    directly by their own SHACL shape (other/shacl/pets-shacl.ttl) — independent of pod.ttl's
+                    pod:shape property, whose own range is sh:NodeShape (the validating shape, not the
                     content's own class).
 
                     Vendors a hand-curated subset of NCBITaxon (project_files/ncbitaxon-subset.ttl, 33
@@ -68,8 +68,8 @@ pets:Pet rdf:type owl:Class ;
                     pets:hasBodyWeight/pets:sex/pets:isSpayedOrNeutered are properties of the pet individual
                     directly (a pet has no persona:Person individual of its own). Validated by the SHACL
                     shape :PetShape in
-                    other/shacl/pets-shacl.ttl, linked from cat:Pets's template cell (cat-templates.ttl) via
-                    cell:formShape."""@en .
+                    other/shacl/pets-shacl.ttl, linked from cat:Pets's template pod (cat-templates.ttl) via
+                    pod:formShape."""@en .
 
 pets:hasSpecies rdf:type owl:ObjectProperty ;
     rdfs:domain pets:Pet ;
@@ -171,11 +171,11 @@ pets:PetMedicationRecord rdf:type owl:Class ;
                     class of the record individual itself, following the same document-individual pattern
                     as identitydocuments:Passport: the pets:hasMedication links below are properties of the
                     PetMedicationRecord, not of the pet directly (a pet has no persona:Person individual of
-                    its own — it is identified only via the cell's/graph's own subject metadata, or, for a
+                    its own — it is identified only via the pod's/graph's own subject metadata, or, for a
                     pet with its own identity graph, via pets:Pet). Asserted via rdf:type directly on the
                     graph file's own individual, validated by the SHACL shape :PetMedicationRecordShape in
-                    other/shacl/pets-shacl.ttl, linked from cat:PetsMedical's template cell (cat-templates.ttl)
-                    via cell:formShape. Named "Record" rather than "Document" since this class is not a
+                    other/shacl/pets-shacl.ttl, linked from cat:PetsMedical's template pod (cat-templates.ttl)
+                    via pod:formShape. Named "Record" rather than "Document" since this class is not a
                     identitydocuments:IdentityDocument, matching medicalappointments:MedicalAppointmentRecord's identical naming
                     reasoning."""@en .
 

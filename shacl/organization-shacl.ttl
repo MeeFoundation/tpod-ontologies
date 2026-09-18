@@ -9,8 +9,8 @@
 
 <http://mee.foundation/ontologies/organization/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/organization> ;
-    owl:versionIRI <http://mee.foundation/ontologies/organization/shapes/1.6.0> ;
-    dc:date "2026-09-13"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/organization/shapes/1.7.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Organization Ontology SHACL Validation Shapes"@en ;
     rdfs:comment "SHACL validation shapes for the Organization Ontology."@en .
 
@@ -25,9 +25,9 @@
     sh:message "Organization validation."@en ;
 
     # Both properties are optional — most organizations in the example data are
-    # named only as a cell:claimant or a tool's own cell:formTopic, with
-    # no profile of their own — an organization is never a cell:subject, since it
-    # participates in a cell through the service:ServiceProvider it provides.
+    # named only as a pod:claimant or a tool's own pod:formTopic, with
+    # no profile of their own — an organization is never a pod:subject, since it
+    # participates in a pod through the service:ServiceProvider it provides.
     sh:property [
         sh:path o:hasWebsite ;
         sh:datatype xsd:anyURI ;

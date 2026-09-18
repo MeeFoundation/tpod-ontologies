@@ -13,8 +13,8 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <http://mee.foundation/ontologies/persona/shapes> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/persona/shapes/4.16.1> ;
-    dc:date "2026-09-16"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/persona/shapes/4.17.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "V4's SHACL Validation Shapes"@en ;
     rdfs:comment """SHACL validation shapes for V4, an identity agent application from The Mee Foundation.
 
@@ -352,9 +352,9 @@
     ] .
 
 #################################################################
-#  Health & Wellness (cat:HealthWellness's own cell:formShape)
+#  Health & Wellness (cat:HealthWellness's own pod:formShape)
 #  Formalizes the physical-characteristics pattern Sophia Walker's own
-#  Health & Wellness cell (graph-17) already uses — height, eye color,
+#  Health & Wellness pod (graph-17) already uses — height, eye color,
 #  and hair color, each borne directly (or via ScalpHair) by a
 #  persona:Person — with every property optional, since this is a
 #  form-level reference to someone else's physical characteristics,

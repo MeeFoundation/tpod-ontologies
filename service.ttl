@@ -11,27 +11,27 @@
 @base <http://mee.foundation/ontologies/service> .
 
 <http://mee.foundation/ontologies/service> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/service/2.7.0> ;
-    dc:date "2026-09-16"^^xsd:date ;
-    owl:versionInfo "Version 2.7.0 - service:AppleContacts retired; contact sync is a tool (cell:Contacts), not a cell member"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/service/2.8.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 2.8.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     owl:imports <https://w3id.org/cco-domains/cco/AgentOntology> ,
                 <http://mee.foundation/ontologies/prov-upper-subset> ;
     rdfs:label "Service Ontology"@en ;
     rdfs:comment """Service Ontology for the V4 App.
                     Describes the non-human services a person invites to collaborate inside a
-                    shared cell — the second kind of first-class, member-capable participant,
+                    shared pod — the second kind of first-class, member-capable participant,
                     peer to persona.ttl (models Person). A service is not a service plus some
                     separate module wrapping it: every service the app offers is one of the
                     classes below, and every class below is a service the app can run.
-                    A cell's members are only ever
+                    A pod's members are only ever
                     p:Person or service:Service individuals: o:Organization
-                    (organization.ttl) is not itself member-capable, and reaches a cell only
-                    as a tool's own cell:formTopic, as a cell:claimant, or as
-                    service:providedBy's own range. A service:Service is never a cell:creator (cell.ttl) — and can
-                    never be promoted to cell:owner either — only ever a cell:member
-                    participant and a cell:claimant of the content it contributes.
+                    (organization.ttl) is not itself member-capable, and reaches a pod only
+                    as a tool's own pod:formTopic, as a pod:claimant, or as
+                    service:providedBy's own range. A service:Service is never a pod:creator (pod.ttl) — and can
+                    never be promoted to pod:owner either — only ever a pod:member
+                    participant and a pod:claimant of the content it contributes.
                     p:Person/o:Organization (persona.ttl/organization.ttl) are referenced by
-                    name without owl:imports, mirroring cell:claimant's own union-range
+                    name without owl:imports, mirroring pod:claimant's own union-range
                     pattern. This file does carry two imports of its own: CCO's AgentOntology,
                     for the cco:ont00001017 (Agent) parent every service:Service specializes,
                     the same by-import pattern organization.ttl already uses for
@@ -52,25 +52,25 @@ service:Service rdf:type owl:Class ;
     rdfs:subClassOf cco:ont00001017 ,  # CCO Agent (a Material Entity bearing an Agent Capability)
                     prov:Agent ;
     rdfs:label "Service"@en ;
-    rdfs:comment """A software module that integrates some local or remote system into a cell, and in doing so becomes
-                    a genuine non-human member of it — the member-capable class for every cell participant that is not
-                    a person, the second kind of first-class, member-capable participant, peer to p:Person. A cell's
+    rdfs:comment """A software module that integrates some local or remote system into a pod, and in doing so becomes
+                    a genuine non-human member of it — the member-capable class for every pod participant that is not
+                    a person, the second kind of first-class, member-capable participant, peer to p:Person. A pod's
                     members are only ever p:Person or service:Service individuals; an o:Organization is not member-
-                    capable, participating in a cell through the service:ServiceProvider it provides and otherwise
-                    reaching it only as a cell:formTopic or a cell:claimant. Unlike p:Person, a service:Service is never a cell:creator,
-                    and can never be promoted to cell:owner either — a cell is always created
+                    capable, participating in a pod through the service:ServiceProvider it provides and otherwise
+                    reaching it only as a pod:formTopic or a pod:claimant. Unlike p:Person, a service:Service is never a pod:creator,
+                    and can never be promoted to pod:owner either — a pod is always created
                     by, and only ever owned by, a p:Person — but it can be a genuine
-                    cell:member participant (see cell.ttl's cell:member comment) and a
-                    cell:claimant of the graphs it contributes, including a tool's own graph
-                    about whatever the cell's relationship concerns (e.g. a trip being
+                    pod:member participant (see pod.ttl's pod:member comment) and a
+                    pod:claimant of the graphs it contributes, including a tool's own graph
+                    about whatever the pod's relationship concerns (e.g. a trip being
                     planned). Where an o:Organization stands behind the service in the
                     relationship, that organization claims on the service's behalf instead —
-                    see cell:claimant's own comment for which of the two a graph names. Whatever it does outside the
-                    cell, every service:Service reaches the cell itself through one surface — the Cell Interface, the
+                    see pod:claimant's own comment for which of the two a graph names. Whatever it does outside the
+                    pod, every service:Service reaches the pod itself through one surface — the Pod Interface, the
                     same read/write surface a human member's own UI uses (app-behavior.md), which is why an invited
                     service needs no special-case permission logic. It branches in two on the
                     question of whom the service acts for: service:AgentService acts on
-                    behalf of exactly one p:Person member of the cell (service:actsFor), and
+                    behalf of exactly one p:Person member of the pod (service:actsFor), and
                     service:ServiceProvider acts on behalf of the o:Organization that
                     provides it (service:providedBy). The concrete services the app
                     ships — service:ChatGPT and service:ArcaBackup — are both the former,
@@ -79,14 +79,14 @@ service:Service rdf:type owl:Class ;
                     legitimately be more than one kind at once. rdfs:subClassOf cco:ont00001017 (CCO Agent,
                     "A Material Entity that bears an Agent Capability", itself a
                     BFO_0000040 Material Entity) — this is what grounds a service as a thing
-                    that genuinely acts, which is exactly what a cell member has to be, and it
+                    that genuinely acts, which is exactly what a pod member has to be, and it
                     parallels o:Organization's own cco:ont00001180 (Organization) parent, so
-                    every cell participant, human or service, is a CCO Agent. Also
+                    every pod participant, human or service, is a CCO Agent. Also
                     rdfs:subClassOf prov:Agent (project_files/prov-upper.ttl) — every
                     service:Service individual bears responsibility for the claims it makes
-                    inside a cell, which is what prov:Agent means; subClassOf rather than
+                    inside a pod, which is what prov:Agent means; subClassOf rather than
                     owl:equivalentClass on both parents, since each one's own membership is
-                    far broader than "invited to collaborate inside a shared cell.\""""@en .
+                    far broader than "invited to collaborate inside a shared pod.\""""@en .
 
 service:providedBy rdf:type owl:ObjectProperty ;
     rdfs:domain service:Service ;
@@ -100,13 +100,13 @@ service:providedBy rdf:type owl:ObjectProperty ;
                     required, exactly one value on service:ServiceProvider and
                     service:ArcaBackup specifically (1..1); all three cardinalities are
                     enforced by shacl/service-shacl.ttl. service:ChatGPT deliberately requires none: naming the vendor is the
-                    class's own job, and OpenAI is not a party to the cell's relationship. This is the only route by which an
-                    o:Organization reaches a cell's member list at all: the organization
+                    class's own job, and OpenAI is not a party to the pod's relationship. This is the only route by which an
+                    o:Organization reaches a pod's member list at all: the organization
                     itself is not member-capable, its service is. It is also what identifies
                     the party a provider service's claims are attributed to — see
-                    cell:claimant's own comment. Range o:Organization (organization.ttl) is
+                    pod:claimant's own comment. Range o:Organization (organization.ttl) is
                     referenced by name without owl:imports, the same by-name pattern
-                    cell:creator/cell:claimant (both cell.ttl) already use."""@en .
+                    pod:creator/pod:claimant (both pod.ttl) already use."""@en .
 
 
 #################################################################
@@ -117,12 +117,12 @@ service:AgentService rdf:type owl:Class ;
     rdfs:subClassOf service:Service ,
                     prov:SoftwareAgent ;
     rdfs:label "Agent Service"@en ;
-    rdfs:comment """A service that acts on behalf of exactly one p:Person member of the cell,
+    rdfs:comment """A service that acts on behalf of exactly one p:Person member of the pod,
                     named by its own required service:actsFor value — this is what defines the
                     class, not what the service happens to do with that mandate. An LLM
                     assistant (service:ChatGPT) and a backup service (service:ArcaBackup)
                     are agent services in exactly the same sense: each was invited by one member, works for that member, and
-                    answers to no one else in the cell. It is the whole of the
+                    answers to no one else in the pod. It is the whole of the
                     service:actsFor side of service:Service's two-way branch; the other side,
                     service:ServiceProvider, acts for the o:Organization that provides it
                     instead, recorded by service:providedBy rather than service:actsFor.
@@ -131,14 +131,14 @@ service:AgentService rdf:type owl:Class ;
                     modeling a new service never requires minting a class for it first.
                     Unlike a service:ServiceProvider, an agent service claims the graphs it
                     contributes under its own IRI rather than an organization's, since no
-                    organization stands behind it in the cell's relationship — even where one
+                    organization stands behind it in the pod's relationship — even where one
                     provides it (service:ArcaBackup carries service:providedBy :Arca and still
                     claims as itself). rdfs:subClassOf prov:SoftwareAgent
                     (project_files/prov-upper.ttl) alongside its service:Service parent, so
                     every leaf below inherits it: each is real software running on someone's
                     behalf, which is what prov:SoftwareAgent means; subClassOf rather than
                     owl:equivalentClass since prov:SoftwareAgent's own membership is broader
-                    than "invited to collaborate inside a shared cell.\""""@en .
+                    than "invited to collaborate inside a shared pod.\""""@en .
 
 service:actsFor rdf:type owl:ObjectProperty ;
     rdfs:subPropertyOf prov:actedOnBehalfOf ;
@@ -148,15 +148,15 @@ service:actsFor rdf:type owl:ObjectProperty ;
     rdfs:comment """Identifies the p:Person member this agent service is a
                     delegate/collaborator for — e.g. Alice's own travel agent carries
                     service:actsFor :Self. Required, exactly one value: a
-                    service:AgentService is always invited into a cell by, and acts on behalf
+                    service:AgentService is always invited into a pod by, and acts on behalf
                     of, exactly one person, never independently — a second member who wants
                     their own agent invites a separate service:AgentService individual of
                     their own, with its own service:actsFor value. That one-principal rule is
-                    also why a cell:serviceTag (cell.ttl) written by an agent service is
+                    also why a pod:serviceTag (pod.ttl) written by an agent service is
                     never propagated on a share: the tag means something only in the instance
                     of the member the service acts for. The range is p:Person alone, not the
                     wider member union: an agent's principal is always a human, mirroring
-                    cell:creator's and cell:owner's own person-only ranges, and referenced by
+                    pod:creator's and pod:owner's own person-only ranges, and referenced by
                     name without owl:imports the same way they are. rdfs:subPropertyOf
                     prov:actedOnBehalfOf (project_files/prov-upper.ttl) — PROV-O's own
                     delegation relation, narrowed here to service:AgentService's own domain
@@ -171,14 +171,14 @@ service:actsFor rdf:type owl:ObjectProperty ;
 service:ChatGPT rdf:type owl:Class ;
     rdfs:subClassOf service:AgentService ;
     rdfs:label "ChatGPT"@en ;
-    rdfs:comment """OpenAI's ChatGPT, invited by a member into a shared cell to collaborate —
-                    e.g. :Alice_Travel_Agent, joining her Kyoto trip cell alongside Alice and
-                    Dave, with its own self-claimed cell:member entry and its own tool
+    rdfs:comment """OpenAI's ChatGPT, invited by a member into a shared pod to collaborate —
+                    e.g. :Alice_Travel_Agent, joining her Kyoto trip pod alongside Alice and
+                    Dave, with its own self-claimed pod:member entry and its own tool
                     contribution to the itinerary. Inherits service:actsFor from
                     service:AgentService, required exactly once, naming the member whose agent
                     it is; each member wanting one invites their own individual. Carries no
                     service:providedBy: the class already names the vendor, and no
-                    o:Organization stands behind it inside the cell's own relationship —
+                    o:Organization stands behind it inside the pod's own relationship —
                     contrast service:ArcaBackup, where the providing organization is a party
                     to the arrangement. See app-behavior.md's ChatGPT Service Module
                     section for what it actually does once invited."""@en .
@@ -191,12 +191,12 @@ service:ChatGPT rdf:type owl:Class ;
 service:ArcaBackup rdf:type owl:Class ;
     rdfs:subClassOf service:AgentService ;
     rdfs:label "Arca Backup"@en ;
-    rdfs:comment """The cell backup service Arca provides, joining a cell as a real member with
-                    its own self-claimed cell:member entry — e.g. :Arca_Backup, the second
-                    member of Alice's Arca cell alongside her own. Inherits service:actsFor
+    rdfs:comment """The pod backup service Arca provides, joining a pod as a real member with
+                    its own self-claimed pod:member entry — e.g. :Arca_Backup, the second
+                    member of Alice's Arca pod alongside her own. Inherits service:actsFor
                     from service:AgentService, required exactly once: a backup service backs
                     up on behalf of the member who invited it, and it is that member's copy of
-                    the cell it preserves, which is why it has a single principal like any
+                    the pod it preserves, which is why it has a single principal like any
                     other agent service. Carries service:providedBy as well, required exactly
                     once (1..1, shacl/service-shacl.ttl's :ArcaBackupShape), naming the
                     o:Organization that runs it — the one leaf under service:AgentService that
@@ -213,8 +213,8 @@ service:ServiceProvider rdf:type owl:Class ;
     rdfs:subClassOf service:Service ;
     rdfs:label "Service Provider"@en ;
     rdfs:comment """The service an o:Organization provides to a person, standing in for that
-                    organization inside a shared cell — e.g. :Citibank_Service, the service
-                    Citibank provides, which is Alice's Citibank cell's second member;
+                    organization inside a shared pod — e.g. :Citibank_Service, the service
+                    Citibank provides, which is Alice's Citibank pod's second member;
                     :BHS_Service does the same for the Boston Hub Society. Carries
                     service:providedBy, required exactly once (1..1,
                     shacl/service-shacl.ttl's :ServiceProviderShape), naming the providing
@@ -222,11 +222,11 @@ service:ServiceProvider rdf:type owl:Class ;
                     service, so that link is never absent. Carries no service:actsFor value — it is not a
                     service:AgentService: a provider service acts for the organization that
                     provides it, recorded by service:providedBy, not for any p:Person member
-                    of the cell. That is the whole of the difference between the two branches. It is the
-                    cell:subject, but not the cell:claimant, of the cell:member entry the
+                    of the pod. That is the whole of the difference between the two branches. It is the
+                    pod:subject, but not the pod:claimant, of the pod:member entry the
                     organization takes part through: the claims are attributed to the providing
                     o:Organization itself, since that is the party really making them and the
-                    one an eventual cryptographic signature would name (see cell:claimant).
+                    one an eventual cryptographic signature would name (see pod:claimant).
                     Not to be confused with CCO's own cco:ont00000509 ("Service Provider"),
                     which this file's imported CCO AgentOntology also defines and which shares
                     this class's rdfs:label: that one is a subclass of cco:ont00001180

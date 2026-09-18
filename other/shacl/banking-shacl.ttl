@@ -10,10 +10,10 @@
 
 <http://mee.foundation/ontologies/banking/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/banking> ;
-    owl:versionIRI <http://mee.foundation/ontologies/banking/shapes/1.2.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/banking/shapes/1.3.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Banking Template SHACL Shapes"@en ;
-    rdfs:comment """SHACL shapes for validating graph files carrying cell:shape
+    rdfs:comment """SHACL shapes for validating graph files carrying pod:shape
                     bankingshapes:DebitCardShape or bankingshapes:CheckingAccountShape. Apply in addition
                     to shacl/persona-shacl.ttl when validating a banking graph file. Paired with
                     other/banking.ttl, the ontology it validates. :DebitCardShape targets

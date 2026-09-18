@@ -1,6 +1,6 @@
 @prefix bhscat: <http://mee.foundation/ontologies/category-ext/boston-hub-society#> .
 @prefix cat: <http://mee.foundation/ontologies/category#> .
-@prefix cell: <http://mee.foundation/ontologies/cell#> .
+@prefix pod: <http://mee.foundation/ontologies/pod#> .
 @prefix bhsshapes: <http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes#> .
 @prefix oshapes: <http://mee.foundation/ontologies/organization/shapes#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
@@ -12,16 +12,16 @@
 @base <http://mee.foundation/ontologies/category-ext/boston-hub-society> .
 
 <http://mee.foundation/ontologies/category-ext/boston-hub-society> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/category-ext/boston-hub-society/1.0.0> ;
-    dc:date "2026-09-14"^^xsd:date ;
-    owl:imports <http://mee.foundation/ontologies/cell> ;
-    owl:versionInfo "Version 1.0.0 - the first category extension: the Boston Hub Society's own concept scheme, template cell, and member shape"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/category-ext/boston-hub-society/1.1.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:imports <http://mee.foundation/ontologies/pod> ;
+    owl:versionInfo "Version 1.1.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     rdfs:label "Boston Hub Society Category Extension"@en ;
     rdfs:comment """The first **category extension** — a self-contained bundle an organization
-                    publishes so that other instances of the app can file and validate cells of a
+                    publishes so that other instances of the app can file and validate pods of a
                     category the app's own taxonomy does not define. One file carries the whole
                     bundle: the publisher's skos:ConceptScheme, the concepts in it, and the
-                    cell:TemplateCell for each. Its member shape lives beside it in
+                    pod:TemplatePod for each. Its member shape lives beside it in
                     category-ext/shacl/.
 
                     Why an extension rather than a new concept in category.ttl: cat:CategoryScheme
@@ -37,12 +37,12 @@
                     one — for links *between* schemes. An extension concept is by definition in
                     another scheme, so skos:broadMatch is the correct predicate and skos:broader
                     would be a misuse. The recipient's app reads the broadMatch to know where in its
-                    own tree an incoming cell of this category should be filed — cat:Groups, here —
+                    own tree an incoming pod of this category should be filed — cat:Groups, here —
                     without having to know anything else about the publisher.
 
                     Every extension concept must carry exactly one skos:broadMatch into a concept of
                     cat:CategoryScheme; see integrity.md's TTL-8, which enforces it, and
-                    shacl/cell-shacl.ttl's :CellShape, which no longer pins a cell:category value to
+                    shacl/pod-shacl.ttl's :PodShape, which no longer pins a pod:category value to
                     cat:CategoryScheme itself but still requires it to be a concept in some
                     skos:ConceptScheme."""@en .
 
@@ -71,32 +71,32 @@ bhscat:BostonHubSociety rdf:type skos:Concept ;
     rdfs:comment """A person's membership of the Boston Hub Society — the society's own directory
                     entry for them, alongside the society's organizational profile. Narrower than
                     cat:Groups, the app's catch-all for clubs and societies, which is what an app
-                    with this extension uninstalled would file such a cell under; the skos:broadMatch
+                    with this extension uninstalled would file such a pod under; the skos:broadMatch
                     above says exactly that."""@en .
 
 
 #################################################################
-#    The extension's template cell
+#    The extension's template pod
 #################################################################
 
-bhscat:BostonHubSocietyTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Boston Hub Society Template Cell"@en ;
-    rdfs:comment """The first cell:TemplateCell whose cell:memberShape is not
+bhscat:BostonHubSocietyTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Boston Hub Society Template Pod"@en ;
+    rdfs:comment """The first pod:TemplatePod whose pod:memberShape is not
                     pshapes:ContactInfoShape. Every one of the 106 templates in cat-templates.ttl
                     carries that shape and nothing else, so a member graph is always validated as a
                     generic contact-info profile whatever its category (integrity.md's TTL-7).
                     The Boston Hub Society asks its members for considerably more than contact
                     information, on a two-page directory form, so its template names its own shape
-                    instead — which is what cell:memberShape exists for.
+                    instead — which is what pod:memberShape exists for.
 
                     That exception lives here rather than in cat-templates.ttl, which keeps its own
                     invariant intact: every template the app itself ships is uniform, and variation
                     arrives only with an extension.
 
-                    The declared tool is unchanged from ctpl:GroupsTemplateCell's — a form carrying
-                    the society's own o:Organization profile — since a cell of this category is
-                    still a cell about a group."""@en ;
-    cell:category bhscat:BostonHubSociety ;
-    cell:memberShape bhsshapes:MemberShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape oshapes:OrganizationShape ] .
+                    The declared tool is unchanged from ctpl:GroupsTemplatePod's — a form carrying
+                    the society's own o:Organization profile — since a pod of this category is
+                    still a pod about a group."""@en ;
+    pod:category bhscat:BostonHubSociety ;
+    pod:memberShape bhsshapes:MemberShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape oshapes:OrganizationShape ] .

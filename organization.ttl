@@ -8,14 +8,14 @@
 @base <http://mee.foundation/ontologies/organization> .
 
 <http://mee.foundation/ontologies/organization> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/organization/1.8.0> ;
+    owl:versionIRI <http://mee.foundation/ontologies/organization/1.9.0> ;
     owl:imports <https://w3id.org/cco-domains/cco/AgentOntology> ;
-    dc:date "2026-09-13"^^xsd:date ;
-    owl:versionInfo "Version 1.8.0 - peer ontologies listed as persona.ttl and cell.ttl"@en ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 1.9.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     rdfs:label "Organization Ontology"@en ;
     rdfs:comment """Organization Ontology for the V4 App.
                     Describes organizations that participate in the Personal Data Network.
-                    Peer of persona.ttl and cell.ttl."""@en .
+                    Peer of persona.ttl and pod.ttl."""@en .
 
 
 #################################################################

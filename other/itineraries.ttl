@@ -8,23 +8,23 @@
 @base <http://mee.foundation/ontologies/itineraries> .
 
 <http://mee.foundation/ontologies/itineraries> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/itineraries/1.3.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
-    owl:versionInfo "Version 1.3.0 - initial extraction of itineraries:Itinerary out of persona-extensions.ttl into its own other/ peer ontology."@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/itineraries/1.4.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 1.4.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     rdfs:label "Itineraries Ontology"@en ;
     rdfs:comment """A small other/ peer ontology (see other/pets.ttl's own rdfs:comment for the
                     general pattern) for a domain a person merely *has* — a specific trip itinerary
                     being planned or taken — rather than *is*, kept out of persona.ttl the same way
                     pet/vehicle/identity-document domain-modeling already are. persona.ttl carries no
                     thin hasX-link property of its own pointing at itineraries:Itinerary — an
-                    itinerary is always held by a cell:Form on its own Trips-category cell
-                    (see cat:Trips's template cell, cat-templates.ttl), so no explicit Person-level
+                    itinerary is always held by a pod:Form on its own Trips-category pod
+                    (see cat:Trips's template pod, cat-templates.ttl), so no explicit Person-level
                     link is needed.
 
                     itineraries:Itinerary is an independent template type label class, asserted via
                     rdf:type directly on the graph's own content individual and targeted directly by
-                    its own SHACL shape (other/shacl/itineraries-shacl.ttl) — independent of cell.ttl's
-                    cell:shape property, whose own range is sh:NodeShape (the validating shape, not
+                    its own SHACL shape (other/shacl/itineraries-shacl.ttl) — independent of pod.ttl's
+                    pod:shape property, whose own range is sh:NodeShape (the validating shape, not
                     the content's own class)."""@en .
 
 
@@ -44,5 +44,5 @@ itineraries:Itinerary rdf:type owl:Class ;
                     the trip (destination, dates, itinerary notes, etc. as free text). Asserted
                     via rdf:type directly on the graph file's own individual, validated by the
                     SHACL shape :ItineraryShape in other/shacl/itineraries-shacl.ttl, linked from
-                    cat:Trips's own class-level cell (cat-templates.ttl) via
-                    cell:formShape. Not an identitydocuments:IdentityDocument."""@en .
+                    cat:Trips's own class-level pod (cat-templates.ttl) via
+                    pod:formShape. Not an identitydocuments:IdentityDocument."""@en .

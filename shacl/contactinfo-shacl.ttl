@@ -10,10 +10,10 @@
 
 <http://mee.foundation/ontologies/persona/shapes/contactinfo> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/persona> ;
-    owl:versionIRI <http://mee.foundation/ontologies/persona/shapes/contactinfo/1.4.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/persona/shapes/contactinfo/1.5.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "ContactInfo Template SHACL Shapes"@en ;
-    rdfs:comment """SHACL shapes for validating graph files carrying cell:shape pshapes:ContactInfoShape.
+    rdfs:comment """SHACL shapes for validating graph files carrying pod:shape pshapes:ContactInfoShape.
                     Apply in addition to shacl/persona-shacl.ttl when validating a Contact Info graph file."""@en .
 
 

@@ -8,13 +8,13 @@
          uri="file:/Users/paul/GitHub/v4-ontologies/shacl/persona-shacl.ttl"/>
     <uri id="contactinfo-shacl"      name="http://mee.foundation/ontologies/persona/shapes/contactinfo"
          uri="file:/Users/paul/GitHub/v4-ontologies/shacl/contactinfo-shacl.ttl"/>
-    <uri id="cell"                 name="http://mee.foundation/ontologies/cell"
-         uri="file:/Users/paul/GitHub/v4-ontologies/cell.ttl"/>
-    <uri id="cell-shacl" name="http://mee.foundation/ontologies/cell/shapes"
-         uri="file:/Users/paul/GitHub/v4-ontologies/shacl/cell-shacl.ttl"/>
+    <uri id="pod"                 name="http://mee.foundation/ontologies/pod"
+         uri="file:/Users/paul/GitHub/v4-ontologies/pod.ttl"/>
+    <uri id="pod-shacl" name="http://mee.foundation/ontologies/pod/shapes"
+         uri="file:/Users/paul/GitHub/v4-ontologies/shacl/pod-shacl.ttl"/>
     <uri id="category"             name="http://mee.foundation/ontologies/category"
          uri="file:/Users/paul/GitHub/v4-ontologies/category.ttl"/>
-    <uri id="cat-templates"        name="http://mee.foundation/ontologies/cell-templates"
+    <uri id="cat-templates"        name="http://mee.foundation/ontologies/pod-templates"
          uri="file:/Users/paul/GitHub/v4-ontologies/cat-templates.ttl"/>
     <!-- ── Other ontologies (peer domain ontologies for what a person merely *has*) ── -->
     <uri id="pets"                     name="http://mee.foundation/ontologies/pets"
@@ -62,7 +62,7 @@
          uri="file:/Users/paul/GitHub/v4-ontologies/persona-ext/shacl/directory-profile-shacl.ttl"/>
 
     <!-- Category extensions (category-ext/): a publisher's own skos:ConceptScheme,
-         its cell:TemplateCell individuals, and the member shape they name -->
+         its pod:TemplatePod individuals, and the member shape they name -->
     <uri id="bhs-category-ext"            name="http://mee.foundation/ontologies/category-ext/boston-hub-society"
          uri="file:/Users/paul/GitHub/v4-ontologies/category-ext/boston-hub-society.ttl"/>
     <uri id="bhs-category-ext-shacl"      name="http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes"

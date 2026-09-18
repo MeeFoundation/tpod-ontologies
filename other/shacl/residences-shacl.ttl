@@ -11,10 +11,10 @@
 
 <http://mee.foundation/ontologies/residences/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/residences> ;
-    owl:versionIRI <http://mee.foundation/ontologies/residences/shapes/1.2.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/residences/shapes/1.3.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Residences Template SHACL Shapes"@en ;
-    rdfs:comment """SHACL shapes for validating graph files carrying cell:shape residenceshapes:ResidenceShape.
+    rdfs:comment """SHACL shapes for validating graph files carrying pod:shape residenceshapes:ResidenceShape.
                     Apply in addition to shacl/persona-shacl.ttl when validating a residence graph file.
                     Targets residences:Residence individuals directly — also typed cco:ent00000016
                     (AddressDesignation), so its own existing address/participant/temporal-region

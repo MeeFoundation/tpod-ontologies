@@ -8,9 +8,9 @@
 @base <http://mee.foundation/ontologies/education> .
 
 <http://mee.foundation/ontologies/education> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/education/1.0.0> ;
-    dc:date "2026-09-14"^^xsd:date ;
-    owl:versionInfo "Version 1.0.0 - education:EducationRecord, backing cat:Education and the schooling rows of a membership directory profile"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/education/1.1.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 1.1.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     rdfs:label "Education Ontology"@en ;
     rdfs:comment """A small other/ peer ontology (see other/pets.ttl's own rdfs:comment for the
                     general pattern) for a domain a person merely *has* — a record of one stage of
@@ -32,7 +32,7 @@
                     education:EducationRecord is an independent template type label class, asserted
                     via rdf:type directly on the graph's own content individual and targeted directly
                     by its own SHACL shape (other/shacl/education-shacl.ttl) — independent of
-                    cell.ttl's cell:shape property, whose own range is sh:NodeShape (the validating
+                    pod.ttl's pod:shape property, whose own range is sh:NodeShape (the validating
                     shape, not the content's own class)."""@en .
 
 

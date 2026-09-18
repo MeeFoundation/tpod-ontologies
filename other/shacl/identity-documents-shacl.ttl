@@ -11,10 +11,10 @@
 
 <http://mee.foundation/ontologies/identity-documents/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/identity-documents> ;
-    owl:versionIRI <http://mee.foundation/ontologies/identity-documents/shapes/1.4.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/identity-documents/shapes/1.5.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Identity Documents Template SHACL Shapes"@en ;
-    rdfs:comment """SHACL shapes for validating graph files carrying cell:shape idocshapes:BirthCertificateShape,
+    rdfs:comment """SHACL shapes for validating graph files carrying pod:shape idocshapes:BirthCertificateShape,
                     idocshapes:DriversLicenseShape, or idocshapes:PassportShape. Apply in
                     addition to shacl/persona-shacl.ttl when validating one of these graph files.
                     Targets identitydocuments:BirthCertificate/DriversLicense/Passport

@@ -1,0 +1,482 @@
+@prefix : <http://mee.foundation/ontologies/pod/shapes#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pod: <http://mee.foundation/ontologies/pod#> .
+@prefix p: <http://mee.foundation/ontologies/persona#> .
+@prefix o: <http://mee.foundation/ontologies/organization#> .
+@prefix service: <http://mee.foundation/ontologies/service#> .
+@prefix cat: <http://mee.foundation/ontologies/category#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<http://mee.foundation/ontologies/pod/shapes> rdf:type owl:Ontology ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod/shapes/9.3.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    rdfs:label "Pod Ontology SHACL Validation Shapes"@en ;
+    rdfs:comment "SHACL validation shapes for pod:Pod DataBook instances (the content facet of a pod) the pod:Tool nodes a pod carries, and the graph DataBook instances a pod links to — pod:MemberGraph via pod:member, pod:FormGraph via a tool's own pod:formGraph — in the Pod Ontology."@en .
+
+
+#################################################################
+#  Pod
+#  pod:Pod carries only what's common to every pod regardless of
+#  kind: category. A pod records no tree position of its own — its
+#  parent is per-member state in that member's own store, never a
+#  stored path — so there's nothing to constrain here for that. Graph links (pod:member/
+#  pod:tool) live on :InstancePodShape below — since pod:TemplatePod
+#  and pod:InstancePod are disjoint (pod.ttl), that shape fires only
+#  on the InstancePod branch, not on template pods. The tool nodes
+#  themselves are constrained by :LiveToolShape and :DeclaredToolShape,
+#  which use sh:targetObjectsOf pod:tool / pod:declaresTool rather
+#  than a class, since the same tool classes serve both roles.
+#################################################################
+
+:PodShape
+    a sh:NodeShape ;
+    sh:targetClass pod:Pod ;
+    sh:message "Pod validation."@en ;
+
+    # pod:category — at most one value (0..1), on any pod:Pod
+    # regardless of kind. Absent exactly when the pod is of the
+    # UserDefined category — identified precisely by that absence
+    # itself, not a vague "no canonical counterpart" judgment call.
+    # This repo's scaffolding mirrors it in the pod-databook's
+    # filename, which carries the literal "(custom)" disambiguator;
+    # SHACL can't see filenames, so that absence/filename pairing is
+    # checked in integrity.md's PNG-9, not here. Now
+    # constrained via sh:class skos:Concept — category.ttl's tree is a
+    # SKOS concept scheme, not an OWL class hierarchy, so a legal value
+    # really is rdf:type skos:Concept, no class-value punning involved
+    # (contrast vehicles:hasVehicleType, other/vehicles.ttl, which still
+    # does pun a real class hierarchy). The nested skos:inScheme check
+    # requires a legal value to belong to some concept scheme — sh:class
+    # skos:Concept alone would accept a free-floating SKOS concept from
+    # anywhere. It deliberately does *not* pin that scheme to
+    # cat:CategoryScheme: a category extension (category-ext/) publishes
+    # its concepts in its own scheme and links them to the app's taxonomy
+    # with skos:broadMatch, which is what SKOS provides for cross-scheme
+    # mapping (skos:broader being reserved for hierarchy within one
+    # scheme). Requiring cat:CategoryScheme here would make every such
+    # concept illegal as a pod:category value. What SHACL cannot check
+    # is the other half — that an extension concept really does carry
+    # exactly one skos:broadMatch into a cat:CategoryScheme concept, so
+    # the recipient's app always knows where to file an incoming pod;
+    # that is integrity.md's TTL-8, which needs to dereference across
+    # two files at once.
+    sh:property [
+        sh:path pod:category ;
+        sh:maxCount 1 ;
+        sh:class skos:Concept ;
+        sh:property [
+            sh:path skos:inScheme ;
+            sh:minCount 1 ;
+            sh:class skos:ConceptScheme ;
+            sh:message "A pod:category value must be a concept in some skos:ConceptScheme — cat:CategoryScheme (category.ttl) for a core category, or an extension's own scheme (category-ext/), which must skos:broadMatch a core concept."@en
+        ] ;
+        sh:message "A pod may have at most one pod:category value: the category concept its content is filed under, if any."@en
+    ] ;
+
+    # rdf:type — exactly one of pod:TemplatePod/pod:InstancePod, never
+    # both and never neither, mirroring pod.ttl's owl:disjointWith
+    # pod:TemplatePod pod:InstancePod. A reusable class-level template
+    # (cat-templates.ttl) is typed pod:TemplatePod only; every pod
+    # in a user's own tree is typed pod:InstancePod only — there is no
+    # legal bare tree-position-only pod with no member content in the
+    # InstancePod branch (a category node with nothing substantive to
+    # say still carries a minimal stub pod:member entry, see
+    # integrity.md's YAML-6) and no pod legally carries both kinds at
+    # once.
+    sh:xone (
+        [ sh:property [ sh:path rdf:type ; sh:hasValue pod:TemplatePod ] ]
+        [ sh:property [ sh:path rdf:type ; sh:hasValue pod:InstancePod ] ]
+    ) .
+
+
+#################################################################
+#  TemplatePod
+#  pod:TemplatePod is the template facet of a pod — reusable content,
+#  identified by its own pod:category value naming the category concept
+#  (a skos:Concept in cat:CategoryScheme, category.ttl) it's a template
+#  for — a reverse lookup, since category.ttl carries no forward pointer.
+#################################################################
+
+:TemplatePodShape
+    a sh:NodeShape ;
+    sh:targetClass pod:TemplatePod ;
+    sh:message "Template Pod validation."@en ;
+
+    # pod:memberShape — zero or more values, no maxCount. Not
+    # constrained to sh:class
+    # sh:NodeShape here: the individuals they point at (e.g.
+    # idocshapes:PassportShape) are only typed sh:NodeShape in
+    # the per-template other/shacl/*.ttl files, which the pod pass
+    # deliberately excludes from its shapes (see example.md's Validation
+    # section) — asserting sh:class here would spuriously fail there.
+    sh:property [
+        sh:path pod:memberShape ;
+        sh:message "pod:memberShape links a pod:TemplatePod to zero or more sh:NodeShape values."@en
+    ] ;
+
+    # pod:declaresTool — zero or more pod:Tool nodes naming the tools a
+    # pod of this category is created with. Most templates declare none.
+    # There is no boolean flag saying whether such a pod holds structured
+    # content: declaring the tool already says it, and a second statement
+    # could only ever disagree with the first.
+    sh:property [
+        sh:path pod:declaresTool ;
+        sh:class pod:Tool ;
+        sh:message "pod:declaresTool links a pod:TemplatePod to zero or more pod:Tool nodes."@en
+    ] .
+
+
+#################################################################
+#  InstancePod
+#  pod:InstancePod is the actual/instantiated facet of a pod — real,
+#  member-classified content. :InstancePodShape constrains
+#  pod:creator/pod:owner/pod:member, plus the two tag properties
+#  pod:userTag/pod:serviceTag (see their own comment below; the
+#  pod:ServiceTag value nodes pod:serviceTag points at are
+#  constrained by :ServiceTagShape, further below) — pod:owner and pod:member are
+#  each required, one or more values, no fixed upper bound (pod:creator
+#  stays exactly one); pod:tool is zero or more here, with the shape of
+#  each tool node enforced by :LiveToolShape, not here. Every pod:owner value must also be one of
+#  the pod's active pod:member pod:subject values — an invariant
+#  not itself SHACL-expressible (it requires dereferencing each linked
+#  graph's own pod:subject), so it is checked only by CLAUDE.md's
+#  own integrity check (YAML-7), not here. There is no pod-level
+#  subject to constrain: pod:subject is scoped to pod:MemberGraph
+#  (:MemberGraphShape below), never asserted on a pod — a pod's own subject
+#  is derived from its tools' own pod:formTopic values, or failing those
+#  from its pod:member graphs' own pod:subject values, rather than
+#  asserted directly (see pod.ttl's pod:tool comment; :LiveToolShape and
+#  :MemberGraphShape below constrain those properties instead). There is likewise no
+#  pod-level shape to constrain — an InstancePod's validation shape is derived
+#  from its own pod:category value (reverse-lookup the pod:TemplatePod
+#  with the same pod:category, cat-templates.ttl) rather than stored on
+#  the InstancePod itself.
+#################################################################
+
+:InstancePodShape
+    a sh:NodeShape ;
+    sh:targetClass pod:InstancePod ;
+    sh:message "Instance Pod validation."@en ;
+
+    # pod:creator — exactly one value, required, must be a Person: a pod
+    # is always created by a human, never by a service:Service and never by
+    # an o:Organization, whose participation in a pod is always through the
+    # service:ServiceProvider it provides.
+    sh:property [
+        sh:path pod:creator ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class p:Person ;
+        sh:message "A pod:InstancePod must have exactly one pod:creator, a single p:Person."@en
+    ] ;
+
+    # pod:owner — one or more values, required, no fixed upper bound,
+    # each must be a Person (never a service:Service — an invited service
+    # can be a pod:member but can never be promoted to owner; see
+    # pod.ttl's pod:owner comment).
+    sh:property [
+        sh:path pod:owner ;
+        sh:minCount 1 ;
+        sh:class p:Person ;
+        sh:message "A pod:InstancePod must have at least one pod:owner, each a p:Person."@en
+    ] ;
+
+    # pod:member — one or more values, required, no fixed upper bound.
+    # Member count is never stored as a class — it's simply the number of
+    # distinct subjects among a pod's members, counted at read time
+    # when needed (a pod is not expected to ever have more than a couple
+    # dozen members).
+    sh:property [
+        sh:path pod:member ;
+        sh:minCount 1 ;
+        sh:class pod:MemberGraph ;
+        sh:message "A pod:InstancePod's pod:member is required, at least one value, and each must be a pod:MemberGraph."@en
+    ] ;
+
+    # pod:tool — zero or more values, no minCount and no maxCount. A pod
+    # carrying no tool is the ordinary case, not a lesser kind of pod, and
+    # nothing caps how many it may carry: a pod gets one per tool its
+    # category's template declares and the user may add more at any time.
+    # The tool nodes' own contents are constrained by :LiveToolShape below.
+    sh:property [
+        sh:path pod:tool ;
+        sh:class pod:Tool ;
+        sh:message "A pod:InstancePod's pod:tool values must each be a pod:Tool."@en
+    ] ;
+
+    # pod:userTag/pod:serviceTag — each zero or more values, no
+    # minCount and no maxCount: a pod need carry no tags at all, and nothing
+    # caps how many it may carry. Neither has an sh:in list, since a tag
+    # belongs to no vocabulary at all (contrast vehicles:fuelType and
+    # pets:sex, whose small closed vocabularies really are frozen that way).
+    #
+    # They are constrained to different depths, because they are different
+    # shapes. pod:userTag is a literal, held to a non-empty string and
+    # nothing further — sh:minLength 1 catches only the empty string, so the
+    # rules SHACL cannot see for it (leading/trailing whitespace, a YAML
+    # value that isn't a string at all, and duplicates, RDF being a set so a
+    # repeated literal collapses before validation ever runs) are
+    # integrity.md's YAML-9 instead. pod:serviceTag's value is a
+    # pod:ServiceTag node, and this block fixes only that: the node's
+    # own three required parts are :ServiceTagShape's business below.
+    sh:property [
+        sh:path pod:userTag ;
+        sh:datatype xsd:string ;
+        sh:minLength 1 ;
+        sh:message "A pod:userTag value must be a non-empty string."@en
+    ] ;
+
+    sh:property [
+        sh:path pod:serviceTag ;
+        sh:nodeKind sh:BlankNodeOrIRI ;
+        sh:class pod:ServiceTag ;
+        sh:message "Each pod:serviceTag value must be a pod:ServiceTag node, not a literal."@en
+    ] .
+
+
+#################################################################
+#  ServiceTag
+#  pod:ServiceTag is the value node pod:serviceTag points at —
+#  pod:tagNamespace (whose module wrote the tag), pod:tagKey (what kind
+#  of external fact it records) and pod:tagValue (the label itself), each
+#  required exactly once. A node missing any of the three records nothing
+#  a module could act on; one carrying two of a single part would be two
+#  tags, not one.
+#
+#  sh:pattern does the structural work sh:minLength alone cannot:
+#  reverse-DNS well-formedness on the namespace, an identifier token on
+#  the key, and — now that the label has a property of its own rather than
+#  being one segment of an opaque string — no leading or trailing
+#  whitespace on the value. What stays integrity.md's YAML-9 is only
+#  what no SHACL constraint can reach: a YAML sub-value that is not a
+#  string at all (a bare 1.2 stringifies to "1.2" and passes the namespace
+#  pattern), an entry that is not a mapping, an unrecognized extra
+#  sub-key, and the same (namespace, key, value) triple twice on one pod
+#  — two value nodes are distinct, so unlike two identical literals a
+#  duplicate really is present after synthesis, but comparing sibling
+#  nodes needs a SPARQL query rather than any core SHACL constraint.
+#
+#  sh:BlankNodeOrIRI rather than sh:BlankNode: helpers/databook_graphs.py
+#  synthesizes a blank node, since a pod-databook's frontmatter has
+#  nowhere to mint an IRI, but a named individual is equally legal — the
+#  spelling an app writing straight into a triplestore would reach for.
+#################################################################
+
+:ServiceTagShape
+    a sh:NodeShape ;
+    sh:targetClass pod:ServiceTag ;
+    sh:message "Service Tag validation: exactly one namespace, key and value are required."@en ;
+
+    sh:property [
+        sh:path pod:tagNamespace ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$" ;  # reverse-DNS, two or more lowercase labels
+        sh:message "pod:tagNamespace must be a DNS domain the writing module's developer controls, in reverse-DNS order: two or more lowercase labels, e.g. foundation.mee.applecontacts."@en
+    ] ;
+
+    sh:property [
+        sh:path pod:tagKey ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:pattern "^[A-Za-z][A-Za-z0-9_-]*$" ;  # identifier token, no dot: a key is never a further namespace segment
+        sh:message "pod:tagKey must be a letter followed by letters, digits, underscores or hyphens, e.g. group or recordID."@en
+    ] ;
+
+    sh:property [
+        sh:path pod:tagValue ;
+        sh:datatype xsd:string ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:minLength 1 ;
+        sh:pattern "^\\S(.*\\S)?$" ;  # non-empty, single-line, no surrounding whitespace
+        sh:message "pod:tagValue must be a non-empty single-line string with no leading or trailing whitespace."@en
+    ] .
+
+
+#################################################################
+#  Tools
+#  A pod:Tool node appears in two roles, told apart by which property
+#  points at it rather than by its class, since both roles use the same
+#  tool classes (pod:Form, pod:Calendar, pod:Canvas, pod:Contacts,
+#  pod:Map).
+#  So these two shapes target sh:targetObjectsOf, never sh:targetClass:
+#
+#    :LiveToolShape     — a live tool, reached by pod:tool from a
+#                         pod:InstancePod. A live pod:Form
+#                         carries pod:formTopic (exactly one) and
+#                         pod:formGraph (at least one), never a shape;
+#                         a live pod:Calendar or pod:Canvas
+#                         carries none of the three, so each
+#                         requirement is conditioned on pod:Form
+#                         rather than asserted outright.
+#    :DeclaredToolShape — a declaration, reached by pod:declaresTool
+#                         from a pod:TemplatePod. Carries
+#                         pod:formShape alone: a template cannot
+#                         know what a future pod's tool will be about.
+#
+#  pod:formGraph's real upper bound — one value per pod member, each
+#  with a distinct claimant — is a cross-property invariant SHACL can't
+#  check here; see integrity.md's YAML-8.
+#################################################################
+
+:LiveToolShape
+    a sh:NodeShape ;
+    sh:targetObjectsOf pod:tool ;
+    sh:message "Tool validation."@en ;
+
+    # All three tool-content properties are scoped to pod:Form
+    # (pod.ttl), the one tool class with a content model, so the
+    # requirements below are conditioned on the tool's class rather than
+    # asserted outright: this shape targets every live tool, and a
+    # pod:Calendar, pod:Canvas, pod:Contacts or pod:Map legitimately carries none
+    # of them. A blanket sh:minCount here would fail those three.
+    #
+    # A live pod:Form carries pod:formTopic exactly once — what its
+    # content is about, stated once on the tool rather than repeated on
+    # each graph beneath it, so several members' claims about one thing
+    # cannot disagree about what that thing is — and at least one
+    # pod:formGraph. SHACL enforces only that minimum; the per-tool upper
+    # bound, one graph per pod member each with a distinct claimant, is
+    # integrity.md's YAML-8.
+    sh:or (
+        [ sh:not [ sh:class pod:Form ] ]
+        [ sh:property [
+              sh:path pod:formTopic ;
+              sh:minCount 1 ;
+              sh:maxCount 1 ;
+              sh:message "A live pod:Form must have exactly one pod:formTopic value."@en
+          ] ;
+          sh:property [
+              sh:path pod:formGraph ;
+              sh:minCount 1 ;
+              sh:message "A live pod:Form must have at least one pod:formGraph value."@en
+          ] ]
+    ) ;
+
+    # Whatever the tool kind, each pod:formGraph value is a pod:FormGraph.
+    sh:property [
+        sh:path pod:formGraph ;
+        sh:class pod:FormGraph ;
+        sh:message "A pod:Tool's pod:formGraph values must each be a pod:FormGraph."@en
+    ] ;
+
+    # A live tool never carries a shape — that belongs to the declared
+    # role, on a pod:TemplatePod's own pod:declaresTool node.
+    sh:property [
+        sh:path pod:formShape ;
+        sh:maxCount 0 ;
+        sh:message "A live pod:Tool (reached by pod:tool) must not carry pod:formShape — that belongs to a declared tool."@en
+    ] .
+
+:DeclaredToolShape
+    a sh:NodeShape ;
+    sh:targetObjectsOf pod:declaresTool ;
+    sh:message "Declared Tool validation."@en ;
+
+    # pod:formShape — zero or more values. Not constrained to
+    # sh:class sh:NodeShape here, for the same reason pod:memberShape
+    # isn't: the individuals it points at are only typed sh:NodeShape in
+    # the per-template other/shacl/*.ttl files, which the pod pass
+    # deliberately excludes from its shapes.
+    sh:property [
+        sh:path pod:formShape ;
+        sh:message "pod:formShape links a declared pod:Tool to zero or more sh:NodeShape values."@en
+    ] ;
+
+    # A declared tool carries neither of the live-tool properties.
+    sh:property [
+        sh:path pod:formTopic ;
+        sh:maxCount 0 ;
+        sh:message "A declared pod:Tool must not carry pod:formTopic — a template cannot know what a future pod's tool will be about."@en
+    ] ;
+
+    sh:property [
+        sh:path pod:formGraph ;
+        sh:maxCount 0 ;
+        sh:message "A declared pod:Tool must not carry pod:formGraph — it declares a shape, not live content."@en
+    ] .
+
+
+#################################################################
+#  Graph DataBooks (pod:CGraph and its two leaves)
+#  Validates the classification fields on every graph DataBook a pod
+#  links to — a graph DataBook only ever exists to be linked from a
+#  pod (via pod:member, or via a tool's own pod:formGraph, above),
+#  so its shapes live here
+#  alongside the pod shapes rather than in a separate file.
+#
+#  Three shapes, mirroring pod.ttl's three levels. :CGraphShape
+#  carries the pod:claimant constraint common to both kinds;
+#  :MemberGraphShape carries pod:subject, the one about-ness property
+#  a leaf still defines, and :FormGraphShape asserts that a tool graph
+#  carries none — its about-ness is the holding tool's own
+#  pod:formTopic (:LiveToolShape above). That sh:maxCount 0 is how the
+#  owl:disjointWith between the two leaves becomes something a
+#  validator can actually fail on.
+#
+#  :CGraphShape deliberately targets the two leaf classes rather than
+#  pod:CGraph itself. sh:targetClass reaches subclass instances only
+#  under rdfs:subClassOf entailment, and helpers/validate.py runs no
+#  reasoner — helpers/databook_graphs.py emits the leaf type alone
+#  (pod:MemberGraph or pod:FormGraph, never a bare pod:CGraph), so
+#  targeting the abstract superclass would silently match nothing.
+#  Listing both leaves keeps the claimant constraint declared once
+#  while still firing on real data.
+#################################################################
+
+# pod:shape (domain pod:Graph, range sh:NodeShape) is deliberately left
+# unconstrained by any shape here, for the identical reason :TemplatePodShape's
+# own comment above already gives for not constraining pod:memberShape
+# and pod:formShape to sh:class sh:NodeShape: the individuals a pod:shape
+# value points at (e.g. idocshapes:PassportShape) are only typed
+# sh:NodeShape in files (shacl/persona-shacl.ttl,
+# shacl/contactinfo-shacl.ttl, and every other/shacl/*-shacl.ttl file)
+# that the pod pass's own shapes deliberately exclude — asserting
+# sh:class here would spuriously fail there.
+
+:CGraphShape
+    a sh:NodeShape ;
+    sh:targetClass pod:MemberGraph, pod:FormGraph ;
+    sh:message "CGraph validation: claimant must be exactly one Person, Organization, or Service."@en ;
+    sh:property [
+        sh:path pod:claimant ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:or ( [ sh:class p:Person ] [ sh:class o:Organization ] [ sh:class service:Service ] ) ;
+        sh:message "pod:claimant must have exactly one value, and it must be a p:Person, o:Organization, or service:Service."@en
+    ] .
+
+:MemberGraphShape
+    a sh:NodeShape ;
+    sh:targetClass pod:MemberGraph ;
+    sh:message "MemberGraph validation: subject must be exactly one IRI."@en ;
+    sh:property [
+        sh:path pod:subject ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:nodeKind sh:IRI ;
+        sh:message "pod:subject must have exactly one value, and it must be an IRI."@en
+    ] .
+
+:FormGraphShape
+    a sh:NodeShape ;
+    sh:targetClass pod:FormGraph ;
+    sh:message "FormGraph validation: no subject may be present."@en ;
+    # The disjointness between the two leaves, made checkable: a tool's
+    # graph records who is claiming, never who a member is. What the
+    # content is about is the holding tool's own pod:formTopic, stated
+    # once for all the graphs beneath it (:LiveToolShape above), so a
+    # pod:FormGraph carries no about-ness property of its own at all.
+    sh:property [
+        sh:path pod:subject ;
+        sh:maxCount 0 ;
+        sh:message "A pod:FormGraph must not carry pod:subject — that property belongs to pod:MemberGraph, its disjoint sibling."@en
+    ] .

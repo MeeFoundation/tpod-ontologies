@@ -12,13 +12,13 @@
 
 <http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/category-ext/boston-hub-society> ;
-    owl:versionIRI <http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes/1.0.0> ;
-    dc:date "2026-09-14"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes/1.1.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Boston Hub Society Member SHACL Shapes"@en ;
     rdfs:comment """The Boston Hub Society's own member shape — the second half of the category
                     extension in category-ext/boston-hub-society.ttl, and the shape that template's
-                    cell:memberShape names. It validates every cell:MemberGraph of a cell whose
-                    cell:category is bhscat:BostonHubSociety, in place of pshapes:ContactInfoShape.
+                    pod:memberShape names. It validates every pod:MemberGraph of a pod whose
+                    pod:category is bhscat:BostonHubSociety, in place of pshapes:ContactInfoShape.
 
                     It is reverse-engineered from the society's two-page "Personal Page for BHS 2026
                     Directory" form, and it mints no vocabulary of its own. Every term it constrains
@@ -43,7 +43,7 @@
 
 #################################################################
 #  BHS Member Shape
-#  Targets persona:Person — the subject of a BHS cell's member graph.
+#  Targets persona:Person — the subject of a BHS pod's member graph.
 #
 #  Required: GivenName ("First full Name"), FamilyName ("Last Name")
 #  Everything else on the form is optional, as the form itself is.

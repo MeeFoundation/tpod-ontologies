@@ -9,10 +9,10 @@
 
 <http://mee.foundation/ontologies/education/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/education> ;
-    owl:versionIRI <http://mee.foundation/ontologies/education/shapes/1.0.0> ;
-    dc:date "2026-09-14"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/education/shapes/1.1.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Education Template SHACL Shapes"@en ;
-    rdfs:comment """SHACL shapes for validating graph files carrying cell:shape
+    rdfs:comment """SHACL shapes for validating graph files carrying pod:shape
                     educationshapes:EducationRecordShape. Paired with other/education.ttl, the
                     ontology it validates.
 

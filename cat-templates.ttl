@@ -1,5 +1,5 @@
-@prefix cell: <http://mee.foundation/ontologies/cell#> .
-@prefix ctpl: <http://mee.foundation/ontologies/cell-templates#> .
+@prefix pod: <http://mee.foundation/ontologies/pod#> .
+@prefix ctpl: <http://mee.foundation/ontologies/pod-templates#> .
 @prefix cat: <http://mee.foundation/ontologies/category#> .
 @prefix pshapes: <http://mee.foundation/ontologies/persona/shapes#> .
 @prefix petshapes: <http://mee.foundation/ontologies/pets/shapes#> .
@@ -16,1023 +16,1023 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
-@base <http://mee.foundation/ontologies/cell-templates> .
+@base <http://mee.foundation/ontologies/pod-templates> .
 
-<http://mee.foundation/ontologies/cell-templates> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/cell-templates/4.1.3> ;
-    dc:date "2026-09-16"^^xsd:date ;
-    owl:imports <http://mee.foundation/ontologies/cell> ;
-    owl:versionInfo "Version 4.1.3 - comment wording aligned on the repo-wide \"tool\" term"@en ;
-    rdfs:label "Cell Templates"@en ;
-    rdfs:comment """Class-level cell:Cell templates for category concepts (category.ttl's cat:CategoryScheme). Each individual here is what the app clones into a new cell when a cell of its own cell:category concept is first instantiated into a user's tree (Lazy Instantiation) — finding the template for a given category is a reverse lookup (?tc cell:category cat:X), since category.ttl carries no forward pointer of its own. Each is typed solely cell:TemplateCell, and carries cell:memberShape for the member baseline plus zero or more cell:declaresTool nodes naming the tools — a cell:Form and its governing cell:formShape — a cell of that category is created with. Most declare none: most categories have nothing structured to say beyond their member baseline, and a cell cloned from such a template can still gain tools later, chosen by the user."""@en .
+<http://mee.foundation/ontologies/pod-templates> rdf:type owl:Ontology ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod-templates/4.2.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:imports <http://mee.foundation/ontologies/pod> ;
+    owl:versionInfo "Version 4.2.0 - all 106 template individuals renamed to pod:TemplatePod under the Pod Ontology"@en ;
+    rdfs:label "Pod Templates"@en ;
+    rdfs:comment """Class-level pod:Pod templates for category concepts (category.ttl's cat:CategoryScheme). Each individual here is what the app clones into a new pod when a pod of its own pod:category concept is first instantiated into a user's tree (Lazy Instantiation) — finding the template for a given category is a reverse lookup (?tc pod:category cat:X), since category.ttl carries no forward pointer of its own. Each is typed solely pod:TemplatePod, and carries pod:memberShape for the member baseline plus zero or more pod:declaresTool nodes naming the tools — a pod:Form and its governing pod:formShape — a pod of that category is created with. Most declare none: most categories have nothing structured to say beyond their member baseline, and a pod cloned from such a template can still gain tools later, chosen by the user."""@en .
 
 #################################################################
 #  cat:Person  (SKOS top concept)
 #################################################################
 
-ctpl:PersonTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Person Template Cell"@en ;
-    rdfs:comment """The template for cat:Person, one of the scheme's two SKOS top concepts. A cell
+ctpl:PersonTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Person Template Pod"@en ;
+    rdfs:comment """The template for cat:Person, one of the scheme's two SKOS top concepts. A pod
                     instantiated directly as bare "Person" is the root of a user's own tree of
-                    cells — purely organizational, with no document, account or third party of its
+                    pods — purely organizational, with no document, account or third party of its
                     own — so it carries only the contact-info member view every template shares,
                     and declares no tool."""@en ;
-    cell:category cat:Person ;
-    cell:memberShape pshapes:ContactInfoShape .
+    pod:category cat:Person ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Organization  (SKOS top concept)
 #################################################################
 
-ctpl:OrganizationTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Organization Template Cell"@en ;
+ctpl:OrganizationTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Organization Template Pod"@en ;
     rdfs:comment """The template for cat:Organization, one of the scheme's two SKOS top concepts. A
-                    cell instantiated directly as bare "Organization" stands for the organization
-                    itself — an employer, say — so it declares a cell:Form carrying that
+                    pod instantiated directly as bare "Organization" stands for the organization
+                    itself — an employer, say — so it declares a pod:Form carrying that
                     organization's own o:Organization profile, the same
                     oshapes:OrganizationShape cat:Groups uses."""@en ;
-    cell:category cat:Organization ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape oshapes:OrganizationShape ] .
+    pod:category cat:Organization ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape oshapes:OrganizationShape ] .
 
 #################################################################
 #  cat:Passport
 #################################################################
 
-ctpl:PassportTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Passport Template Cell"@en ;
-    cell:category cat:Passport ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape idocshapes:PassportShape ] .
+ctpl:PassportTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Passport Template Pod"@en ;
+    pod:category cat:Passport ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape idocshapes:PassportShape ] .
 
 #################################################################
 #  cat:SSN
 #################################################################
 
-ctpl:SSNTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "SSN Template Cell"@en ;
-    cell:category cat:SSN ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape pshapes:SSNShape ] .
+ctpl:SSNTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "SSN Template Pod"@en ;
+    pod:category cat:SSN ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape pshapes:SSNShape ] .
 
 #################################################################
 #  cat:Home
 #################################################################
 
-ctpl:HomeTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Home Template Cell"@en ;
-    cell:category cat:Home ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape residenceshapes:ResidenceShape ] .
+ctpl:HomeTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Home Template Pod"@en ;
+    pod:category cat:Home ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape residenceshapes:ResidenceShape ] .
 
 #################################################################
 #  cat:Trips
 #################################################################
 
-ctpl:TripsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Trips Template Cell"@en ;
-    cell:category cat:Trips ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape itineraryshapes:ItineraryShape ] .
+ctpl:TripsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Trips Template Pod"@en ;
+    pod:category cat:Trips ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape itineraryshapes:ItineraryShape ] .
 
 #################################################################
-#  No category (Custom / UserDefined cells)
+#  No category (Custom / UserDefined pods)
 #################################################################
 
-ctpl:UserDefinedTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "User-Defined (No Category) Template Cell"@en ;
-    rdfs:comment """The one cell:TemplateCell with no cell:category value at all — for a cell the
+ctpl:UserDefinedTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "User-Defined (No Category) Template Pod"@en ;
+    rdfs:comment """The one pod:TemplatePod with no pod:category value at all — for a pod the
                     user creates without picking any existing category concept (the Custom/
-                    UserDefined case, identified by the cell carrying no category value
-                    at all; this repo's scaffolding mirrors it in the cell-databook
+                    UserDefined case, identified by the pod carrying no category value
+                    at all; this repo's scaffolding mirrors it in the pod-databook
                     filename's (custom) disambiguator). Since it has no
-                    cell:category, it isn't reachable by the usual ?tc cell:category cat:X
-                    reverse lookup every other template cell uses — it's found instead as the
-                    unique cell:TemplateCell carrying no cell:category value, and Lazy
-                    Instantiation falls back to cloning it whenever a new cell is created with no
-                    category selected. Carries only cell:memberShape
-                    pshapes:ContactInfoShape — a Custom cell has no document type and no
+                    pod:category, it isn't reachable by the usual ?tc pod:category cat:X
+                    reverse lookup every other template pod uses — it's found instead as the
+                    unique pod:TemplatePod carrying no pod:category value, and Lazy
+                    Instantiation falls back to cloning it whenever a new pod is created with no
+                    category selected. Carries only pod:memberShape
+                    pshapes:ContactInfoShape — a Custom pod has no document type and no
                     tool content of its own, only ever a contact-info view of its member(s)."""@en ;
-    cell:memberShape pshapes:ContactInfoShape .
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:BirthCertificate
 #################################################################
 
-ctpl:BirthCertificateTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Birth Certificate Template Cell"@en ;
-    cell:category cat:BirthCertificate ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape idocshapes:BirthCertificateShape ] .
+ctpl:BirthCertificateTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Birth Certificate Template Pod"@en ;
+    pod:category cat:BirthCertificate ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape idocshapes:BirthCertificateShape ] .
 
 #################################################################
 #  cat:DriversLicense
 #################################################################
 
-ctpl:DriversLicenseTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Drivers License Template Cell"@en ;
-    cell:category cat:DriversLicense ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape idocshapes:DriversLicenseShape ] .
+ctpl:DriversLicenseTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Drivers License Template Pod"@en ;
+    pod:category cat:DriversLicense ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape idocshapes:DriversLicenseShape ] .
 
 #################################################################
 #  cat:MedicalAppointment
 #################################################################
 
-ctpl:MedicalAppointmentTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Medical Appointment Template Cell"@en ;
-    cell:category cat:MedicalAppointment ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape mashapes:MedicalAppointmentRecordShape ] .
+ctpl:MedicalAppointmentTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Medical Appointment Template Pod"@en ;
+    pod:category cat:MedicalAppointment ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape mashapes:MedicalAppointmentRecordShape ] .
 
 #################################################################
 #  cat:PetsMedical
 #################################################################
 
-ctpl:PetMedicationsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Pet Medications Template Cell"@en ;
-    cell:category cat:PetsMedical ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape petshapes:PetMedicationRecordShape ] .
+ctpl:PetMedicationsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Pet Medications Template Pod"@en ;
+    pod:category cat:PetsMedical ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape petshapes:PetMedicationRecordShape ] .
 
 #################################################################
 #  cat:Pets
 #################################################################
 
-ctpl:PetProfileTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Pet Profile Template Cell"@en ;
-    cell:category cat:Pets ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape petshapes:PetShape ] .
+ctpl:PetProfileTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Pet Profile Template Pod"@en ;
+    pod:category cat:Pets ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape petshapes:PetShape ] .
 
 #################################################################
 #  cat:Vehicles
 #################################################################
 
-ctpl:VehicleProfileTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Vehicle Profile Template Cell"@en ;
-    cell:category cat:Vehicles ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape vehicleshapes:VehicleShape ] .
+ctpl:VehicleProfileTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Vehicle Profile Template Pod"@en ;
+    pod:category cat:Vehicles ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape vehicleshapes:VehicleShape ] .
 
 #################################################################
 #  cat:People
 #################################################################
 
-ctpl:PeopleTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "People Template Cell"@en ;
-    cell:category cat:People ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PeopleTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "People Template Pod"@en ;
+    pod:category cat:People ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:ImmediateFamily
 #################################################################
 
-ctpl:ImmediateFamilyTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Immediate Family Template Cell"@en ;
-    cell:category cat:ImmediateFamily ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ImmediateFamilyTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Immediate Family Template Pod"@en ;
+    pod:category cat:ImmediateFamily ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:ExtendedFamily
 #################################################################
 
-ctpl:ExtendedFamilyTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Extended Family Template Cell"@en ;
-    cell:category cat:ExtendedFamily ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ExtendedFamilyTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Extended Family Template Pod"@en ;
+    pod:category cat:ExtendedFamily ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:InLawsStepFamily
 #################################################################
 
-ctpl:InLawsStepFamilyTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "In-Laws / Step-Family Template Cell"@en ;
-    cell:category cat:InLawsStepFamily ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:InLawsStepFamilyTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "In-Laws / Step-Family Template Pod"@en ;
+    pod:category cat:InLawsStepFamily ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Others
 #################################################################
 
-ctpl:OthersTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Others Template Cell"@en ;
-    cell:category cat:Others ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:OthersTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Others Template Pod"@en ;
+    pod:category cat:Others ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Companies
 #################################################################
 
-ctpl:CompaniesTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Companies Template Cell"@en ;
-    cell:category cat:Companies ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape sashapes:ServiceAccountShape ] .
+ctpl:CompaniesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Companies Template Pod"@en ;
+    pod:category cat:Companies ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape sashapes:ServiceAccountShape ] .
 
 #################################################################
 #  cat:BankingPayments
 #################################################################
 
-ctpl:BankingPaymentsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Banking & Payments Firms Template Cell"@en ;
-    cell:category cat:BankingPayments ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape sashapes:ServiceAccountShape , bankingshapes:DebitCardShape , bankingshapes:CheckingAccountShape ] .
+ctpl:BankingPaymentsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Banking & Payments Firms Template Pod"@en ;
+    pod:category cat:BankingPayments ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape sashapes:ServiceAccountShape , bankingshapes:DebitCardShape , bankingshapes:CheckingAccountShape ] .
 
 #################################################################
 #  cat:Advisors
 #################################################################
 
-ctpl:AdvisorsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Advisors Template Cell"@en ;
-    cell:category cat:Advisors ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:AdvisorsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Advisors Template Pod"@en ;
+    pod:category cat:Advisors ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Advisory
 #################################################################
 
-ctpl:AdvisoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Advisory Firms Template Cell"@en ;
-    cell:category cat:Advisory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:AdvisoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Advisory Firms Template Pod"@en ;
+    pod:category cat:Advisory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Advisory(org)
 #################################################################
 
-ctpl:AdvisoryOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Advisory (org) Template Cell"@en ;
-    cell:category cat:Advisory\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:AdvisoryOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Advisory (org) Template Pod"@en ;
+    pod:category cat:Advisory\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:BankingPayments(org)
 #################################################################
 
-ctpl:BankingPaymentsOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Banking & Payments (org) Template Cell"@en ;
-    cell:category cat:BankingPayments\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:BankingPaymentsOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Banking & Payments (org) Template Pod"@en ;
+    pod:category cat:BankingPayments\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:BoardOfDirectors
 #################################################################
 
-ctpl:BoardOfDirectorsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Board of Directors Template Cell"@en ;
-    cell:category cat:BoardOfDirectors ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:BoardOfDirectorsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Board of Directors Template Pod"@en ;
+    pod:category cat:BoardOfDirectors ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Bookkeeping
 #################################################################
 
-ctpl:BookkeepingTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Bookkeeping Template Cell"@en ;
-    cell:category cat:Bookkeeping ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:BookkeepingTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Bookkeeping Template Pod"@en ;
+    pod:category cat:Bookkeeping ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Colleagues
 #################################################################
 
-ctpl:ColleaguesTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Colleagues Template Cell"@en ;
-    cell:category cat:Colleagues ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ColleaguesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Colleagues Template Pod"@en ;
+    pod:category cat:Colleagues ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Conferences
 #################################################################
 
-ctpl:ConferencesTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Conferences Template Cell"@en ;
-    cell:category cat:Conferences ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ConferencesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Conferences Template Pod"@en ;
+    pod:category cat:Conferences ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Consultants
 #################################################################
 
-ctpl:ConsultantsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Consultants Template Cell"@en ;
-    cell:category cat:Consultants ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ConsultantsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Consultants Template Pod"@en ;
+    pod:category cat:Consultants ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Customers
 #################################################################
 
-ctpl:CustomersTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Customers Template Cell"@en ;
-    cell:category cat:Customers ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:CustomersTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Customers Template Pod"@en ;
+    pod:category cat:Customers ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Dental
 #################################################################
 
-ctpl:DentalTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Dental Template Cell"@en ;
-    cell:category cat:Dental ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DentalTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Dental Template Pod"@en ;
+    pod:category cat:Dental ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:DentalAppointment
 #################################################################
 
-ctpl:DentalAppointmentTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Dental Appointment Template Cell"@en ;
-    cell:category cat:DentalAppointment ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DentalAppointmentTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Dental Appointment Template Pod"@en ;
+    pod:category cat:DentalAppointment ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:DentalHistory
 #################################################################
 
-ctpl:DentalHistoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "History Template Cell"@en ;
-    cell:category cat:DentalHistory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DentalHistoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "History Template Pod"@en ;
+    pod:category cat:DentalHistory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:DentalInsurance
 #################################################################
 
-ctpl:DentalInsuranceTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Insurance Template Cell"@en ;
-    cell:category cat:DentalInsurance ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DentalInsuranceTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Insurance Template Pod"@en ;
+    pod:category cat:DentalInsurance ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:DentalProvider
 #################################################################
 
-ctpl:DentalProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:DentalProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DentalProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:DentalProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Dentist
 #################################################################
 
-ctpl:DentistTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Dentist Template Cell"@en ;
-    cell:category cat:Dentist ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DentistTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Dentist Template Pod"@en ;
+    pod:category cat:Dentist ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:DirectReports
 #################################################################
 
-ctpl:DirectReportsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Direct Reports Template Cell"@en ;
-    cell:category cat:DirectReports ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:DirectReportsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Direct Reports Template Pod"@en ;
+    pod:category cat:DirectReports ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Education
 #################################################################
 
-ctpl:EducationTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Education Template Cell"@en ;
-    cell:category cat:Education ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:EducationTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Education Template Pod"@en ;
+    pod:category cat:Education ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Employees
 #################################################################
 
-ctpl:EmployeesTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Employees Template Cell"@en ;
-    cell:category cat:Employees ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:EmployeesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Employees Template Pod"@en ;
+    pod:category cat:Employees ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Events
 #################################################################
 
-ctpl:EventsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Events Template Cell"@en ;
-    cell:category cat:Events ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:EventsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Events Template Pod"@en ;
+    pod:category cat:Events ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Events(org)
 #################################################################
 
-ctpl:EventsOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Events (org) Template Cell"@en ;
-    cell:category cat:Events\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:EventsOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Events (org) Template Pod"@en ;
+    pod:category cat:Events\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:EyeDoctor
 #################################################################
 
-ctpl:EyeDoctorTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Eye Doctor Template Cell"@en ;
-    cell:category cat:EyeDoctor ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:EyeDoctorTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Eye Doctor Template Pod"@en ;
+    pod:category cat:EyeDoctor ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Federal
 #################################################################
 
-ctpl:FederalTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Federal Template Cell"@en ;
-    cell:category cat:Federal ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:FederalTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Federal Template Pod"@en ;
+    pod:category cat:Federal ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Finances
 #################################################################
 
-ctpl:FinancesTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Finances Template Cell"@en ;
-    cell:category cat:Finances ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:FinancesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Finances Template Pod"@en ;
+    pod:category cat:Finances ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Finances(org)
 #################################################################
 
-ctpl:FinancesOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Finances (org) Template Cell"@en ;
-    cell:category cat:Finances\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:FinancesOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Finances (org) Template Pod"@en ;
+    pod:category cat:Finances\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Fitness
 #################################################################
 
-ctpl:FitnessTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Fitness Template Cell"@en ;
-    cell:category cat:Fitness ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:FitnessTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Fitness Template Pod"@en ;
+    pod:category cat:Fitness ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:FitnessProvider
 #################################################################
 
-ctpl:FitnessProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:FitnessProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:FitnessProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:FitnessProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Food
 #################################################################
 
-ctpl:FoodTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Food Template Cell"@en ;
-    cell:category cat:Food ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:FoodTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Food Template Pod"@en ;
+    pod:category cat:Food ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Government
 #################################################################
 
-ctpl:GovernmentTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Government Template Cell"@en ;
-    cell:category cat:Government ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:GovernmentTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Government Template Pod"@en ;
+    pod:category cat:Government ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Government(org)
 #################################################################
 
-ctpl:GovernmentOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Government (org) Template Cell"@en ;
-    cell:category cat:Government\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:GovernmentOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Government (org) Template Pod"@en ;
+    pod:category cat:Government\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Groups
 #################################################################
 
-ctpl:GroupsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Groups Template Cell"@en ;
-    cell:category cat:Groups ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape oshapes:OrganizationShape ] .
+ctpl:GroupsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Groups Template Pod"@en ;
+    pod:category cat:Groups ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape oshapes:OrganizationShape ] .
 
 #################################################################
 #  cat:HealthWellness
 #################################################################
 
-ctpl:HealthWellnessTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Health & Wellness Template Cell"@en ;
-    cell:category cat:HealthWellness ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape pshapes:HealthWellnessShape ] .
+ctpl:HealthWellnessTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Health & Wellness Template Pod"@en ;
+    pod:category cat:HealthWellness ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape pshapes:HealthWellnessShape ] .
 
 #################################################################
 #  cat:Information
 #################################################################
 
-ctpl:InformationTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Information Template Cell"@en ;
-    cell:category cat:Information ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:InformationTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Information Template Pod"@en ;
+    pod:category cat:Information ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Insurance
 #################################################################
 
-ctpl:InsuranceTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Insurance Firms Template Cell"@en ;
-    cell:category cat:Insurance ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:InsuranceTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Insurance Firms Template Pod"@en ;
+    pod:category cat:Insurance ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Insurance(org)
 #################################################################
 
-ctpl:InsuranceOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Insurance (org) Template Cell"@en ;
-    cell:category cat:Insurance\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:InsuranceOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Insurance (org) Template Pod"@en ;
+    pod:category cat:Insurance\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Investing
 #################################################################
 
-ctpl:InvestingTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Investment Firms Template Cell"@en ;
-    cell:category cat:Investing ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:InvestingTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Investment Firms Template Pod"@en ;
+    pod:category cat:Investing ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Investing(org)
 #################################################################
 
-ctpl:InvestingOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Investing (org) Template Cell"@en ;
-    cell:category cat:Investing\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:InvestingOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Investing (org) Template Pod"@en ;
+    pod:category cat:Investing\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:KB
 #################################################################
 
-ctpl:KBTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "KB Template Cell"@en ;
-    cell:category cat:KB ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:KBTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "KB Template Pod"@en ;
+    pod:category cat:KB ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Legal
 #################################################################
 
-ctpl:LegalTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Legal Template Cell"@en ;
-    cell:category cat:Legal ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:LegalTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Legal Template Pod"@en ;
+    pod:category cat:Legal ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Legal(org)
 #################################################################
 
-ctpl:LegalOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Legal (org) Template Cell"@en ;
-    cell:category cat:Legal\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:LegalOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Legal (org) Template Pod"@en ;
+    pod:category cat:Legal\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:LendingCredit
 #################################################################
 
-ctpl:LendingCreditTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Lending & Credit Firms Template Cell"@en ;
-    cell:category cat:LendingCredit ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:LendingCreditTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Lending & Credit Firms Template Pod"@en ;
+    pod:category cat:LendingCredit ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:LendingCredit(org)
 #################################################################
 
-ctpl:LendingCreditOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Lending & Credit (org) Template Cell"@en ;
-    cell:category cat:LendingCredit\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:LendingCreditOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Lending & Credit (org) Template Pod"@en ;
+    pod:category cat:LendingCredit\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Managers
 #################################################################
 
-ctpl:ManagersTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Manager(s) Template Cell"@en ;
-    cell:category cat:Managers ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ManagersTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Manager(s) Template Pod"@en ;
+    pod:category cat:Managers ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Marketing
 #################################################################
 
-ctpl:MarketingTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Marketing Template Cell"@en ;
-    cell:category cat:Marketing ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MarketingTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Marketing Template Pod"@en ;
+    pod:category cat:Marketing ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Medical
 #################################################################
 
-ctpl:MedicalTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Medical Template Cell"@en ;
-    cell:category cat:Medical ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MedicalTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Medical Template Pod"@en ;
+    pod:category cat:Medical ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MedicalHistory
 #################################################################
 
-ctpl:MedicalHistoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "History Template Cell"@en ;
-    cell:category cat:MedicalHistory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MedicalHistoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "History Template Pod"@en ;
+    pod:category cat:MedicalHistory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MedicalInsurance
 #################################################################
 
-ctpl:MedicalInsuranceTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Insurance Template Cell"@en ;
-    cell:category cat:MedicalInsurance ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MedicalInsuranceTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Insurance Template Pod"@en ;
+    pod:category cat:MedicalInsurance ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MedicalProvider
 #################################################################
 
-ctpl:MedicalProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:MedicalProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MedicalProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:MedicalProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Meetings
 #################################################################
 
-ctpl:MeetingsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Meetings Template Cell"@en ;
-    cell:category cat:Meetings ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MeetingsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Meetings Template Pod"@en ;
+    pod:category cat:Meetings ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MentalHealth
 #################################################################
 
-ctpl:MentalHealthTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Mental Health Template Cell"@en ;
-    cell:category cat:MentalHealth ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MentalHealthTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Mental Health Template Pod"@en ;
+    pod:category cat:MentalHealth ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MentalHealthHistory
 #################################################################
 
-ctpl:MentalHealthHistoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "History Template Cell"@en ;
-    cell:category cat:MentalHealthHistory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MentalHealthHistoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "History Template Pod"@en ;
+    pod:category cat:MentalHealthHistory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MentalHealthInsurance
 #################################################################
 
-ctpl:MentalHealthInsuranceTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Insurance Template Cell"@en ;
-    cell:category cat:MentalHealthInsurance ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MentalHealthInsuranceTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Insurance Template Pod"@en ;
+    pod:category cat:MentalHealthInsurance ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:MentalHealthProvider
 #################################################################
 
-ctpl:MentalHealthProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:MentalHealthProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:MentalHealthProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:MentalHealthProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Nutrition
 #################################################################
 
-ctpl:NutritionTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Nutrition Template Cell"@en ;
-    cell:category cat:Nutrition ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:NutritionTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Nutrition Template Pod"@en ;
+    pod:category cat:Nutrition ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:NutritionHistory
 #################################################################
 
-ctpl:NutritionHistoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "History Template Cell"@en ;
-    cell:category cat:NutritionHistory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:NutritionHistoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "History Template Pod"@en ;
+    pod:category cat:NutritionHistory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:NutritionProvider
 #################################################################
 
-ctpl:NutritionProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:NutritionProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:NutritionProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:NutritionProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Others(org)
 #################################################################
 
-ctpl:OthersOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Others (org) Template Cell"@en ;
-    cell:category cat:Others\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:OthersOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Others (org) Template Pod"@en ;
+    pod:category cat:Others\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Partners
 #################################################################
 
-ctpl:PartnersTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Partners Template Cell"@en ;
-    cell:category cat:Partners ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PartnersTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Partners Template Pod"@en ;
+    pod:category cat:Partners ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:People(org)
 #################################################################
 
-ctpl:PeopleOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "People (org) Template Cell"@en ;
-    cell:category cat:People\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PeopleOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "People (org) Template Pod"@en ;
+    pod:category cat:People\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PersonalTrainer
 #################################################################
 
-ctpl:PersonalTrainerTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Personal Trainer Template Cell"@en ;
-    cell:category cat:PersonalTrainer ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PersonalTrainerTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Personal Trainer Template Pod"@en ;
+    pod:category cat:PersonalTrainer ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Personality
 #################################################################
 
-ctpl:PersonalityTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Personality Template Cell"@en ;
-    cell:category cat:Personality ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PersonalityTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Personality Template Pod"@en ;
+    pod:category cat:Personality ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PetsCareAndFeeding
 #################################################################
 
-ctpl:PetsCareAndFeedingTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Care & Feeding Template Cell"@en ;
-    cell:category cat:PetsCareAndFeeding ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape petshapes:PetsCareAndFeedingShape ] .
+ctpl:PetsCareAndFeedingTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Care & Feeding Template Pod"@en ;
+    pod:category cat:PetsCareAndFeeding ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape petshapes:PetsCareAndFeedingShape ] .
 
 #################################################################
 #  cat:PetsDevices
 #################################################################
 
-ctpl:PetsDevicesTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Devices Template Cell"@en ;
-    cell:category cat:PetsDevices ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PetsDevicesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Devices Template Pod"@en ;
+    pod:category cat:PetsDevices ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PetsVeterinarians
 #################################################################
 
-ctpl:PetsVeterinariansTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Veterinarians Template Cell"@en ;
-    cell:category cat:PetsVeterinarians ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PetsVeterinariansTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Veterinarians Template Pod"@en ;
+    pod:category cat:PetsVeterinarians ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PhysicalTherapy
 #################################################################
 
-ctpl:PhysicalTherapyTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Physical Therapy Template Cell"@en ;
-    cell:category cat:PhysicalTherapy ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PhysicalTherapyTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Physical Therapy Template Pod"@en ;
+    pod:category cat:PhysicalTherapy ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PhysicalTherapyHistory
 #################################################################
 
-ctpl:PhysicalTherapyHistoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "History Template Cell"@en ;
-    cell:category cat:PhysicalTherapyHistory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PhysicalTherapyHistoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "History Template Pod"@en ;
+    pod:category cat:PhysicalTherapyHistory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PhysicalTherapyProvider
 #################################################################
 
-ctpl:PhysicalTherapyProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:PhysicalTherapyProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PhysicalTherapyProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:PhysicalTherapyProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Previous
 #################################################################
 
-ctpl:PreviousTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Previous Template Cell"@en ;
-    cell:category cat:Previous ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:PreviousTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Previous Template Pod"@en ;
+    pod:category cat:Previous ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:PrimaryCarePhysician
 #################################################################
 
-ctpl:PrimaryCarePhysicianTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Primary Care Physician Template Cell"@en ;
-    cell:category cat:PrimaryCarePhysician ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape pshapes:PrimaryCarePhysicianShape , pshapes:ContactInfoShape ] .
+ctpl:PrimaryCarePhysicianTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Primary Care Physician Template Pod"@en ;
+    pod:category cat:PrimaryCarePhysician ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape pshapes:PrimaryCarePhysicianShape , pshapes:ContactInfoShape ] .
 
 #################################################################
 #  cat:Projects
 #################################################################
 
-ctpl:ProjectsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Projects Template Cell"@en ;
-    cell:category cat:Projects ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ProjectsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Projects Template Pod"@en ;
+    pod:category cat:Projects ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Projects(org)
 #################################################################
 
-ctpl:ProjectsOrgTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Projects (org) Template Cell"@en ;
-    cell:category cat:Projects\(org\) ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ProjectsOrgTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Projects (org) Template Pod"@en ;
+    pod:category cat:Projects\(org\) ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Prospects
 #################################################################
 
-ctpl:ProspectsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Prospects Template Cell"@en ;
-    cell:category cat:Prospects ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ProspectsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Prospects Template Pod"@en ;
+    pod:category cat:Prospects ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:SportsEntertainment
 #################################################################
 
-ctpl:SportsEntertainmentTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Sports & Entertainment Template Cell"@en ;
-    cell:category cat:SportsEntertainment ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:SportsEntertainmentTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Sports & Entertainment Template Pod"@en ;
+    pod:category cat:SportsEntertainment ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:State
 #################################################################
 
-ctpl:StateTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "State Template Cell"@en ;
-    cell:category cat:State ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:StateTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "State Template Pod"@en ;
+    pod:category cat:State ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Suppliers
 #################################################################
 
-ctpl:SuppliersTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Suppliers Template Cell"@en ;
-    cell:category cat:Suppliers ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:SuppliersTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Suppliers Template Pod"@en ;
+    pod:category cat:Suppliers ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Therapist
 #################################################################
 
-ctpl:TherapistTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Therapist Template Cell"@en ;
-    cell:category cat:Therapist ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:TherapistTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Therapist Template Pod"@en ;
+    pod:category cat:Therapist ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Things
 #################################################################
 
-ctpl:ThingsTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Things Template Cell"@en ;
-    cell:category cat:Things ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:ThingsTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Things Template Pod"@en ;
+    pod:category cat:Things ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Travel
 #################################################################
 
-ctpl:TravelTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Travel Template Cell"@en ;
-    cell:category cat:Travel ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:TravelTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Travel Template Pod"@en ;
+    pod:category cat:Travel ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:TravelProvider
 #################################################################
 
-ctpl:TravelProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:TravelProvider ;
-    cell:memberShape pshapes:ContactInfoShape ;
-    cell:declaresTool [ rdf:type cell:Form ;
-                        cell:formShape sashapes:ServiceAccountShape ] .
+ctpl:TravelProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:TravelProvider ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Form ;
+                        pod:formShape sashapes:ServiceAccountShape ] .
 
 #################################################################
 #  cat:VehiclesProvider
 #################################################################
 
-ctpl:VehiclesProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:VehiclesProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:VehiclesProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:VehiclesProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Vision
 #################################################################
 
-ctpl:VisionTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Vision Template Cell"@en ;
-    cell:category cat:Vision ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:VisionTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Vision Template Pod"@en ;
+    pod:category cat:Vision ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:VisionAppointment
 #################################################################
 
-ctpl:VisionAppointmentTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Vision Appointment Template Cell"@en ;
-    cell:category cat:VisionAppointment ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:VisionAppointmentTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Vision Appointment Template Pod"@en ;
+    pod:category cat:VisionAppointment ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:VisionHistory
 #################################################################
 
-ctpl:VisionHistoryTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "History Template Cell"@en ;
-    cell:category cat:VisionHistory ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:VisionHistoryTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "History Template Pod"@en ;
+    pod:category cat:VisionHistory ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:VisionInsurance
 #################################################################
 
-ctpl:VisionInsuranceTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Insurance Template Cell"@en ;
-    cell:category cat:VisionInsurance ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:VisionInsuranceTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Insurance Template Pod"@en ;
+    pod:category cat:VisionInsurance ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:VisionProvider
 #################################################################
 
-ctpl:VisionProviderTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Provider Template Cell"@en ;
-    cell:category cat:VisionProvider ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:VisionProviderTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Provider Template Pod"@en ;
+    pod:category cat:VisionProvider ;
+    pod:memberShape pshapes:ContactInfoShape .
 
 #################################################################
 #  cat:Work
 #################################################################
 
-ctpl:WorkTemplateCell rdf:type cell:Cell, cell:TemplateCell ;
-    rdfs:label "Work Template Cell"@en ;
-    cell:category cat:Work ;
-    cell:memberShape pshapes:ContactInfoShape .
+ctpl:WorkTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "Work Template Pod"@en ;
+    pod:category cat:Work ;
+    pod:memberShape pshapes:ContactInfoShape .

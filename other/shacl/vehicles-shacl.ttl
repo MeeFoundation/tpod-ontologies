@@ -10,10 +10,10 @@
 
 <http://mee.foundation/ontologies/vehicles/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/vehicles> ;
-    owl:versionIRI <http://mee.foundation/ontologies/vehicles/shapes/1.3.0> ;
-    dc:date "2026-09-05"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/vehicles/shapes/1.4.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
     rdfs:label "Vehicles Template SHACL Shapes"@en ;
-    rdfs:comment """SHACL shapes for validating graph files carrying cell:shape vehicleshapes:VehicleShape. Apply in
+    rdfs:comment """SHACL shapes for validating graph files carrying pod:shape vehicleshapes:VehicleShape. Apply in
                     addition to shacl/persona-shacl.ttl when validating a vehicle identity graph file. Targets
                     vehicles:Vehicle individuals directly — a vehicle has no persona:Person individual of its
                     own."""@en .
@@ -42,7 +42,7 @@
 
     # vehicles:hasVehicleType's value is the class itself (class-value punning
     # — vehicles:VehicleType is a real OWL class hierarchy, unlike
-    # category.ttl's SKOS-based tree, so cell:category's shape no longer uses
+    # category.ttl's SKOS-based tree, so pod:category's shape no longer uses
     # this same style), so sh:in enumerating the
     # four concrete classes is the right constraint — not sh:class, which would
     # instead require an *instance* of vehicles:VehicleType.

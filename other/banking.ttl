@@ -9,9 +9,9 @@
 @base <http://mee.foundation/ontologies/banking> .
 
 <http://mee.foundation/ontologies/banking> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/banking/1.3.1> ;
-    dc:date "2026-09-16"^^xsd:date ;
-    owl:versionInfo "Version 1.3.1 - comment wording aligned on the repo-wide \"tool graph\" term"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/banking/1.4.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 1.4.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     rdfs:label "Banking Ontology"@en ;
     rdfs:comment """A small other/ peer ontology (see other/pets.ttl's own rdfs:comment for the
                     general pattern) for a domain a person merely *has* — a debit card and the
@@ -30,10 +30,10 @@
                     banking:DebitCard and banking:CheckingAccount are each independent template type
                     label classes, asserted via rdf:type directly on the graph's own content individual
                     and targeted directly by their own SHACL shape (other/shacl/banking-shacl.ttl) —
-                    independent of cell.ttl's cell:shape property, whose own range is sh:NodeShape
+                    independent of pod.ttl's pod:shape property, whose own range is sh:NodeShape
                     (the validating shape, not the content's own class). Both are linked from
-                    cat:BankingPayments's own class-level cell (cat-templates.ttl) via
-                    cell:formShape, alongside serviceaccounts:ServiceAccount
+                    cat:BankingPayments's own class-level pod (cat-templates.ttl) via
+                    pod:formShape, alongside serviceaccounts:ServiceAccount
                     (other/service-accounts.ttl) — a single Citibank-claimed tool graph holds all
                     three templates' content together."""@en .
 
@@ -54,8 +54,8 @@ banking:DebitCard rdf:type owl:Class ;
                     funds from. Asserted via rdf:type directly on the graph file's own
                     individual, validated by the SHACL shape :DebitCardShape (other/shacl/banking-shacl.ttl,
                     targeting cco:ent00000051 directly), linked from
-                    cat:BankingPayments's own class-level cell (cat-templates.ttl) via
-                    cell:formShape. Not an identitydocuments:IdentityDocument."""@en .
+                    cat:BankingPayments's own class-level pod (cat-templates.ttl) via
+                    pod:formShape. Not an identitydocuments:IdentityDocument."""@en .
 
 
 #################################################################
@@ -71,8 +71,8 @@ banking:CheckingAccount rdf:type owl:Class ;
                     graph file's own individual, the same pattern identitydocuments:Passport/
                     medicalappointments:MedicalAppointmentRecord already follow. Validated by the existing
                     SHACL shape :CheckingAccountShape (other/shacl/banking-shacl.ttl), whose own CURIE — not this class — is what the graph's
-                    cell:shape value names; linked from cat:BankingPayments's template cell
-                    (cat-templates.ttl) via cell:formShape."""@en .
+                    pod:shape value names; linked from cat:BankingPayments's template pod
+                    (cat-templates.ttl) via pod:formShape."""@en .
 
 banking:accessesBankAccount rdf:type owl:ObjectProperty ;
     rdfs:domain cco:ent00000051 ;  # Debit Card

@@ -8,9 +8,9 @@
 @base <http://mee.foundation/ontologies/directory-profile> .
 
 <http://mee.foundation/ontologies/directory-profile> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/1.0.0> ;
-    dc:date "2026-09-14"^^xsd:date ;
-    owl:versionInfo "Version 1.0.0 - the fields a membership directory asks of its members"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/1.1.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionInfo "Version 1.1.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
     rdfs:label "Directory Profile Ontology"@en ;
     rdfs:comment """The first persona-ext/ peer ontology: the fields a membership directory asks of
                     its members — when they joined, who sponsored them, what industry they work in,
@@ -55,7 +55,7 @@ directoryprofile:DirectoryProfile rdf:type owl:Class ;
                     directory. Never asserted via rdf:type anywhere — a label only, exactly like
                     persona:ContactInfo (persona.ttl), and for the same reason: the individual a
                     directory profile describes is already a persona:Person, and the graph's own
-                    cell:shape value names the validating shape directly. An organization's member
+                    pod:shape value names the validating shape directly. An organization's member
                     shape therefore targets persona:Person, not this class."""@en .
 
 
@@ -66,8 +66,8 @@ directoryprofile:DirectoryProfile rdf:type owl:Class ;
 directoryprofile:memberSince rdf:type owl:DatatypeProperty ;
     rdfs:label "member since"@en ;
     rdfs:comment """The date the person became a member of the organization whose directory this
-                    is. Which organization that is comes from the cell the graph sits in, not from
-                    this property — a person's memberships each live in their own cell."""@en ;
+                    is. Which organization that is comes from the pod the graph sits in, not from
+                    this property — a person's memberships each live in their own pod."""@en ;
     rdfs:domain persona:Person ;
     rdfs:range xsd:date .
 
@@ -159,7 +159,7 @@ directoryprofile:spousePartnerName rdf:type owl:DatatypeProperty ;
     rdfs:comment """The name of the person's spouse or partner. A bare string rather than a link to
                     a persona:Person or a persona:hasSocialNetwork membership: a directory prints
                     the name it was given, and makes no claim that the spouse is a user of this
-                    app. Where a real modeled relationship is wanted, that belongs in a cell of its
+                    app. Where a real modeled relationship is wanted, that belongs in a pod of its
                     own under cat:ImmediateFamily, not in a directory entry."""@en ;
     rdfs:domain persona:Person ;
     rdfs:range xsd:string .

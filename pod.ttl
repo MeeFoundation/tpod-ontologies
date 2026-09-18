@@ -1,0 +1,688 @@
+@prefix pod: <http://mee.foundation/ontologies/pod#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix p: <http://mee.foundation/ontologies/persona#> .
+@prefix o: <http://mee.foundation/ontologies/organization#> .
+@prefix service: <http://mee.foundation/ontologies/service#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@base <http://mee.foundation/ontologies/pod> .
+
+<http://mee.foundation/ontologies/pod> rdf:type owl:Ontology ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod/9.8.0> ;
+    dc:date "2026-09-18"^^xsd:date ;
+    rdfs:label "Pod Ontology"@en ;
+    rdfs:comment """Pod Ontology for the V4 App. A pod is the atomic unit of the user's tree, a unit the app manages and holds entirely in its own store — V4 persists nothing in the user's filesystem (see storage.md). Defines pod:Pod — the self-contained content facet of a pod. pod:Pod stores no property recording the pod's own tree position: a pod's parent is per-member state in that member's own store, never shared content, and not a fact this RDF individual needs to carry. pod:Pod splits into two disjoint kinds: pod:TemplatePod (a reusable, class-level template) and pod:InstancePod (an actual pod instantiated in a user's own tree) — a pod is always exactly one of the two, never both. There are no further kinds of pod: an instance pod that carries anything beyond its pod:member baseline carries it as a pod:Tool — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI (pod:Form, pod:Calendar, pod:Canvas, pod:Map), zero or more per pod, rather than in a subclass of its own. pod:InstancePod also carries the two tag properties — pod:userTag, a plain xsd:string, and pod:serviceTag, whose values are pod:ServiceTag nodes (also defined here) carrying a namespace, a key and a label — each zero or more values, a retrieval dimension orthogonal to pod:category's single filing hint. Also defines the graph-DataBook classes pod:member/pod:formGraph link to — pod:Graph, its abstract pod:CGraph subclass, and that class's two disjoint leaves pod:MemberGraph (pod:member's range) and pod:FormGraph (pod:formGraph's range) — along with their pod:shape/pod:claimant/pod:subject annotation properties, since a graph DataBook only ever exists to be linked from a pod. pod:MemberGraph and pod:FormGraph are split apart because a pod:subject value always maps to a PDN node subject identity while a pod:formTopic value — the tool-level statement of what the tool's content is about — need not."""@en .
+
+
+#################################################################
+#    Annotation Properties for Pod DataBook Classification
+#################################################################
+
+pod:abstract rdf:type owl:AnnotationProperty ;
+    rdfs:domain owl:Class ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "abstract"@en ;
+    rdfs:comment "True if this class is not directly instantiated in DataBooks — it exists only to organize the class hierarchy."@en .
+
+#################################################################
+#    Pod
+#
+#    A pod is the atomic unit of the user's tree — pods nest inside
+#    pods, forming the tree. pod:Pod is the self-contained content
+#    record the app holds for one. It stores no property recording
+#    the pod's own tree position: a pod's parent is per-member
+#    state in that member's own store, never shared content, which is
+#    what lets two members of a shared pod each file it wherever
+#    they like without touching what the other sees.
+#    A pod's content lives entirely inside the app, in a protected
+#    store, encrypted at rest — V4 persists nothing in the user's
+#    filesystem: no folder stands for a pod, no file holds its note,
+#    and no directory holds its attachments (storage.md).
+#    This repo carries the example tree on disk instead, as one
+#    folder per pod holding a pod-databook file, a note file, a
+#    _pod-attachments folder and the member's own private files. All
+#    of that is development scaffolding and none of it exists in a
+#    running v4 (pod-databook.md's Development Scaffolding section).
+#
+#    pod:Pod itself carries only what's common to every pod
+#    regardless of facet: inherent classification (pod:category).
+#    Everything facet-specific — including pod:member (its linked
+#    pod:MemberGraph container(s)) and pod:tool (its pod:Tool nodes) —
+#    lives on pod:TemplatePod or pod:InstancePod below. There is
+#    no stored property recording who or what a pod's relationship is
+#    about: that fact is derivable directly from pod:member/pod:tool
+#    (see their own comments below) rather than asserted
+#    independently: its value is always mechanically computable from
+#    the pod:subject values of the graphs already linked and the
+#    pod:formTopic values of the tools, so storing it again on the pod
+#    would be a second copy of a derived fact. Note the name: pod:subject
+#    is scoped to pod:MemberGraph, where it names the party whose member
+#    entry a graph is — not what the pod as a whole is about. A pod
+#    carries neither it nor pod:formTopic, which is scoped to
+#    pod:Form; see the "Pod Graph and Tool Links" section further
+#    down for how the two combine into a pod's derived subject.
+#################################################################
+
+pod:Pod rdf:type owl:Class ;
+    pod:abstract true ;
+    rdfs:label "Pod"@en ;
+    rdfs:comment """Superclass of every pod individual, carrying only what's common regardless of kind: inherent classification (pod:category). pod:Pod — the RDF content facet of a pod — stores no property recording its own tree position: a pod's parent is per-member state in that member's own store rather than shared content, so refiling a pod requires no triple to change, which is what keeps a pod robust under PDN sync. pod:category does not violate this: its range is skos:Concept — a category concept scoped to cat:CategoryScheme (category.ttl), not a tree position — so it records what kind of thing the pod is, never where it currently lives. Creator and ownership metadata (pod:creator, pod:owner), the tag properties (pod:userTag, pod:serviceTag), the graph link pod:member and the tool link pod:tool live on the pod:InstancePod kind, not directly here — tags in particular are deliberately not hoisted up to pod:Pod the way pod:category is, since a pod:TemplatePod seeds none; validation shape is not stored on either kind, only derived (see pod:InstancePod's own comment)."""@en .
+
+
+#################################################################
+#    Pod Kinds: Template (TemplatePod) and Instance (InstancePod)
+#
+#    A pod:Pod splits into two disjoint kinds — a pod is always
+#    exactly one, never both:
+#
+#    pod:TemplatePod — a reusable, class-level template. Carries
+#    pod:category, naming the category concept (a skos:Concept in
+#    cat:CategoryScheme, category.ttl) it's a template for;
+#    pod:memberShape, zero or more sh:NodeShape values
+#    describing what a graph filed in the eventual InstancePod's
+#    pod:member list is expected to look like once instantiated; and
+#    pod:declaresTool, zero or more pod:Tool nodes naming the tools
+#    a pod of that category is created with, each carrying its own
+#    pod:formShape. Finding the template for a given category is
+#    a reverse lookup (?tc pod:category cat:X) rather than a forward
+#    property chain — category.ttl no longer points at
+#    cat-templates.ttl at all. Every pod:TemplatePod individual
+#    lives in cat-templates.ttl, never in a user's own tree.
+#
+#    pod:InstancePod — an actual pod instantiated in a user's own
+#    tree. Carries pod:creator, pod:owner (one or more of the pod's
+#    members holding the owner role — see pod:owner's own comment),
+#    pod:member, its required baseline of linked pod:MemberGraph
+#    containers, one per member in the relationship (no fixed upper
+#    bound), and pod:tool, zero or more pod:Tool nodes — a form, a
+#    calendar, a drawing canvas or a map — carried beyond that
+#    baseline, each with its own data format. A pod stores no shape of its own — an
+#    InstancePod's own validation expectation is derivable by the
+#    same reverse pod:category lookup that finds its TemplatePod,
+#    then reading either that TemplatePod's pod:memberShape
+#    (for a pod:member graph) or the pod:formShape on the
+#    matching declared tool (for a pod:formGraph graph), so storing a
+#    second copy on the InstancePod itself was pure redundancy (the
+#    same reasoning by which a pod stores no subject of its own —
+#    pod:subject exists, but is scoped to pod:MemberGraph, naming the
+#    party whose member entry a graph is rather than what the pod is
+#    about, below).
+#
+#    There is no third kind and no mixin subclass. Every pod is
+#    about something — a two-member pod with no tool and an empty
+#    note is about the relationship between its two members — so
+#    "has a topic" could never distinguish one kind of pod from
+#    another. What actually varies is whether a pod holds structured
+#    content, and how: that is what pod:tool records, as a count from
+#    zero upwards rather than as a type.
+#
+#    pod:TemplatePod and pod:InstancePod are owl:disjointWith one
+#    another: every individual in cat-templates.ttl is typed
+#    pod:TemplatePod only, carrying pod:memberShape and
+#    pod:declaresTool and nothing from pod:InstancePod's side — it
+#    is reusable template content, not itself a piece of
+#    member-classified content. When Lazy Instantiation clones that
+#    template into a new pod for a user's tree, the clone is a wholly
+#    separate individual, typed pod:InstancePod, carrying one live
+#    pod:tool per pod:declaresTool the template declared.
+#################################################################
+
+pod:TemplatePod rdf:type owl:Class ;
+    pod:abstract true ;
+    rdfs:subClassOf pod:Pod ;
+    owl:disjointWith pod:InstancePod ;
+    rdfs:label "Template Pod"@en ;
+    rdfs:comment """A reusable, class-level pod template — one of the two disjoint kinds of pod:Pod, the other being pod:InstancePod. A pod:TemplatePod individual carries its own pod:category value naming the category concept (a skos:Concept in cat:CategoryScheme, category.ttl) it's a template for — it's what the app clones into a new pod when a category of that concept is first instantiated into a user's tree (Lazy Instantiation). Finding the template for a given category concept is a reverse lookup (?tc pod:category cat:X), since category.ttl carries no forward pointer of its own any more. Carries pod:memberShape, zero or more values linking to the sh:NodeShape(s) describing the content expected of a graph filed in the eventual InstancePod's pod:member list, and pod:declaresTool, zero or more pod:Tool nodes naming the tools a pod of this category is created with — each declared tool carrying its own pod:formShape and nothing else, since a declared tool is a statement about what the clone should get, not a tool holding live content. A template declaring no tool at all is the common case: most categories have nothing structured to say beyond their member baseline, and a pod cloned from such a template can still gain tools later, chosen by the user. Disjoint with pod:InstancePod: a pod:TemplatePod individual is never also typed pod:InstancePod — see cat-templates.ttl, where every template individual is typed solely pod:Pod, pod:TemplatePod."""@en .
+
+pod:memberShape rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:TemplatePod ;
+    rdfs:range sh:NodeShape ;
+    rdfs:label "memberShape"@en ;
+    rdfs:comment """Links a pod:TemplatePod individual to the sh:NodeShape(s) that describe the content a graph filed in the eventual pod:InstancePod's pod:member list, under that template's own pod:category concept, is expected to conform to — e.g. ctpl:PassportTemplatePod (cat-templates.ttl) carries pod:category cat:Passport and pod:memberShape pshapes:ContactInfoShape (shacl/contactinfo-shacl.ttl); its real document shape, idocshapes:PassportShape (other/shacl/identity-documents-shacl.ttl), is instead the pod:formShape of a declared tool, see that property's own comment. Zero or more values, no fixed upper bound — a single pod:member graph may need to satisfy more than one shape at once. A pod:member pod:MemberGraph's own pod:shape value is set from whichever pod:memberShape value(s) apply, via the same reverse pod:category lookup pod:formShape uses for tool graphs (see its own comment, and pod:InstancePod's). A real pod:InstancePod cloned from this template does not carry its own copy of this value — a pod stores no shape of its own — since it is always reachable on demand from the InstancePod's own pod:category value via this same reverse lookup (?tc pod:category cat:X ; pod:memberShape ?shape), making a stored per-instance copy pure redundancy."""@en .
+
+pod:declaresTool rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:TemplatePod ;
+    rdfs:range pod:Tool ;
+    rdfs:label "declaresTool"@en ;
+    rdfs:comment """Links a pod:TemplatePod individual to the pod:Tool node(s) describing which tools a pod of that template's own pod:category concept is created with by Lazy Instantiation — e.g. ctpl:MedicalAppointmentTemplatePod (cat-templates.ttl) declares one pod:Form carrying pod:formShape mashapes:MedicalAppointmentRecordShape. Zero or more values, no fixed upper bound; most templates declare none, since most categories have nothing structured to say beyond their pod:member baseline. A declared tool is a specification, not a live tool: it carries pod:formShape and never pod:formTopic or pod:formGraph, which only a tool holding real content in an instantiated pod can have (the reverse of pod:tool's own nodes — see that property's comment). This presence-or-absence is the whole of what the template says about tools: there is no boolean flag declaring whether a pod of this category will carry a tool, because declaring the tool already says it, and saying it twice invites the two statements to disagree. A pod may also gain tools its template never declared, chosen by the user at any time and as many as they like, so this property constrains what Lazy Instantiation produces, never what the resulting pod may later hold."""@en .
+
+pod:InstancePod rdf:type owl:Class ;
+    rdfs:subClassOf pod:Pod ;
+    rdfs:label "Instance Pod"@en ;
+    rdfs:comment """An actual pod instantiated in a user's own tree — real, member-classified content, as opposed to a reusable class-level template (pod:TemplatePod). Carries pod:creator (required, exactly one value), pod:owner (required, one or more values — the members holding the owner role, as opposed to the regular member role every other member defaults to; pod:creator's own value is always included, as the pod's initial owner — see pod:owner's own comment for the full owner/regular-member role semantics), pod:member (required, one or more pod:MemberGraph containers backing the pod's content — one per member in the relationship, no fixed upper bound), pod:tool (zero or more pod:Tool nodes — a form, a calendar, a drawing canvas or a map — carried beyond that baseline, each with its own data format; see the Pod Tools section below), and the two tag properties pod:userTag (a plain xsd:string) and pod:serviceTag (whose values are pod:ServiceTag nodes), each zero or more values, no fixed upper bound — see the Pod Tags section below. A pod stores no shape of its own: a pod:InstancePod's applicable validation shape is not stored at all, only derived, via its own pod:category value — find the pod:TemplatePod with the same pod:category (cat-templates.ttl) and read either its pod:memberShape (for one of this pod's own pod:member graphs) or the pod:formShape of the matching declared tool (for one of a tool's own pod:formGraph graphs). There is no subclass for a pod that carries a tool: such a pod simply carries one or more pod:tool values, and a pod with none is not a lesser kind of pod — it is the ordinary case. Who or what the pod's relationship is about is not a stored fact either — it is derivable directly from pod:tool/pod:member: the full set of distinct pod:formTopic values among its form tools if any are present, else the full set of distinct pod:subject values among pod:member (see pod:tool's own comment). Every real pod:Pod individual in a user's own tree is typed directly pod:InstancePod — its member count is never itself stored as a class, simply counted from pod:member when needed. Disjoint with pod:TemplatePod (see pod:TemplatePod's own comment): every pod:Pod individual in a user's own tree is typed pod:InstancePod, never pod:TemplatePod, which is reserved for the reusable templates in cat-templates.ttl. Even a purely organizational pod with nothing substantive to say carries a minimal stub pod:member entry (claimed by and about pod:creator's own :Self, who is then also that pod's sole pod:owner value) rather than omitting member content altogether — such a pod has nothing to hold a tool for, so it carries none."""@en .
+
+pod:creator rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:InstancePod ;
+    rdfs:range p:Person ;
+    rdfs:label "creator"@en ;
+    rdfs:comment """Identifies who created a pod's content — a named individual of p:Person. Required, exactly one value, since every actual pod's content is authored by someone. Range p:Person alone: a pod is always created by a human, never by a service:Service (service.ttl) and never by an o:Organization, whose participation in a pod is always through the service:ServiceProvider it provides. p:Person is referenced by name without owl:imports, the same by-name pattern pod:claimant (below) uses for its own wider range. Only actual/instantiated pods (pod:InstancePod) have a creator."""@en .
+
+pod:owner rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:InstancePod ;
+    rdfs:range p:Person ;
+    rdfs:label "owner"@en ;
+    rdfs:comment """Identifies which of a pod:InstancePod's members hold the owner role, as opposed to the regular (non-owner) member role every other member defaults to — a named individual of p:Person, the same range pod:creator uses (never a service:Service — an invited service can join a pod as a member but can never be promoted to owner, mirroring pod:member's own comment that a service can join a pod as a member but never creates one). Required, one or more values (sh:minCount 1, no maxCount, enforced by shacl/pod-shacl.ttl's :InstancePodShape) — every pod:InstancePod has at least one owner and may have several: pod:creator's own value is always included among pod:owner's values as the pod's initial (and, until any promotion, sole) owner, and any current owner may add any other current regular p:Person member (identified by pod:member, not by a tool's own pod:claimant) to pod:owner, promoting them, or remove another owner's value from pod:owner, demoting them back to regular-member status — the sh:minCount 1 floor is what keeps a pod's last remaining owner from being demoted. Every member has full read/write access to the pod's note regardless of ownership (app-level; see app-behavior.md's Permissions section); what an owner alone may do is delete any member's claim or attachment, not only their own. A claim itself is immutable at this layer — a member creates, reads and deletes their own claims but never updates one, a correction being a retraction followed by a fresh claim; the app presents that to the user as an ordinary edit of the value, so app-behavior.md, written at the user level, describes the same operation as an update. Every pod:owner value is also one of the pod's active members — i.e. it must equal the pod:subject of at least one of that pod's pod:member graphs — an invariant not itself OWL/SHACL-expressible (it requires dereferencing each linked graph's own pod:subject, not just counting or matching cardinalities), so it is checked only by CLAUDE.md's own integrity check (YAML-7), not by shacl/pod-shacl.ttl."""@en .
+
+#################################################################
+#    Pod Tags
+#
+#    Two sibling properties, both domain pod:InstancePod, each
+#    zero or more values: pod:userTag and pod:serviceTag.
+#    Which of the two carries a tag is the whole of what records
+#    its kind — there is no separate kind marker, the same "the
+#    property is the fact" economy pod:member/pod:tool already
+#    use to distinguish a pod's two graph lists — which, since those
+#    lists have different ranges (pod:MemberGraph and pod:FormGraph),
+#    also record which kind each graph is.
+#
+#    The two are not the same shape, because they do not have the
+#    same author. pod:userTag is a plain xsd:string: a person
+#    types a label for their own later retrieval, and within one
+#    user's own tree there is no second author to collide with,
+#    so the label needs no qualification and a literal is the
+#    whole of it. pod:serviceTag is written by software —
+#    one member's own service (service:AgentService,
+#    service.ttl) — where a bare string would collide with every
+#    other service's, so its value is a pod:ServiceTag
+#    node carrying the writing developer's own namespace and a
+#    key naming what the label records, alongside the label
+#    itself. See the Service Tag section below.
+#
+#    There is deliberately no third, app-supplied kind: no
+#    property here holds a label the app itself ships, and the app
+#    maintains no built-in tag vocabulary. Where a set of pods
+#    shares a fact the data already models — every pod recording
+#    a loyalty-program relationship, say — that fact is found by
+#    searching for the property itself
+#    (serviceaccounts:loyaltyProgramID, other/service-accounts.ttl),
+#    which needs no one to have remembered to apply a label. See
+#    app-behavior.md's Finding Pods by Property section. A tag
+#    is for what the data does not already model.
+#
+#    Tags are orthogonal to pod:category, not a second stab at
+#    it. pod:category is a filing mechanism: at most one value,
+#    fixed at creation, its whole purpose being to hint at where a
+#    recipient's app should file an incoming shared pod. A tag
+#    records nothing about filing or tree position at all — it is
+#    a retrieval label, and a pod may carry any number of them at
+#    once, across both kinds.
+#
+#    Domain is pod:InstancePod rather than pod:Pod deliberately:
+#    a pod:TemplatePod (cat-templates.ttl) seeds no tags, so no
+#    tag of any kind is ever cloned into a new pod by Lazy
+#    Instantiation — every tag is applied to the real, already
+#    instantiated pod afterwards. This is the opposite choice
+#    from pod:category, whose domain really is pod:Pod because
+#    a template does carry the category concept it is a template
+#    for.
+#
+#    Both are constrained by shacl/pod-shacl.ttl, but not to the
+#    same depth. pod:userTag is constrained by :InstancePodShape
+#    to a non-empty string and nothing more, so the further
+#    well-formedness rules SHACL cannot see — no leading/trailing
+#    whitespace, no YAML type confusion, and no duplicates (RDF is
+#    a set, so a repeated literal collapses silently before
+#    validation ever runs) — are integrity.md's YAML-9 instead.
+#    pod:serviceTag is constrained by :InstancePodShape only
+#    as to its value's kind; the value node's own three parts are
+#    :ServiceTagShape's business, and being separate
+#    properties they are pattern-checked there, whitespace
+#    included. What is left to YAML-9 for this kind is only what
+#    no SHACL constraint can reach: a YAML sub-value that is not a
+#    string at all, an entry that is not a mapping, an
+#    unrecognized extra sub-key, and the same (namespace, key,
+#    value) triple written twice on one pod.
+#
+#    pod:userTag is ordinary shared pod content;
+#    pod:serviceTag is not. See its own comment below, and
+#    README.md's Tags section (Pod Ontology).
+#################################################################
+
+pod:userTag rdf:type owl:DatatypeProperty ;
+    rdfs:domain pod:InstancePod ;
+    rdfs:range xsd:string ;
+    rdfs:label "userTag"@en ;
+    rdfs:comment """A free-text tag the user minted themselves and applied to this pod — a plain string, zero or more values, no fixed upper bound. Unconstrained beyond being a non-empty string (shacl/pod-shacl.ttl's :InstancePodShape): there is no vocabulary, no scheme, and no registry a value must belong to, and neither this ontology nor the app supplies a list to pick from — the user simply types what they want. It needs no namespace the way pod:serviceTag does, and takes none: a user tag is authored by the one person whose tree it is searched in, so there is no second author for it to collide with. Repeating the same string across several pods is the entire point, since that is what lets one search gather them all; what integrity.md's YAML-9 flags is only the same value repeated within this one property on a single pod. Shared pod content: it propagates to every member's copy when the pod is shared, exactly as the pod's own name and its pod:category value do, and any member may add or remove one regardless of ownership. pod:serviceTag, the other tag kind, is the one that does not propagate."""@en .
+
+pod:serviceTag rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:InstancePod ;
+    rdfs:range pod:ServiceTag ;
+    rdfs:label "serviceTag"@en ;
+    rdfs:comment """A tag written by one member's own module — a tool such as pod:Contacts, or an invited service:AgentService (service.ttl) — for that module's own bookkeeping, rather than by a person. Zero or more values, no fixed upper bound. Each value is a pod:ServiceTag node rather than a literal, carrying exactly one pod:tagNamespace, one pod:tagKey and one pod:tagValue (see the Service Tag section below). That structure is what keeps two service modules' labels from colliding: the namespace is a DNS domain the writing module's own developer controls, so no registry has to arbitrate between them and no module has to remember to prefix itself by hand. Hidden from the user end to end: the app never shows these in the pod's tag display alongside its pod:userTag values, and the user's own tag search never matches them either — a person can neither see one nor find a pod by one. Only services reach them, through the app's Pod Interface, and each module reaches only its own: every operation there — search, read, add, delete — is scoped to the pod:tagNamespace the calling module's developer controls, a module querying pod:tagNamespace and pod:tagKey to find its own tags. Isolating one service's tags from another's is what that namespace is for (app-behavior.md's Finding Pods by Tag section). Alone among a pod's content, a pod:serviceTag value is local to the instance that wrote it and is never propagated to any other member when the pod is shared — the deliberate exception to the rule that everything in a pod's content is kept in sync across every member's copy. That exception is not a privacy carve-out but a meaning one: each principal's device hosts and runs its own agent independently, so bookkeeping written by one member's own module says nothing in a member's instance running a different service, or none at all, and syncing it would produce values no one there can interpret or clear. Its consequence is that the same pod can legitimately carry different pod:serviceTag values on either side of a share, with nothing merging or reconciling the two. One further consequence follows from the value being a node rather than a literal: two identical tags no longer collapse the way two identical literals do under RDF's set semantics, so a module adding a tag checks for a matching (pod:tagNamespace, pod:tagKey, pod:tagValue) triple itself rather than relying on the graph to deduplicate for it — integrity.md's YAML-9 flags a pod carrying the same triple twice."""@en .
+
+
+#################################################################
+#    Service Tag
+#
+#    pod:ServiceTag is the value node pod:serviceTag
+#    points at, carrying exactly three xsd:string parts and
+#    nothing else: pod:tagNamespace (whose module wrote this),
+#    pod:tagKey (what kind of external fact it records) and
+#    pod:tagValue (the label itself). Each is required exactly
+#    once (shacl/pod-shacl.ttl's :ServiceTagShape) — a node
+#    missing any of the three records nothing a module could act
+#    on, and one carrying two of any single part would be two
+#    tags, not one.
+#
+#    A blank node in practice: helpers/databook_graphs.py
+#    synthesizes one per v4.serviceTag entry, since a tag
+#    node has no identity worth naming and a pod-databook's
+#    frontmatter has nowhere to mint an IRI. Nothing in the model
+#    requires that — :ServiceTagShape accepts a named
+#    individual equally (sh:BlankNodeOrIRI), which is how an app
+#    writing straight into a triplestore would more naturally
+#    spell it.
+#################################################################
+
+pod:ServiceTag rdf:type owl:Class ;
+    rdfs:label "Service Tag"@en ;
+    rdfs:comment """One module-written tag on a pod:InstancePod — a namespaced label, recorded as a node rather than a literal so that the writing module's identity travels alongside the label instead of being encoded into it by a convention nothing enforces. Exactly three parts, each required exactly once: pod:tagNamespace, pod:tagKey and pod:tagValue. The division of labor between them is what makes one module's bookkeeping legible and collision-free at the same time — the namespace separates developers from one another, the key separates one kind of recorded fact from another within a single developer's own module, and only the value is free-form. A node is never shared between pods and never reused: each pod:serviceTag value is its own node, and removing the tag removes the node with it. Instances are not typed owl:NamedIndividual, since the synthesized form is a blank node; see the section comment above."""@en .
+
+pod:tagNamespace rdf:type owl:DatatypeProperty ;
+    rdfs:domain pod:ServiceTag ;
+    rdfs:range xsd:string ;
+    rdfs:label "tagNamespace"@en ;
+    rdfs:comment """Which module wrote this tag: a DNS domain the writing module's own developer controls, written in reverse-DNS order — two or more lowercase labels, e.g. foundation.mee.applecontacts — the same registry-free namespacing convention Java packages, Apple's uniform type identifiers and D-Bus names already use. Required, exactly one value. It is the developer's domain, not the external system's: an Apple Contacts sync connector written by The Mee Foundation namespaces itself under mee.foundation, because a domain is only proof against collision for whoever actually controls it, and naming the synced system instead would be first-come squatting on a name nobody holds. Two competing connectors for one external system therefore write different namespaces for the same underlying fact, which costs nothing here — a pod:serviceTag never propagates on a share, and the module that wrote a tag is the only one that ever reads it back, the app's Pod Interface scoping every service-tag operation to the caller's own namespace. Lowercase is required rather than merely conventional (shacl/pod-shacl.ttl's :ServiceTagShape): DNS is case-insensitive, so accepting Foundation.Mee would admit a second spelling of one namespace and silently split a module's own tags into two sets. Nothing links this string to a service:AgentService subclass, and nothing should: a third-party developer's module has no class in service.ttl to point at, and a tag has to stay interpretable without loading service.ttl at all."""@en .
+
+pod:tagKey rdf:type owl:DatatypeProperty ;
+    rdfs:domain pod:ServiceTag ;
+    rdfs:range xsd:string ;
+    rdfs:label "tagKey"@en ;
+    rdfs:comment """What kind of external fact this tag records, within its own namespace — e.g. group for the Apple Contacts Group a synced contact sat in, or recordID for the external record's own identifier. Required, exactly one value: a letter followed by letters, digits, underscores or hyphens (shacl/pod-shacl.ttl's :ServiceTagShape), with no dot, so a key can never be mistaken for a further namespace segment. The key exists so that one module can record several kinds of fact about a pod without having to encode the kind into the label — which would be the same collision problem one level further down, inside a string this ontology would again not be parsing. Only the namespace/key pair has to be unique to one module's own vocabulary; the pair is deliberately not unique on a single pod, since a contact that sits in three Apple Contacts Groups is three tags sharing one namespace and one key, differing only in pod:tagValue."""@en .
+
+pod:tagValue rdf:type owl:DatatypeProperty ;
+    rdfs:domain pod:ServiceTag ;
+    rdfs:range xsd:string ;
+    rdfs:label "tagValue"@en ;
+    rdfs:comment """The label itself — the free-form payload the writing module needs to round-trip, e.g. the Apple Contacts Group name "Christmas List". Required, exactly one value. Free-form is the point: the namespace and key have already done all the qualifying, so nothing about the external system's own naming has to be escaped, abbreviated or encoded to fit here — a value may contain spaces, punctuation, and a slash (an Apple Contacts group name may legitimately carry one), none of which can be confused for structure, since the structure lives in sibling properties rather than in this string. Constrained only to a non-empty, single-line string with no leading or trailing whitespace (shacl/pod-shacl.ttl's :ServiceTagShape) — surrounding whitespace is rejected rather than tolerated for the same reason it is on pod:userTag, since a padded label silently fails to match its own unpadded twin in a search. No user-facing search ever matches this string: a pod:serviceTag is hidden from the user's retrieval as completely as from their display, and only the writing module reads it back, within its own namespace — see pod:serviceTag's own comment."""@en .
+
+#################################################################
+#    Pod Tools
+#
+#    A pod:Tool is an object a pod can carry — a form, a calendar, a
+#    drawing canvas — each with its own data format and its own
+#    contribution to the app's UI. A pod carries zero or more, via
+#    pod:tool. Only the data format is modelled here; what a tool
+#    contributes to the interface is app-level, and app-behavior.md
+#    describes it.
+#
+#    Tools exist because "has a topic" is not a property that
+#    distinguishes pods. Every pod is about something: a pod whose
+#    note is about taking care of a pet is about taking care of that
+#    pet, and a two-member pod with an empty note is about the
+#    relationship between its two members. What actually varies from
+#    pod to pod is which tools it carries, if any, alongside its
+#    unstructured note and its attachments. So that variation is
+#    recorded as a count of tools, from zero upwards, rather than as a
+#    subclass of pod.
+#
+#    That each kind has its *own* data format is why pod:Tool carries
+#    no property: there is nothing common to hoist onto it. A form's
+#    format is graph DataBooks conforming to a shape; a calendar's
+#    would be dated entries and a canvas's a drawing surface, neither
+#    of which is a graph and neither of which is worked out. The
+#    properties therefore sit on the one subclass whose format is
+#    settled (see below).
+#
+#    Four concrete tools are defined. pod:Form is the one whose
+#    format is settled: it holds one or more pod:FormGraph DataBooks via
+#    pod:formGraph, whose fields the app renders from the
+#    pod:formShape that governs it. pod:Calendar and
+#    pod:Canvas and pod:Map are defined with no properties of their own yet —
+#    named here so that the extension point is visibly plural, and so
+#    that adding a tool later is a new subclass rather than a new
+#    property on pod:InstancePod.
+#
+#    Every tool carries pod:formTopic: what its content is about,
+#    stated once on the tool itself rather than repeated on each graph
+#    beneath it. That placement is deliberate. A form tool holds one
+#    graph per claiming member — several members may each state their
+#    own view of the same third party — and those claims must be about
+#    the same thing for the tool to mean anything at all. Carrying the
+#    value once makes disagreement unrepresentable instead of merely
+#    forbidden, which is why pod:FormGraph carries no about-ness
+#    property of its own.
+#
+#    A pod:Tool node appears in two roles, told apart by which
+#    property points at it rather than by its class:
+#      - reached by pod:tool, from a pod:InstancePod: a live tool.
+#        A live pod:Form carries pod:formTopic and
+#        pod:formGraph, never pod:formShape; a live pod:Calendar
+#        or pod:Canvas carries nothing at all yet.
+#      - reached by pod:declaresTool, from a pod:TemplatePod: a
+#        declaration of a tool the clone should get, carrying
+#        pod:formShape alone.
+#    shacl/pod-shacl.ttl enforces the two with sh:targetObjectsOf on
+#    those properties rather than sh:targetClass, since both roles use
+#    the same tool classes.
+#
+#    A tool is a blank node in practice: helpers/databook_graphs.py
+#    synthesizes one per v4.tool entry, so instances are not typed
+#    owl:NamedIndividual.
+#################################################################
+
+pod:Tool rdf:type owl:Class ;
+    pod:abstract true ;
+    rdfs:label "Tool"@en ;
+    rdfs:comment """An object a pod can carry that adds a new capability to it — a form, a calendar, a drawing canvas, a map. Each kind brings two things at once: its own data format inside the pod, and its own contribution to the app's UI. A pod carries zero or more, via pod:tool; a pod with none is the ordinary case, not a lesser kind of pod. A tool is not a member of the pod, and it is not one of the pod's built-in areas either — every pod has a Note area, a Chat area, an Attachments area and Member Info whether or not it carries a tool. Five kinds are defined — pod:Form, pod:Calendar, pod:Canvas, pod:Contacts and pod:Map — and only pod:Form has a settled data format today; the other four are deliberate extension points, awaiting one. A pod is created carrying whatever tool its category's template declares, and the person may add more at any time. Only the data format is modelled here; the UI contribution is app-level (app-behavior.md). Abstract: no tool is ever typed pod:Tool directly, only one of its concrete subclasses (pod:Form, pod:Calendar, pod:Canvas, pod:Contacts, pod:Map). Carries no property of its own, and that follows from the definition rather than being a gap in it: each kind has its own data format, so there is nothing common to hoist here. Everything a tool records today — what its content is about (pod:formTopic), the graphs carrying it (pod:formGraph) and the shape governing them (pod:formShape) — is scoped to pod:Form, the one subclass whose format is settled. A property that proves common once pod:Calendar, pod:Canvas, pod:Contacts and pod:Map have formats of their own can be hoisted up then, which is cheap; retracting one asserted too early is not. A pod:Tool has no identity of its own beyond the pod that holds it: it is never shared between pods and never reused, and removing the tool removes the node with it."""@en .
+
+pod:Form rdf:type owl:Class ;
+    rdfs:subClassOf pod:Tool ;
+    rdfs:label "Form"@en ;
+    rdfs:comment """A tool whose data format is graph DataBooks: one or more pod:FormGraph values via pod:formGraph, each conforming to the sh:NodeShape that governs the tool. It contributes an editable form to the app's UI. The one tool class with a content model, and so the domain of all three tool-content properties — pod:formTopic, pod:formGraph and pod:formShape — the pod:formShape of the corresponding declared tool on the pod's category template, or a shape the user picked themselves for a tool no template declared. The app renders it as an editable form, deriving each input field from that shape's own sh:property constraints (see app-behavior.md's Form Fields from SHACL Shapes) rather than from a hand-coded form per category. One graph per claiming member: several of a pod's members may each hold their own view of the tool's pod:formTopic, which is why pod:formGraph is a list rather than a single value, and why its upper bound is the pod's own member count (integrity.md's YAML-8)."""@en .
+
+pod:Calendar rdf:type owl:Class ;
+    rdfs:subClassOf pod:Tool ;
+    rdfs:label "Calendar"@en ;
+    rdfs:comment """A tool whose data format is dated entries, contributing a calendar to the app's UI. Defined with no properties at all yet, inheriting none either, since pod:Tool carries none — what a calendar entry is, and whether a calendar is about one resource the way a form is, is not yet worked out. It exists to keep the tool hierarchy honestly plural: a tool's data format is not always graph-shaped, and the model should not have to change shape the first time it isn't."""@en .
+
+pod:Canvas rdf:type owl:Class ;
+    rdfs:subClassOf pod:Tool ;
+    rdfs:label "Canvas"@en ;
+    rdfs:comment """A tool whose data format is a drawing surface, contributing a canvas to the app's UI. Defined with no properties at all yet, inheriting none either, for the same reason pod:Calendar has none; it exists alongside that class and pod:Map to keep the tool hierarchy honestly plural — see pod:Calendar's own comment."""@en .
+
+pod:Map rdf:type owl:Class ;
+    rdfs:subClassOf pod:Tool ;
+    rdfs:label "Map"@en ;
+    rdfs:comment """A tool whose data format is placed features — whatever a location has to carry to be drawn and found again — contributing a map to the app's UI. Defined with no properties at all yet, inheriting none either, for the same reason pod:Calendar and pod:Canvas have none: what a placed feature is has not been worked out, and a pod:Map's format is no more graph-shaped than a calendar's or a canvas's. Its presence alongside them is the point — five concrete tools make it plain that a pod:Tool is a kind of object rather than a synonym for pod:Form."""@en .
+
+pod:Contacts rdf:type owl:Class ;
+    rdfs:subClassOf pod:Tool ;
+    rdfs:label "Contacts"@en ;
+    rdfs:comment """A tool whose data format is a correspondence between the pod's member info and an entry in the device's own address book — Apple Contacts, its Android equivalent, Windows People — contributing a sync action to the app's UI: a member imports a contact into the pod, and later edits on either side travel back across. Defined with no properties at all yet, inheriting none either, for the same reason pod:Calendar, pod:Canvas and pod:Map have none: what the correspondence has to record has not been worked out. It is a tool rather than a service because it never joins the pod as a member — no claim in a pod is the address book's, so there is no party for a pod:member entry to name, which is exactly what separates it from service:ChatGPT and service:ArcaBackup (each a real pod:member with claims of its own). The pod:ServiceTag values the module writes — namespace foundation.mee.applecontacts, key group, value the name of the Apple Contacts Group a synced contact sat in — are local to the member's own instance and never propagate on a share, as any module's are. See app-behavior.md's Apple Contacts section."""@en .
+
+pod:tool rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:InstancePod ;
+    rdfs:range pod:Tool ;
+    rdfs:label "tool"@en ;
+    rdfs:comment """Links an actual (instantiated) pod to the pod:Tool node(s) it carries beyond its pod:member baseline — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI. Zero or more values, no fixed upper bound — a pod with none is the ordinary case, not a lesser kind of pod, and no subclass marks the difference either way. A pod receives one tool per pod:declaresTool on its category's own pod:TemplatePod when Lazy Instantiation clones it, and may gain further tools at any time, chosen by the user from the app's full list of tools and shapes: nothing caps how many a pod may hold, nor requires its category to have declared them. A tool reached this way is a live tool — it carries pod:formTopic and, for a pod:Form, pod:formGraph, and never pod:formShape, which belongs to the declared-tool role instead (see pod:declaresTool). Together with pod:member this is also how a consumer derives who or what the pod's relationship is about, now that there is no separate stored fact for it: if the pod has any form tools, the full set of distinct pod:formTopic values among them is the answer; otherwise the answer is the full set of distinct pod:subject values found among pod:member (for a single-member pod this is trivially :Self; for a pod with more members and none of its tools carrying a topic, it is every one of that pod's active members — e.g. a two-member pod with no tool is understood as being about the connection between its two members). Only pod:Form carries pod:formTopic today, so a pod holding only a calendar or a canvas falls to the pod:member branch."""@en .
+
+pod:formTopic rdf:type owl:AnnotationProperty ;
+    rdfs:domain pod:Form ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "formTopic"@en ;
+    rdfs:comment """What a form tool's content is about. Required on a live pod:Form, exactly one value; may be any resource IRI. Deliberately NOT required to map to a PDN node subject identity, which is the whole reason it is named topic rather than subject: the word subject is reserved here for parties that do hold one (pod:claimant, pod:subject). A topic may well be a party that has such an identity — another user's p:Person, or an o:Organization — but it is just as legitimately something that has none and could never be given one: a pets:Pet, a vehicles:Vehicle, an identitydocuments:Passport, a residences:Residence, an itineraries:Itinerary, a recipe, a poem. Folding those in alongside pod:subject would erase the one fact a consumer most needs when resolving a pod's parties over the PDN — which of its values are identities it can resolve at all. Carried by the tool rather than by each graph beneath it: a pod:Form's several pod:formGraph values are one claim apiece by different members about one and the same thing, so stating it once is what makes their disagreeing about it unrepresentable rather than merely forbidden. Not carried by a declared tool (pod:declaresTool), which names a shape and nothing else — a template cannot know what a future pod's tool will be about. This is also, with pod:claimant, one of only two ways an o:Organization or an other/*.ttl domain individual reaches a pod at all: pod:member content never does (see pod:member's own comment)."""@en .
+
+pod:formGraph rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:Form ;
+    rdfs:range pod:FormGraph ;
+    rdfs:label "formGraph"@en ;
+    rdfs:comment """Links a pod:Form to the Tool-Claimant classified graph DataBook(s) (pod:FormGraph) holding its content. Required on a live form tool, at least one value — enforced by shacl/pod-shacl.ttl's :LiveToolShape. SHACL enforces only that minimum; the real upper bound is the pod's own member count, since each value is one of the pod's own members making their own claim about the tool's single pod:formTopic — its pod:claimant must be a distinct one of that pod's pod:member pod:subject values, so the number of values can never exceed the number of members. This is a cross-property invariant, not an OWL/SHACL-expressible cardinality restriction (it requires dereferencing each linked graph's own pod:claimant/pod:subject, not just counting links), so it's enforced by integrity.md's YAML-8 instead. Which shape those graphs conform to comes from the tool's own governing pod:formShape when the pod's category declared the tool, and from the user's own choice when it did not — in the latter case nothing about the category constrains it. Range pod:FormGraph, never pod:MemberGraph: the two are disjoint, and which list a graph is linked from is the whole of what fixes its kind."""@en .
+
+pod:formShape rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:Form ;
+    rdfs:range sh:NodeShape ;
+    rdfs:label "formShape"@en ;
+    rdfs:comment """Links a declared tool — a pod:Tool reached by pod:declaresTool from a pod:TemplatePod — to the sh:NodeShape(s) describing the content a graph held by the corresponding live tool is expected to conform to, e.g. the pod:Form declared by ctpl:MedicalAppointmentTemplatePod (cat-templates.ttl) carries pod:formShape mashapes:MedicalAppointmentRecordShape (other/shacl/medical-appointments-shacl.ttl). Zero or more values, no fixed upper bound, mirroring pod:memberShape's own cardinality — see its comment for the shared rationale (a stored per-instance copy on the eventual InstancePod would be pure redundancy) and for how a linked pod:FormGraph's own pod:shape value gets set from it. Carried only in the declared-tool role, never by a live pod:tool node, and never by a template for a tool it does not declare: a category that declares no tool offers no shape hint either, so a user adding a tool to such a pod picks its shape themselves from the app's full list."""@en .
+
+
+#################################################################
+#    Annotation Properties for Graph DataBook Classification
+#
+#    A graph DataBook only ever exists to be linked from a pod (via
+#    pod:member/pod:formGraph below), so its own classification
+#    properties live here in pod.ttl rather than in a separate
+#    ontology/file.
+#
+#    Four properties across three levels of the graph hierarchy:
+#    pod:shape on pod:Graph (every graph DataBook), pod:claimant
+#    on pod:CGraph (every graph a pod actually links to), and then
+#    one property apiece on the two disjoint leaves below it —
+#    pod:subject on pod:MemberGraph, and nothing of its own on
+#    pod:FormGraph, whose about-ness lives one level up on the tool
+#    holding it (pod:formTopic). That split is the whole point of the
+#    hierarchy: a pod:claimant or pod:subject value is always a
+#    party in the relationship and so always maps to a PDN node
+#    subject identity, while a pod:formTopic value need not map to
+#    one at all.
+#################################################################
+
+pod:claimant rdf:type owl:AnnotationProperty ;
+    rdfs:label "claimed by"@en ;
+    rdfs:comment """Annotates a graph DataBook with the identity making the claim —
+                    a named individual of p:Person, o:Organization, or service:Service
+                    (service.ttl). Which of the three a given graph names is a matter of
+                    who is really making the claim, not of who mechanically entered it:
+                    :Self or another p:Person for a person's own claims; the providing
+                    o:Organization for content a service:ServiceProvider contributes on
+                    its behalf (e.g. graph-76 is claimed by :Citibank, not by
+                    :Citibank_Service, since the organization is the party responsible for
+                    the claim and the one an eventual cryptographic signature would name);
+                    and the service:Service itself for a service with no organization
+                    standing behind it in the relationship — an invited
+                    service:AgentService self-claiming its own pod:member entry and
+                    claiming whatever tool content it contributes. A claimant need
+                    not itself be one of the pod's members: a provider service's
+                    organization is reachable from a member subject via
+                    service:providedBy rather than being a member subject itself, which is
+                    what integrity.md's YAML-8 allows for. Applied to the graph
+                    DataBook's own IRI (its plain `id`) — the same IRI
+                    pod:member/pod:formGraph link to from the pod side — not to the
+                    `#graph`-suffixed `graph.named_graph` IRI, and not to the
+                    Person/Organization/Service individual. Domain pod:CGraph, not
+                    pod:MemberGraph: a claimant is carried by every graph a pod links to,
+                    whether it is a pod:member graph (pod:MemberGraph) or a tool's own
+                    graph (pod:FormGraph) — a tool graph's claim is made by a party
+                    exactly as a member graph's is. Every claimant value maps to a PDN
+                    node subject identity, since only a party holding one can make a
+                    claim; that is true of pod:subject too, and deliberately not
+                    of pod:formTopic."""@en ;
+    rdfs:domain pod:CGraph ;
+    rdfs:range [ rdf:type owl:Class ; owl:unionOf ( p:Person o:Organization service:Service ) ] .
+
+pod:subject rdf:type owl:AnnotationProperty ;
+    rdfs:label "subject"@en ;
+    rdfs:comment """Annotates a pod:MemberGraph — a graph a pod links via pod:member — with the
+                    party whose member entry it is. Required, exactly one value. That party is
+                    always a real participant in the pod's relationship: a p:Person, or a
+                    service:Service standing in for one (e.g. :Self, a p:Person;
+                    :Citibank_Service, a service:ServiceProvider), which is what makes every
+                    pod:subject value, like every pod:claimant value, map to a PDN node
+                    subject identity. pod:formTopic, the about-ness property carried one level up by the tool
+                    that holds a pod:FormGraph, carries no such guarantee — that asymmetry is why
+                    the two are separate properties rather than one property with a wider range. Applied to the graph DataBook's own IRI (its plain `id`) — the same IRI
+                    pod:member links to from the pod side — not to the `#graph`-suffixed
+                    `graph.named_graph` IRI, and not to the subject resource itself. Not to be
+                    confused with a pod's own (derived, never-stored) subject — see pod:Pod's
+                    own comment and the "Pod Graph and Tool Links" section below."""@en ;
+    rdfs:domain pod:MemberGraph ;
+    rdfs:range xsd:anyURI .
+
+pod:shape rdf:type owl:AnnotationProperty ;
+    rdfs:label "template"@en ;
+    rdfs:comment """Annotates a graph DataBook with the sh:NodeShape(s) it should be validated
+                    against. Each value names a shape such as idocshapes:PassportShape,
+                    pshapes:ContactInfoShape, petshapes:PetShape, or
+                    vehicleshapes:VehicleShape — the same shape CURIEs a category's
+                    pod:TemplatePod individual carries via pod:memberShape, or via the
+                    pod:formShape of a tool it declares (cat-templates.ttl), so a graph's
+                    declared value can be checked directly, by CURIE equality, against its pod's
+                    own TemplatePod requirement, with no indirection through the shape's own sh:targetClass. Zero
+                    or more values, no fixed upper bound (0..N) — a single graph may still hold
+                    more than one template's worth of content at once (e.g. a graph combining
+                    ServiceAccount, DebitCard, and CheckingAccount content all together), each
+                    contributing its own pod:shape value naming that content's own shape.
+                    Named for the form the app renders from it — the shape IS the form's field
+                    list — and deliberately not "template", which names the wholly different
+                    class-level pod:TemplatePod.
+                    Used to select the appropriate per-template SHACL shapes file(s) for
+                    validation. Applied to the graph DataBook's own IRI (its plain `id`), not the
+                    `#graph`-suffixed `graph.named_graph` IRI — matching pod:claimant
+                    and pod:subject. Domain pod:Graph, the top of the
+                    graph hierarchy, since a shape declaration is equally meaningful for a
+                    pod:member graph and a tool's own graph."""@en ;
+    rdfs:domain pod:Graph ;
+    rdfs:range sh:NodeShape .
+
+
+#################################################################
+#    Graph (DataBook), CGraph, MemberGraph and FormGraph
+#
+#    Four classes on three levels. pod:Graph is any graph DataBook at
+#    all; pod:CGraph adds the claimant every graph a pod actually
+#    links to must carry; and the two disjoint leaves below it split
+#    on what the graph is about and, with it, on whether that value is
+#    a PDN node subject identity:
+#
+#      pod:MemberGraph — pod:member's range. Carries pod:subject,
+#      the party whose member entry it is: always a real participant
+#      in the relationship, so always PDN-mappable.
+#
+#      pod:FormGraph — pod:formGraph's range. Carries no about-ness
+#      property of its own: what the content is about is stated once
+#      by the holding tool (pod:formTopic), which may be a person or
+#      an organization holding a PDN identity of its own, but just as
+#      legitimately a pet, a vehicle, a passport, a trip, a recipe or
+#      a poem, none of which has a PDN subject identity or could be
+#      given one. The leaf survives as its own class because
+#      pod:member and pod:formGraph must still have different
+#      ranges, and because the PDN distinction that justified the
+#      split is intact — it simply lives one level up now.
+#
+#    Collapsing those two into one property on one class would erase
+#    exactly that distinction, which is why they are separate
+#    properties on separate owl:disjointWith leaves rather than one
+#    property with a wider range. A graph is always exactly one of the
+#    two, never both and never neither: pod:CGraph is abstract, and
+#    which leaf a graph is typed as follows from which of its pod's
+#    two lists it was linked from.
+#################################################################
+
+pod:Graph rdf:type owl:Class ;
+    pod:abstract true ;
+    rdfs:label "Graph"@en ;
+    rdfs:comment """A graph DataBook — a named graph of claims about some resource, filed in a specific relationship or situation, extracted into a named graph (graph.named_graph, the DataBook's own `id` plus a `#graph` fragment) — since this class's instances represent exactly the content that becomes that named graph, see the '#### Graph' DataBook section heading convention. The resource it is about need not be a person's identity — see pod:formTopic. Carries pod:shape, the one annotation every graph DataBook may take regardless of kind; pod:claimant is one level down, on pod:CGraph, and pod:subject one level down again, on pod:MemberGraph. Instances of this class and its annotations (pod:shape, pod:claimant, pod:subject) are typed and asserted on the DataBook's own `id` IRI, not the `#graph`-suffixed named graph IRI that wraps its extracted content."""@en .
+
+pod:CGraph rdf:type owl:Class ;
+    pod:abstract true ;
+    rdfs:subClassOf pod:Graph ;
+    rdfs:label "CGraph"@en ;
+    rdfs:comment """Claimant graph: a graph DataBook that carries a pod:claimant — i.e. every graph reachable from a pod, since a pod links a graph only via pod:member or via a tool's own pod:formGraph and both kinds record who is making the claim. Abstract: no graph is ever typed pod:CGraph directly, because every real one is either a pod:MemberGraph or a pod:FormGraph, and those two are owl:disjointWith one another. This class exists so that pod:claimant is declared once, at the level where it is genuinely common, instead of twice on the two leaves — leaving pod:MemberGraph to carry the one property that distinguishes it (pod:subject) and pod:FormGraph to carry none, its about-ness having moved up onto the tool."""@en .
+
+pod:MemberGraph rdf:type owl:Class ;
+    rdfs:subClassOf pod:CGraph ;
+    owl:disjointWith pod:FormGraph ;
+    rdfs:label "MemberGraph"@en ;
+    rdfs:comment """A member graph: the class every graph in a pod's pod:member list is typed as — pod:member's own range. Carries pod:subject (the party whose member entry it is) alongside the pod:claimant it inherits from pod:CGraph; the four self-vs-other cases (self-by-self, other-by-self, other-by-other, self-by-other) are determined directly from the combination of those two, not from a further subclass — this class has none. Both of its values always map to a PDN node subject identity, which is precisely what separates it from its disjoint sibling pod:FormGraph, whose holding tool's pod:formTopic value need not. A pod:MemberGraph is never held by a tool."""@en .
+
+pod:FormGraph rdf:type owl:Class ;
+    rdfs:subClassOf pod:CGraph ;
+    owl:disjointWith pod:MemberGraph ;
+    rdfs:label "FormGraph"@en ;
+    rdfs:comment """A form graph: the class every graph held by a pod:Form is typed as — pod:formGraph's own range. Carries only the pod:claimant it inherits from pod:CGraph, and has no subclasses of its own. Unlike its disjoint sibling pod:MemberGraph it carries no about-ness property: what its content is about is pod:formTopic, stated once by the tool holding it rather than repeated on each graph beneath, so that several members' claims about one thing cannot disagree about what that thing is. It remains a separate class from pod:MemberGraph, rather than the same class linked by a different property, for the reason that split was made in the first place: a pod:claimant or a pod:subject always names a party holding a PDN node subject identity, whereas the pod:formTopic above a pod:FormGraph routinely names something that has none and could never be given one — a pets:Pet, a vehicles:Vehicle, an identitydocuments:Passport, a recipe, a poem. A consumer resolving a graph's IRIs over the PDN can therefore tell from the graph's own type which of its values are resolvable identities, with nothing to look up and no per-value guesswork. A pod:FormGraph never carries a pod:subject: its claimant already records who is speaking, and the pod's members are derivable from its pod:member graphs."""@en .
+
+
+#################################################################
+#    Pod Graph and Tool Links
+#
+#    pod:member has domain pod:InstancePod; pod:tool has the same
+#    domain. A pod not yet typed pod:InstancePod (no real content
+#    filed under it yet) carries neither; a pod:InstancePod with no
+#    tool is simply a pod with nothing structured to hold, which is
+#    the ordinary case and not a distinct kind of pod.
+#
+#    The two differ in what they link to. pod:member's range is
+#    pod:MemberGraph, a graph DataBook directly. pod:tool's range is
+#    pod:Tool, a node that in turn holds its own graphs — for a
+#    pod:Form, one or more pod:FormGraph values via
+#    pod:formGraph. That extra level is what gives the tool's single
+#    pod:formTopic somewhere to live. Which leaf a graph is typed as
+#    still follows from the list it is linked from, and nothing else
+#    has to mark it: pod:member's graphs are pod:MemberGraph,
+#    pod:formGraph's are pod:FormGraph, and the two are disjoint.
+#
+#    pod:member is the required baseline — at least one
+#    pod:MemberGraph per member in the relationship, no fixed upper bound
+#    (enforced by shacl/pod-shacl.ttl's :InstancePodShape).
+#    pod:tool is zero or more, no upper bound: a pod gets one per
+#    tool its category's template declares, and the user may add more
+#    at any time, of any kind, whatever the category says.
+#
+#    Together these two properties are also how a consumer derives
+#    who or what a pod's relationship is about, now that there is no
+#    separate stored fact for it: if the pod has any form tools, the
+#    full set of distinct pod:formTopic values among them is the answer;
+#    otherwise the answer is the full set of distinct
+#    pod:subject values found among pod:member (for a
+#    single-member pod this is trivially :Self; for a pod with more
+#    members and no tool, it is every one of that pod's active
+#    members). Note the two branches read properties at different
+#    levels — one on the tool, one on the graph — since a tool states
+#    its topic once for all the graphs beneath it. See README.md's
+#    Pod Ontology section for the full rule and worked examples.
+#################################################################
+
+pod:member rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:InstancePod ;
+    rdfs:range pod:MemberGraph ;
+    rdfs:label "member"@en ;
+    rdfs:comment """Links an actual (instantiated) pod to its required baseline of Subject-Claimant classified graph DataBooks (pod:MemberGraph, which has no subclasses) — at least one per member in the relationship, no fixed upper bound (enforced by shacl/pod-shacl.ttl's :InstancePodShape) — a pod is not expected to ever have more than a couple dozen members, but nothing here caps it. Which self-vs-other case a given value represents comes from that graph's own pod:subject/pod:claimant combination, not from a further rdf:type below pod:MemberGraph. Every pod:member graph's pod:subject is a real relationship participant — a p:Person or a service:Service (service.ttl); those two, and only those two, are member-capable, and both always hold a PDN node subject identity, which is what pod:subject's own comment guarantees and what separates pod:MemberGraph from pod:FormGraph. An o:Organization is never a member subject: an organization participates in a pod through the service:ServiceProvider it provides (e.g. a large Groups pod's members can include :BHS_Service, the society's own service, alongside p:Person individuals), and an invited service:AgentService, once a member invites their own agent — an AI assistant, a contact sync, a backup service — into the pod, gets its own self-claimed pod:member entry alongside the human members. So pod:member content never reaches into an other/*.ttl domain ontology (e.g. pets:Pet); only a tool can, via its own pod:formTopic (see pod:formTopic's own comment). Unlike pod:member, pod:creator's and pod:owner's own range is p:Person alone — a service:Service can join a pod as a member but never creates one and can never be promoted to owner (see pod:owner's own comment). Together with pod:tool, this is also the sole basis for deriving who or what the pod's relationship is about — see pod:tool's own comment for the rule."""@en .
+
+
+
+#################################################################
+#    Pod Content (the Attachments Tab)
+#
+#    A pod's content lives entirely inside the app, in a protected
+#    store, encrypted at rest. V4 persists nothing in the user's
+#    filesystem, so there is no folder standing for a pod and
+#    nothing for pod:Pod to point back at; see storage.md.
+#
+#    A pod's attachments, shown in the app's Attachments tab, are
+#    the files every member of the pod receives. They are the part
+#    of a pod's content that travels with it when it is shared, and
+#    they are flat, like email attachments.
+#    A file a member adds to the pod without attaching it is
+#    instead their own private file: it stays in their copy of the
+#    pod and never reaches another member. Both sets are shown in
+#    the Attachments tab, the private ones marked as such. The
+#    distinction is about propagation and nothing else, which is why
+#    it is still real for a single-member pod that shares nothing:
+#    it records what would travel if the pod were ever shared
+#    later. A descendant pod is never part of its ancestor's own
+#    content, even though it sits beneath it in the tree.
+#    The pod's note keeps its own separate role and its own Note
+#    area, and is neither an attachment nor a private file.
+#    The diagram (images/pod-ontology/pod.png)
+#    additionally sketches pod:note, pod:attachment, and pod:chat
+#    as arrows off Pod for documentation purposes only — none of the
+#    three is an actual property declared here, and none is ever
+#    reified as a triple in any real graph (see integrity.md's PNG-3
+#    and README.md's Documentation-only Properties section).
+#
+#    A note's Markdown content may link to any other note anywhere in
+#    the user's own tree of pods, not just within its own pod — the
+#    same tree-wide linking a PKM tool supports. When a pod is
+#    shared, the note's own text (including any links it contains)
+#    travels with it like any other pod content, but a link's target
+#    does not: if that target lies outside this pod's own boundary
+#    (i.e. it isn't part of this pod's own Attachments-tab content or
+#    its own note), the recipient's tree may not contain that other
+#    pod at all, or may organize it completely differently, so the
+#    link simply won't resolve on their side. This is an accepted
+#    limitation of cross-pod linking, not a defect — nothing in this
+#    ontology tracks link targets or attempts to keep them resolvable
+#    across a share, consistent with the "no ontology property"
+#    treatment of the note itself above. That boundary has an inner
+#    edge as well: a link whose target is one of the member's own
+#    private files resolves in their own copy and fails closed on
+#    every other member's side, since a private file never travels.
+#
+#    This repo carries all of the above on disk as development
+#    scaffolding — one folder per pod, holding a pod-databook file,
+#    a note file named after the folder, a reserved _pod-attachments
+#    folder and the member's own private files loose beside it — which
+#    is where the folder-shaped vocabulary in this project's checks
+#    and helper scripts comes from. None of it exists in a running v4
+#    (pod-databook.md's Development Scaffolding section).
+#################################################################
+
+pod:category rdf:type owl:ObjectProperty ;
+    rdfs:domain pod:Pod ;
+    rdfs:range skos:Concept ;
+    rdfs:label "category"@en ;
+    rdfs:comment """The category concept this pod was originally instantiated as — a genuine skos:Concept individual (e.g. cat:Others, cat:BankingPayments) scoped to a concept scheme via its own skos:inScheme value, not a string and not a class — category.ttl's tree is a SKOS concept scheme (skos:broader edges), not an OWL class hierarchy, so no class-value punning is involved here (contrast other/vehicles.ttl's vehicles:hasVehicleType, which does pun a real class hierarchy). Domain pod:Pod (not narrowed to pod:InstancePod) deliberately, since pod:category is asserted on both kinds: for one of the templated concepts (cat:Passport/cat:BirthCertificate/cat:DriversLicense/cat:MedicalAppointment/cat:Vehicles/cat:Pets/cat:PetsMedical), the same category concept is asserted both on the pod:TemplatePod that was cloned (cat-templates.ttl) and on the resulting pod:InstancePod clone; for any other pod, it is simply the category the pod was created to represent, asserted directly with no template involved. At most one value (0..1), on any pod:Pod regardless of kind, matching pod.png's category arrow off Pod. Absent exactly when the pod is of the UserDefined category — a pod the user created without picking any existing category concept, identified precisely by the pod carrying no category value at all, not by a vague 'no canonical counterpart' judgment call. This repo's scaffolding makes that visible on disk by giving such a pod's pod-databook the literal (custom) disambiguator in place of a category-derived <catType> (e.g. Friends(custom).databook.md); the two must agree, but the filename is a scaffolding convention rather than the test. This is a different fact from whether the pod's own name matches its category's skos:prefLabel verbatim — see the green ('Predefined')/black ('User-defined') name-text convention documented in app-behavior.md and integrity.md's PNG-8/PNG-1h, which only applies when a category IS present; a UserDefined (no-category) pod's name is trivially always user-defined text too, since there is no label to possibly match. This value is fixed at the point the pod was created — it is not re-derived from the pod's current name or position, so neither needs to stay in step with it, keeping a pod:Pod robust under PDN sync exactly as its own class comment already promises (no stored tree-position property). That scheme is normally cat:CategoryScheme (category.ttl), the app's own curated taxonomy. It may instead be a category extension's own scheme (category-ext/), published by an organization for a category the app's taxonomy does not define — bhscat:BostonHubSociety, say. An extension concept is linked to the core taxonomy with skos:broadMatch rather than skos:broader, SKOS reserving the latter for hierarchy within a single scheme and providing the skos:mappingRelation family for links between schemes; every extension concept carries exactly one such broadMatch into a cat:CategoryScheme concept (integrity.md's TTL-8), so a recipient whose app lacks the extension can still file an incoming pod under the core category it maps to. Purpose: when a pod is shared with another PDN member, the recipient's app can use this value, if present, as a hint for where in the recipient's own tree the incoming pod should be filed — a snapshot of the sender's original classification, robust to either side's tree being organized differently. A pod's own tree position has no RDF representation at all — UserDefined is a display convention only, never a category concept. Range skos:Concept is referenced by name without owl:imports, the same by-name pattern already used for cat:CategoryScheme/category.ttl's own concepts and mirroring pod:creator's identical pattern for p:Person (persona.ttl)."""@en .
