@@ -3,9 +3,9 @@
 
 A form type *is* a SHACL node shape: the Add Tool dialog offers one entry per
 shape a tool's graph can be validated against, and the picked shape's IRI is
-stamped onto the new graph as its cell:shape value (app-behavior.md's "Adding a
+stamped onto the new graph as its pod:shape value (app-behavior.md's "Adding a
 Tool"); README.md's "Form Shapes" section is where the list itself lives. Which shapes those are, and which categories declare one up front via
-cell:formShape, are both facts of the .ttl files — so the table's row set, its
+pod:formShape, are both facts of the .ttl files — so the table's row set, its
 shape column and its "Declared by" column are generated here rather than
 maintained by hand.
 
@@ -13,15 +13,15 @@ What this script owns, and what it deliberately does not:
 
   * Owns the ROW SET. The shapes a graph may name are exactly the keys of
     helpers/validate.py's SHAPE_TO_FILE registry — the same registry the
-    validator resolves a cell:shape value against — minus any shape that
-    appears only as a template's cell:memberShape and never as a
-    cell:formShape (bhsshapes:MemberShape is today's only one: it governs a
+    validator resolves a pod:shape value against — minus any shape that
+    appears only as a template's pod:memberShape and never as a
+    pod:formShape (bhsshapes:MemberShape is today's only one: it governs a
     category extension's member graphs, not a form). Component shapes that
     validate a node nested inside a form (:BodyWeightShape, :MedicationShape,
     :OdometerReadingShape and the rest) are already outside that registry and
     so never appear here.
   * Owns the SHAPE column (the CURIE) and the DECLARED BY column (every
-    category whose cell:TemplateCell names that shape as a cell:formShape, in
+    category whose pod:TemplatePod names that shape as a pod:formShape, in
     cat-templates.ttl or in a category-ext/ bundle).
   * Does NOT own the display name or the description. Those are the app's own
     UI wording, not derivable from a shape's local name, so a surviving row
@@ -55,18 +55,18 @@ from rdflib import Namespace  # noqa: E402
 from validate import PREFIX_TO_FILES, SHAPE_NS, SHAPE_TO_FILE  # noqa: E402
 
 SH = Namespace("http://www.w3.org/ns/shacl#")
-CELL = Namespace("http://mee.foundation/ontologies/cell#")
+POD = Namespace("http://mee.foundation/ontologies/pod#")
 
 DOC = os.path.join(REPO, "README.md")
 
 # The two shapes files that hold no form shape at all: they constrain the
-# cell/graph/tool scaffolding and the service hierarchy themselves, never the
+# pod/graph/tool scaffolding and the service hierarchy themselves, never the
 # content a form carries. Every OTHER shape in the corpus must be accounted
 # for — either in the registry (a form type) or as a component shape, i.e. one
 # whose sh:targetClass some other shape names as a value class — so that a
 # newly-added shape nobody registered is reported rather than silently
 # missing from the table.
-INFRA_FILES = {"shacl/cell-shacl.ttl", "shacl/service-shacl.ttl"}
+INFRA_FILES = {"shacl/pod-shacl.ttl", "shacl/service-shacl.ttl"}
 
 # The generated block's fences. Everything between them is this script's; the
 # prose above and below it is hand-written and never touched.
@@ -85,7 +85,7 @@ TODO = "{TODO: describe this form — run `python3 helpers/form-types.py --repor
 
 def template_files():
     """cat-templates.ttl plus every category extension bundle — an extension
-    carries its own cell:TemplateCell individuals alongside its concept scheme
+    carries its own pod:TemplatePod individuals alongside its concept scheme
     (integrity.md's TTL-8)."""
     return [os.path.join(REPO, "cat-templates.ttl")] + sorted(
         glob.glob(os.path.join(REPO, "category-ext", "*.ttl"))
@@ -101,8 +101,8 @@ def shape_curie(local_name):
     raise KeyError("no CURIE prefix maps to %s" % shapes_file)
 
 
-def shape_cell(curie):
-    """Column two: the CURIE a graph's cell:shape carries, plus a link to the
+def shape_pod(curie):
+    """Column two: the CURIE a graph's pod:shape carries, plus a link to the
     shapes file that defines it. Both halves are facts of the registry, so the
     link can never drift from the shape it points at."""
     shapes_file = SHAPE_TO_FILE[curie.split(":", 1)[1]]
@@ -114,7 +114,7 @@ def shape_iri(local_name):
 
 
 def template_roles():
-    """Read every cell:formShape / cell:memberShape value, and report which
+    """Read every pod:formShape / pod:memberShape value, and report which
     category concept each came from. Returns (form_roles, member_roles), each
     mapping a shape IRI to the sorted category CURIEs naming it."""
     form_roles, member_roles = {}, {}
@@ -122,13 +122,13 @@ def template_roles():
         g = rdflib.Graph()
         g.parse(path, format="turtle")
         norm = g.namespace_manager.normalizeUri
-        for tc in set(g.subjects(rdflib.RDF.type, CELL.TemplateCell)):
-            cats = sorted(norm(c) for c in g.objects(tc, CELL.category))
+        for tc in set(g.subjects(rdflib.RDF.type, POD.TemplatePod)):
+            cats = sorted(norm(c) for c in g.objects(tc, POD.category))
             label = ", ".join(cats) if cats else norm(tc)
-            for tool in g.objects(tc, CELL.declaresTool):
-                for shape in g.objects(tool, CELL.formShape):
+            for tool in g.objects(tc, POD.declaresTool):
+                for shape in g.objects(tool, POD.formShape):
                     form_roles.setdefault(shape, set()).add(label)
-            for shape in g.objects(tc, CELL.memberShape):
+            for shape in g.objects(tc, POD.memberShape):
                 member_roles.setdefault(shape, set()).add(label)
     return (
         {k: sorted(v) for k, v in form_roles.items()},
@@ -138,7 +138,7 @@ def template_roles():
 
 def form_type_shapes():
     """The registry's shapes, minus the member-shape-only ones. Returns
-    (rows, member_only), rows being [(curie, declared_by_cell)] keyed for
+    (rows, member_only), rows being [(curie, declared_by_pod)] keyed for
     lookup and member_only the CURIEs the closing note accounts for."""
     form_roles, member_roles = template_roles()
     rows, member_only = {}, []
@@ -202,13 +202,13 @@ def parse_block(block):
     for line in block.splitlines():
         if not line.startswith("|") or line.startswith("|---"):
             continue
-        cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) != 4 or cells[0] == "Form type":
+        pods = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(pods) != 4 or pods[0] == "Form type":
             continue
-        m = re.match(r"`([^`]+)`", cells[1])
+        m = re.match(r"`([^`]+)`", pods[1])
         if not m:
             continue
-        existing.append((m.group(1), cells[0], cells[2]))
+        existing.append((m.group(1), pods[0], pods[2]))
     return existing
 
 
@@ -221,13 +221,13 @@ def build_block(existing, rows):
         if curie not in rows:
             continue  # shape left the registry, or became member-shape-only
         seen.add(curie)
-        lines.append("| %s | %s | %s | %s |" % (display, shape_cell(curie), description, rows[curie]))
+        lines.append("| %s | %s | %s | %s |" % (display, shape_pod(curie), description, rows[curie]))
     for curie in sorted(rows):
         if curie in seen:
             continue
         local = curie.split(":", 1)[1]
         display = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", local[: -len("Shape")])
-        lines.append("| **%s** | %s | %s | %s |" % (display, shape_cell(curie), TODO, rows[curie]))
+        lines.append("| **%s** | %s | %s | %s |" % (display, shape_pod(curie), TODO, rows[curie]))
     return "\n".join(lines)
 
 

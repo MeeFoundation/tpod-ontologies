@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
 draw.py  —  Generate a Mermaid (.mmd) and PNG diagram for a single graph's
-RDF content, whether that graph is embedded in a cell-databook (post-merge)
+RDF content, whether that graph is embedded in a pod-databook (post-merge)
 or (for legacy/under-development .ttl files) stands alone.
 
-Usage:   python helpers/draw.py <cell_file.databook.md> <graph-id-or-local-name>
+Usage:   python helpers/draw.py <pod_file.databook.md> <graph-id-or-local-name>
          python helpers/draw.py <graph_file.ttl>
 Output:  <graph-id-local-name>.mmd and .png, always written to
-         example/graphs/images/ regardless of where the source cell file
+         example/graphs/images/ regardless of where the source pod file
          lives — graph diagrams keep their pre-merge names/location even
          though the graph's own file no longer exists (must be run from the
          repo root for this relative path to resolve).
@@ -197,8 +197,8 @@ def esc(s: str) -> str:
 # ── DataBook loading ───────────────────────────────────────────────────────────
 
 def load_databook(path: Path, graph_id: str | None = None):
-    """Parse a cell-databook's frontmatter, and (when graph_id is given)
-    isolate just that one embedded graph's turtle fence — a merged cell
+    """Parse a pod-databook's frontmatter, and (when graph_id is given)
+    isolate just that one embedded graph's turtle fence — a merged pod
     file's body may contain several fences, one per v4.member/v4.tool graph
     entry, so concatenating all of them (the old, pre-merge behavior) would
     wrongly combine sibling graphs' RDF into one graph."""
@@ -468,7 +468,7 @@ def generate_png(mmd_path: Path, png_path: Path) -> None:
 def main() -> None:
     if len(sys.argv) < 2:
         sys.exit(
-            "Usage: python helpers/draw.py <cell_file.databook.md> <graph-id-or-local-name>\n"
+            "Usage: python helpers/draw.py <pod_file.databook.md> <graph-id-or-local-name>\n"
             "       python helpers/draw.py <graph_file.ttl>"
         )
     src = Path(sys.argv[1])
@@ -478,12 +478,12 @@ def main() -> None:
     if src.name.endswith(".databook.md"):
         if len(sys.argv) < 3:
             sys.exit(
-                "A cell-databook file requires a 2nd argument: the graph's id "
+                "A pod-databook file requires a 2nd argument: the graph's id "
                 "(or just its local name, the string after the final '/')."
             )
         graph_arg = sys.argv[2]
-        _, cell_fm = load_databook(src)  # frontmatter only — no graph_id yet
-        v4 = cell_fm.get("v4") or {}
+        _, pod_fm = load_databook(src)  # frontmatter only — no graph_id yet
+        v4 = pod_fm.get("v4") or {}
         entries = graph_entries(v4)
         match = find_graph_entry(entries, graph_arg)
         if not match:
@@ -497,9 +497,9 @@ def main() -> None:
         # `individuals` set (built from an in-graph owl:NamedIndividual typing)
         # picks it up from the graph's own content like any other individual.
         # Use this one graph's own claimant/subject/shape for the "Graph"
-        # metadata box — not the owning cell's aggregate v4.creator
-        # (the cell has no aggregate v4.subject of its own; the subject
-        # key sits inside each member entry, and a cell's own subject is
+        # metadata box — not the owning pod's aggregate v4.creator
+        # (the pod has no aggregate v4.subject of its own; the subject
+        # key sits inside each member entry, and a pod's own subject is
         # derived from its tools/members).
         frontmatter = {"v4": {
             "claimant": match.get("claimant"),

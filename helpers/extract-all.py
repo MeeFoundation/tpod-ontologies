@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """
 extract-all.py — print every embedded graph's fenced turtle block, across
-every cell-databook under a root directory, as one merged Turtle stream.
+every pod-databook under a root directory, as one merged Turtle stream.
 
 Why this exists: validation never merges the whole tree — `helpers/validate.py`
-works one cell at a time on purpose — but a few things legitimately need the
+works one pod at a time on purpose — but a few things legitimately need the
 union: integrity.md's TTL-1 ("no orphan Persons"), whose reachability question
-only makes sense across every cell at once, and loading the example into a
+only makes sense across every pod at once, and loading the example into a
 triplestore for ad-hoc SPARQL. See example.md's "Merged whole-tree dump".
 
-Do NOT run the general SHACL shapes against this output: merging every cell
+Do NOT run the general SHACL shapes against this output: merging every pod
 unions facts the self-containment convention deliberately keeps per-graph,
 which manufactures violations no real query would ever see.
 

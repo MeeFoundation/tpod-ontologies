@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Regenerate the .mmd and .png diagram for every graph embedded in a staged
-# cell-databook, and stage the results alongside it.
+# pod-databook, and stage the results alongside it.
 #
 # Install: cp hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 #
-# helpers/draw.py takes a cell-databook plus one graph id and always writes
+# helpers/draw.py takes a pod-databook plus one graph id and always writes
 # <graph-NN>.mmd/.png into example/graphs/images/, so this hook enumerates each
 # staged databook's own v4.member and v4.tool[].graph ids and draws them one by one,
 # from the repo root (draw.py resolves its output path relative to the cwd).
@@ -20,7 +20,7 @@ set -euo pipefail
 repo_root=$(git rev-parse --show-toplevel)
 cd "$repo_root"
 
-staged=$(git diff --cached --name-only --diff-filter=ACM | grep '^example/Cells/.*\.databook\.md$' || true)
+staged=$(git diff --cached --name-only --diff-filter=ACM | grep '^example/Pods/.*\.databook\.md$' || true)
 [ -z "$staged" ] && exit 0
 
 command -v mmdc >/dev/null 2>&1 || echo "[draw] warning: mmdc not found — .png files will not be regenerated"

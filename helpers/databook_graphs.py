@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
 """
-databook_graphs.py — shared helpers for reading cell-databook files: locating
+databook_graphs.py — shared helpers for reading pod-databook files: locating
 one embedded graph's content inside a (possibly multi-graph) file, and turning
-a cell's own frontmatter into `cell:` triples. Used by draw.py,
+a pod's own frontmatter into `pod:` triples. Used by draw.py,
 extract-graph.py, extract-all.py, yaml-to-rdf.py and validate.py.
 
-Since graph-databooks were merged into their owning cell-databooks, a cell
+Since graph-databooks were merged into their owning pod-databooks, a pod
 file's body may contain several ```turtle fences — one per embedded graph
-(each `v4.member`/`v4.tool[].graph` entry in that cell's frontmatter is one such
+(each `v4.member`/`v4.tool[].graph` entry in that pod's frontmatter is one such
 graph's own metadata dict). Each fence still carries its own
 `<!-- databook:graph: {graph_id}#graph -->` marker, computed from the
 graph's own `id` per the unchanged `{id}#graph` named-graph convention
-(cell-databook.md's "Graph Ids and Named Graphs") — so isolating one graph's fence
+(pod-databook.md's "Graph Ids and Named Graphs") — so isolating one graph's fence
 only requires knowing that graph's `id`, no new marker scheme.
 
 Also carries `resolve()`/`as_list()` — needed wherever a `v4.*` YAML value
 (a CURIE or a bare `:X` local name) must become the same full IRI — and the
-`cell:` triple synthesis (`process_cell_databook()`/`process_embedded_graph()`)
-that turns one cell-databook's frontmatter into Turtle. Both `yaml-to-rdf.py`
-(whole-tree dump) and `validate.py` (one cell at a time) call that synthesis,
+`pod:` triple synthesis (`process_pod_databook()`/`process_embedded_graph()`)
+that turns one pod-databook's frontmatter into Turtle. Both `yaml-to-rdf.py`
+(whole-tree dump) and `validate.py` (one pod at a time) call that synthesis,
 so it lives here rather than in either script; `yaml-to-rdf.py`'s hyphenated
 filename is not an importable module name in any case.
 """
@@ -27,21 +27,21 @@ import re
 FRONTMATTER_RE = re.compile(r"^(---\n)(.*?\n)(---\n?)(.*)$", re.DOTALL)
 
 V4_NS = "http://www.example.org/v4#"
-CELL = "http://mee.foundation/ontologies/cell#"
+POD = "http://mee.foundation/ontologies/pod#"
 
 PREFIXES = {
     "cat": "http://mee.foundation/ontologies/category#",
-    "cell": "http://mee.foundation/ontologies/cell#",
+    "pod": "http://mee.foundation/ontologies/pod#",
     "persona": "http://mee.foundation/ontologies/persona#",
     "pets": "http://mee.foundation/ontologies/pets#",
     "vehicles": "http://mee.foundation/ontologies/vehicles#",
     # A category extension's own namespace (category-ext/). A v4.category
     # value may name a concept in an extension's scheme rather than in
-    # cat:CategoryScheme — see cell.ttl's cell:category comment. One entry
+    # cat:CategoryScheme — see pod.ttl's pod:category comment. One entry
     # per published extension.
     "bhscat": "http://mee.foundation/ontologies/category-ext/boston-hub-society#",
     # Shape namespaces — a v4.member[]/v4.tool[].graph[].shape value is a
-    # sh:NodeShape CURIE (cell:shape's range, cell.ttl), not a type label
+    # sh:NodeShape CURIE (pod:shape's range, pod.ttl), not a type label
     # class name, so these must resolve too. Same base URIs cat-templates.ttl
     # and each extension's own @prefix block declare. An unlisted prefix does
     # not raise — resolve() falls through to the v4 example namespace — so a
@@ -62,18 +62,18 @@ PREFIXES = {
 }
 
 # The three sub-keys of one v4.serviceTag entry, mapped to the
-# cell:ServiceTag datatype property each becomes (cell.ttl's Service
+# pod:ServiceTag datatype property each becomes (pod.ttl's Service
 # Tag section). Spelled out rather than derived from the key name, so a grep
-# for cell:tagNamespace finds this line.
+# for pod:tagNamespace finds this line.
 TAG_SUBKEYS = {
     "namespace": "tagNamespace",
     "key": "tagKey",
     "value": "tagValue",
 }
 
-# Which cell:Tool subclass a v4.tool entry's own `type` key names (cell.ttl's
-# Cell Tools section). Spelled out rather than title-cased from the key, so a
-# grep for cell:Form finds this line, and so an unknown type is a
+# Which pod:Tool subclass a v4.tool entry's own `type` key names (pod.ttl's
+# Pod Tools section). Spelled out rather than title-cased from the key, so a
+# grep for pod:Form finds this line, and so an unknown type is a
 # KeyError here rather than a triple naming a class that does not exist.
 TOOL_TYPES = {
     "form": "Form",
@@ -118,7 +118,7 @@ def iter_graph_blocks(body_text):
     body_text, in document order, with the fence's own `<!-- databook: -->`
     comment lines stripped (they are markers, not Turtle — riot rejects
     them). graph_marker is the fence's `<!-- databook:graph: X -->` value,
-    or None if it carries no such marker. A merged cell-databook body may
+    or None if it carries no such marker. A merged pod-databook body may
     contain several fences, one per embedded graph."""
     in_fence = False
     current_graph = None
@@ -153,7 +153,7 @@ def extract_graph_block(body_text, target_graph):
 
 
 def graph_entries(v4):
-    """Every graph entry a cell links, flattened into one list: its v4.member
+    """Every graph entry a pod links, flattened into one list: its v4.member
     entries first, then the graphs nested under each v4.tool. Tool graphs sit
     one level deeper than member entries because a tool states its own
     formTopic once, above them; so that a caller reading a single graph does
@@ -190,31 +190,31 @@ def find_graph_entry(entries, graph_arg):
 def term(node):
     """Format a node as a Turtle term: a blank-node label (`_:x`) is written
     as-is, anything else is an IRI and gets angle brackets. Blank nodes enter
-    the picture only as cell:serviceTag's cell:ServiceTag value nodes
-    (cell.ttl's Service Tag section)."""
+    the picture only as pod:serviceTag's pod:ServiceTag value nodes
+    (pod.ttl's Service Tag section)."""
     return node if node.startswith("_:") else f"<{node}>"
 
 
-def tag_node(cell_id, index):
-    """A stable blank-node label for one cell:ServiceTag value node,
-    derived from the cell's own id local-name plus the value's position in
+def tag_node(pod_id, index):
+    """A stable blank-node label for one pod:ServiceTag value node,
+    derived from the pod's own id local-name plus the value's position in
     v4.serviceTag. Turtle scopes a blank-node label to one document and
-    yaml-to-rdf.py emits every cell in the tree into a single document, so a
-    label unique only within one process_cell_databook() call would silently
-    merge two cells' tag nodes into one. A cell id is already globally unique
+    yaml-to-rdf.py emits every pod in the tree into a single document, so a
+    label unique only within one process_pod_databook() call would silently
+    merge two pods' tag nodes into one. A pod id is already globally unique
     (integrity.md's YAML-3), so deriving from it needs no counter carried
     between calls and gives the same label on every run."""
-    return f"_:tag_{cell_id.rsplit('/', 1)[-1]}_{index}"
+    return f"_:tag_{pod_id.rsplit('/', 1)[-1]}_{index}"
 
 
-def tool_node(cell_id, index):
-    """A stable blank-node label for one cell:Tool value node, derived the
-    same way tag_node() derives a cell:ServiceTag's — from the cell's own id
+def tool_node(pod_id, index):
+    """A stable blank-node label for one pod:Tool value node, derived the
+    same way tag_node() derives a pod:ServiceTag's — from the pod's own id
     local-name plus the tool's position in v4.tool — and for the same reason:
-    yaml-to-rdf.py emits every cell in the tree into one Turtle document, so a
-    label unique only within a single process_cell_databook() call would
-    silently merge two cells' tools into one node."""
-    return f"_:tool_{cell_id.rsplit('/', 1)[-1]}_{index}"
+    yaml-to-rdf.py emits every pod in the tree into one Turtle document, so a
+    label unique only within a single process_pod_databook() call would
+    silently merge two pods' tools into one node."""
+    return f"_:tool_{pod_id.rsplit('/', 1)[-1]}_{index}"
 
 
 def emit_type(triples, subj, type_iri):
@@ -226,8 +226,8 @@ def emit_obj(triples, subj, prop, obj_iri):
 
 
 def emit_lit(triples, subj, prop, lit):
-    """Emit an xsd:string-typed literal triple — cell:userTag and the three
-    cell:ServiceTag parts are the only `v4.` values that are literals
+    """Emit an xsd:string-typed literal triple — pod:userTag and the three
+    pod:ServiceTag parts are the only `v4.` values that are literals
     rather than IRIs, so they can't go through emit_obj()/resolve(): a tag is
     a plain string, never a CURIE or a local name."""
     escaped = str(lit).replace("\\", "\\\\").replace('"', '\\"')
@@ -236,47 +236,47 @@ def emit_lit(triples, subj, prop, lit):
     )
 
 
-def process_cell_databook(fm, triples):
+def process_pod_databook(fm, triples):
     subj = fm["id"]
     v4 = fm.get("v4", {}) or {}
 
-    emit_type(triples, subj, CELL + "Cell")
+    emit_type(triples, subj, POD + "Pod")
 
     if v4.get("category"):
-        # cell:category — domain cell:Cell, so asserted on every cell
-        # regardless of facet (cell.ttl 3.45.0, renamed from cell:origin).
-        emit_obj(triples, subj, CELL + "category", resolve(v4["category"]))
+        # pod:category — domain pod:Pod, so asserted on every pod
+        # regardless of facet (pod.ttl 3.45.0, renamed from pod:origin).
+        emit_obj(triples, subj, POD + "category", resolve(v4["category"]))
 
-    # Every real cell-databook is always also typed cell:InstanceCell — no
-    # bare tree-position-only cell with no member content; a category node
+    # Every real pod-databook is always also typed pod:InstancePod — no
+    # bare tree-position-only pod with no member content; a category node
     # with nothing substantive to say still carries a minimal stub
-    # cell:member entry rather than omitting member content. Member count
+    # pod:member entry rather than omitting member content. Member count
     # itself is never stored — it's simply the number of distinct
     # subject values among v4.member, derivable by counting whenever
-    # needed. There is no second cell type to emit: a cell that carries
-    # a tool holds cell:tool values, not a subclass.
-    emit_type(triples, subj, CELL + "InstanceCell")
+    # needed. There is no second pod type to emit: a pod that carries
+    # a tool holds pod:tool values, not a subclass.
+    emit_type(triples, subj, POD + "InstancePod")
 
     if v4.get("creator"):
-        emit_obj(triples, subj, CELL + "creator", resolve(v4["creator"]))
+        emit_obj(triples, subj, POD + "creator", resolve(v4["creator"]))
 
-    # cell:owner — one or more p:Person IRIs, resolved the same way as
-    # cell:creator (never a bare graph-local-name).
+    # pod:owner — one or more p:Person IRIs, resolved the same way as
+    # pod:creator (never a bare graph-local-name).
     for owner_iri in as_list(v4.get("owner")):
-        emit_obj(triples, subj, CELL + "owner", resolve(owner_iri))
+        emit_obj(triples, subj, POD + "owner", resolve(owner_iri))
 
-    # cell:userTag — 0..N plain xsd:string values, domain cell:InstanceCell
-    # (cell.ttl's Cell Tags section), so emitted after the cell:InstanceCell
+    # pod:userTag — 0..N plain xsd:string values, domain pod:InstancePod
+    # (pod.ttl's Pod Tags section), so emitted after the pod:InstancePod
     # typing above. as_list() lets a single bare string stand in for a
     # one-element list, the same latitude v4.owner and a graph entry's own
     # template already get. No resolve() here — a user tag is a literal, not
     # a CURIE.
     for tag in as_list(v4.get("userTag")):
-        emit_lit(triples, subj, CELL + "userTag", tag)
+        emit_lit(triples, subj, POD + "userTag", tag)
 
-    # cell:serviceTag — 0..N, each value a cell:ServiceTag node
+    # pod:serviceTag — 0..N, each value a pod:ServiceTag node
     # rather than a literal (an owl:ObjectProperty), carrying exactly one
-    # cell:tagNamespace/cell:tagKey/cell:tagValue. as_list() applies to the
+    # pod:tagNamespace/pod:tagKey/pod:tagValue. as_list() applies to the
     # outer sequence only — a lone mapping may stand in for a one-element
     # list, the same latitude v4.member gets — and never to the three
     # sub-values, each of which is exactly one scalar; coercing there would
@@ -288,72 +288,72 @@ def process_cell_databook(fm, triples):
     # can name the file and the sub-key.
     for i, tag in enumerate(as_list(v4.get("serviceTag"))):
         node = tag_node(subj, i)
-        emit_obj(triples, subj, CELL + "serviceTag", node)
-        emit_type(triples, node, CELL + "ServiceTag")
+        emit_obj(triples, subj, POD + "serviceTag", node)
+        emit_type(triples, node, POD + "ServiceTag")
         if not isinstance(tag, dict):
             continue
         for sub_key, prop in TAG_SUBKEYS.items():
             if sub_key in tag:
-                emit_lit(triples, node, CELL + prop, tag[sub_key])
+                emit_lit(triples, node, POD + prop, tag[sub_key])
 
     for entry in as_list(v4.get("member")):
-        emit_obj(triples, subj, CELL + "member", entry["id"])
+        emit_obj(triples, subj, POD + "member", entry["id"])
         process_embedded_graph(entry, triples, "member")
 
-    # cell:tool — zero or more per cell, each a blank node for one object
-    # the cell carries: a form, a calendar, a drawing canvas or a map,
+    # pod:tool — zero or more per pod, each a blank node for one object
+    # the pod carries: a form, a calendar, a drawing canvas or a map,
     # each with its own data format. The node's rdf:type comes from the
-    # entry's own `type` key (form/calendar/canvas/map); cell:formTopic, what the tool's
+    # entry's own `type` key (form/calendar/canvas/map); pod:formTopic, what the tool's
     # content is about, is carried once by the tool rather than repeated on
     # each graph beneath it, which is what makes its graphs unable to
     # disagree about what they are about.
     for i, entry in enumerate(as_list(v4.get("tool"))):
         node = tool_node(subj, i)
-        emit_obj(triples, subj, CELL + "tool", node)
-        emit_type(triples, node, CELL + TOOL_TYPES[entry.get("type", "form")])
+        emit_obj(triples, subj, POD + "tool", node)
+        emit_type(triples, node, POD + TOOL_TYPES[entry.get("type", "form")])
         if entry.get("formTopic"):
-            emit_obj(triples, node, CELL + "formTopic", resolve(entry["formTopic"]))
+            emit_obj(triples, node, POD + "formTopic", resolve(entry["formTopic"]))
         for graph in as_list(entry.get("graph")):
-            emit_obj(triples, node, CELL + "formGraph", graph["id"])
+            emit_obj(triples, node, POD + "formGraph", graph["id"])
             process_embedded_graph(graph, triples, "tool")
 
-    # No cell-level subject synthesis: who/what a cell is about is
+    # No pod-level subject synthesis: who/what a pod is about is
     # derivable directly from tools/members — the distinct
-    # cell:formTopic values if any tool is present, else the distinct
-    # cell:subject values among members (cell.ttl's cell:tool
+    # pod:formTopic values if any tool is present, else the distinct
+    # pod:subject values among members (pod.ttl's pod:tool
     # comment) — rather than an independently-asserted fact, so it is
     # never stored as its own triple.
 
-    # No cell-level shape synthesis either: a cell:InstanceCell's validation
-    # shape is derivable from its own cell:category value via a reverse
+    # No pod-level shape synthesis either: a pod:InstancePod's validation
+    # shape is derivable from its own pod:category value via a reverse
     # lookup on cat-templates.ttl rather than stored per-instance.
 
 
 def process_embedded_graph(graph, triples, kind):
     """Emit the graph typing plus claimant/shape for one v4.member[] or
     v4.tool[].graph[] entry. `kind` is "member" or "tool", and is what decides
-    the type: cell:MemberGraph for a member entry, cell:FormGraph for a tool's own
-    graph (cell.ttl's two disjoint cell:CGraph leaves). Nothing in the entry
+    the type: pod:MemberGraph for a member entry, pod:FormGraph for a tool's own
+    graph (pod.ttl's two disjoint pod:CGraph leaves). Nothing in the entry
     itself marks which kind it is; the list it was read from settles it,
-    matching cell:member's and cell:formGraph's own ranges. Only a member
-    entry carries an about-ness property of its own (cell:subject); a
-    tool graph's is cell:formTopic, held once by the tool above it."""
+    matching pod:member's and pod:formGraph's own ranges. Only a member
+    entry carries an about-ness property of its own (pod:subject); a
+    tool graph's is pod:formTopic, held once by the tool above it."""
     is_member = kind == "member"
     claimant = graph.get("claimant")
     about = graph.get("subject") if is_member else None
     if not claimant or (is_member and not about):
         return  # missing claimant or subject — not a well-formed graph, skip
     subj = graph["id"]
-    emit_type(triples, subj, CELL + ("MemberGraph" if is_member else "FormGraph"))
-    emit_obj(triples, subj, CELL + "claimant", resolve(claimant))
+    emit_type(triples, subj, POD + ("MemberGraph" if is_member else "FormGraph"))
+    emit_obj(triples, subj, POD + "claimant", resolve(claimant))
     if is_member:
-        emit_obj(triples, subj, CELL + "subject", resolve(about))
+        emit_obj(triples, subj, POD + "subject", resolve(about))
 
-    # cell:shape — domain cell:Graph, so it applies to both kinds, 0..N,
+    # pod:shape — domain pod:Graph, so it applies to both kinds, 0..N,
     # present only on graphs that contain instance(s) of a shape's own type
-    # label class (e.g. identitydocuments:Passport, cell.ttl's graph.png
+    # label class (e.g. identitydocuments:Passport, pod.ttl's graph.png
     # diagram). A graph may satisfy more than one shape at once (e.g. a single
     # graph combining ServiceAccount, DebitCard, and CheckingAccount
     # instances), so this accepts either a bare string or a YAML list.
     for shape in as_list(graph.get("shape")):
-        emit_obj(triples, subj, CELL + "shape", resolve(shape))
+        emit_obj(triples, subj, POD + "shape", resolve(shape))
