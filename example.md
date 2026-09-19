@@ -1,10 +1,10 @@
-# V4 Ontologies — Illustrative Example
+# Tellipod Ontologies — Illustrative Example
 
 This file continues [README.md](README.md), which describes the Category, Pod, Graph, Persona, and Organization ontologies, and is continued by [app-behavior.md](app-behavior.md), which documents how the app behaves on top of this data. It provides an illustrative example — a hypothetical user, Alice Walker — showing how those ontologies are used together, followed by diagram-generation instructions and the full validation pipeline for the example dataset.
 
 ## Illustrative Example: Alice
 
-This section describes the local dataset for a hypothetical user, Alice Walker. Alice's pods live in a tree of pods rooted at `example/Pods/`, where this repo carries each one as a folder — marked as a pod by the `_pod-attachments` folder inside it, and holding a pod DataBook file — all of which is [development scaffolding](pod-databook.md#development-scaffolding) rather than anything a running v4 produces (see [storage.md](storage.md)). Every mention of "Self" in the following is a reference to the user, Alice.
+This section describes the local dataset for a hypothetical user, Alice Walker. Alice's pods live in a tree of pods rooted at `example/Pods/`, where this repo carries each one as a folder — marked as a pod by the `_pod-attachments` folder inside it, and holding a pod DataBook file — all of which is [development scaffolding](pod-databook.md#development-scaffolding) rather than anything a running Tellipod produces (see [storage.md](storage.md)). Every mention of "Self" in the following is a reference to the user, Alice.
 
 ### Bob and Fred
 
@@ -146,7 +146,7 @@ The bundle publishes four things, and `pod-categories.ttl` and `pod-category-tem
 | `bhscat:BostonHubSocietyTemplatePod` | the template pod, naming `bhsshapes:MemberShape` as its `pod:memberShape`; its declared tool is unchanged from `ctpl:GroupsTemplatePod`'s |
 | `bhsshapes:MemberShape` | the member shape, in `pod-category-ext/shacl/boston-hub-society-shacl.ttl` |
 
-The extension introduces no vocabulary of its own — every field its shape constrains comes from CCO, `persona.ttl`, `persona-ext/directory-profile.ttl`, or `other/education.ttl`. What belongs to the society is the constraints: a FamilyName required exactly once where `pshapes:ContactInfoShape` requires none, `dp:industry` restricted to the form's 19 values, and at most one `education:EducationRecord` per level for its single High School and College rows. For the mechanism itself, see [Category Extensions](README.md#pod-category-extensions).
+The extension introduces no vocabulary of its own — every field its shape constrains comes from CCO, `persona.ttl`, `persona-ext/directory-profile.ttl`, or `other/education.ttl`. What belongs to the society is the constraints: a FamilyName required exactly once where `pshapes:ContactInfoShape` requires none, `dp:industry` restricted to the form's 19 values, and at most one `education:EducationRecord` per level for its single High School and College rows. For the mechanism itself, see [Category Extensions](README.md#category-extensions).
 
 The pod also carries the completed form itself as an **attachment** — `Personal Page for BHS 2026 Directory (Alice Walker).pdf`, which every member of the pod receives — that being all an attachment is. (In this repo's scaffolding it sits in the pod's own `_pod-attachments` folder.) Its answers are the same ones [graph 14](<example/Pods/Groups/Boston Hub Society/Boston Hub Society.databook.md#graph-14>) carries as RDF, field for field, so the pod holds the paper and the data side by side: the questions and Alice's handwritten answers in its Attachments area, the same answers structured and validated in its member graph.
 
@@ -386,7 +386,7 @@ pod's instance data, so merging those in doesn't break the isolation.
 Each pod gets two passes.
 
 **1 — the pod pass.** The pod's whole content at once: every one of its embedded graphs' Turtle,
-plus the `pod:` triples synthesized from its own `v4.*` frontmatter
+plus the `pod:` triples synthesized from its own `tpod.*` frontmatter
 (`databook_graphs.process_pod_databook()`). This is validated against the four general shapes
 files — `shacl/pod-shacl.ttl` (the pod model itself: `pod:category` cardinality, the
 `pod:TemplatePod`/`pod:InstancePod` split, `pod:creator`/`pod:owner`/`pod:member`/`pod:tool`, and
@@ -399,7 +399,7 @@ in the graph Turtle.
 
 **2 — the template pass.** Each graph carrying a `template:` value, checked on its own against the
 shape that value names. Driven entirely by data already in each pod-databook's own
-`v4.member[]`/`v4.tool[].graph[]` entries — there is no hand-maintained per-graph command list to keep in
+`tpod.member[]`/`tpod.tool[].graph[]` entries — there is no hand-maintained per-graph command list to keep in
 sync. Since `pod:shape`'s range is `sh:NodeShape` (`pod.ttl`), the value already *names the shape
 itself* (e.g. `idocshapes:PassportShape`), with no label-to-shape resolution; the only work left is
 locating which physical `*-shacl.ttl` file defines a shape of that name — `pshapes:` shapes are
@@ -445,9 +445,9 @@ integrity.md's TTL-1 ("no orphan Persons"), whose reachability question only mak
 pod at once, and loading the example into a triplestore for ad-hoc SPARQL. To produce it:
 
 ```bash
-python3 helpers/extract-all.py example > /tmp/v4-data.ttl   # every embedded graph's turtle
-python3 helpers/yaml-to-rdf.py . > /tmp/v4-yaml.ttl         # the c: triples from every pod's frontmatter
-riot --output=turtle /tmp/v4-data.ttl /tmp/v4-yaml.ttl > /tmp/v4-merged.ttl
+python3 helpers/extract-all.py example > /tmp/tpod-data.ttl   # every embedded graph's turtle
+python3 helpers/yaml-to-rdf.py . > /tmp/tpod-yaml.ttl         # the c: triples from every pod's frontmatter
+riot --output=turtle /tmp/tpod-data.ttl /tmp/tpod-yaml.ttl > /tmp/tpod-merged.ttl
 ```
 
 Do **not** run the general SHACL shapes against this merged file — that is exactly the global-merge

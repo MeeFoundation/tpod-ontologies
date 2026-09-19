@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-09
+id: http://www.example.org/tpod/pods/pod-09
 title: "Drivers License"
 type: pod-databook
 version: 2.0.0
@@ -9,12 +9,12 @@ description: >
   one-member pod with one member entry about :Self and one tool graph about :Self (the pod's
   subject), typed identitydocuments:DriversLicense, carrying Alice's California driver's license
   identity data.
-v4:
+tpod:
   category: "podcat:DriversLicense"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-15"
+    id: "http://www.example.org/tpod/graphs/graph-15"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -22,7 +22,7 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-79"
+        - id: "http://www.example.org/tpod/graphs/graph-79"
           claimant: ":Self"
           shape: "idocshapes:DriversLicenseShape"
 ---
@@ -40,8 +40,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-drivers-license-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-15#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-15#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -67,8 +67,8 @@ This graph captures Alice Walker's California driver's license identity data —
 
 ```turtle
 <!-- databook:id: alice-driverslicense-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-79#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-79#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix identitydocuments: <http://mee.foundation/ontologies/identity-documents#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .

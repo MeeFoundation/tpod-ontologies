@@ -1,23 +1,23 @@
 ---
-id: http://www.example.org/v4/pods/pod-42
+id: http://www.example.org/tpod/pods/pod-42
 title: "Care & Feeding"
 type: pod-databook
 version: 1.1.0
 created: 2026-08-29
 description: >
   Pod DataBook for folder "Care & Feeding" (pod:category: podcat:PetsCareAndFeeding). It is a two-member pod, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the pod's subject) — the day-to-day instructions for looking after Ginger, alongside her Medical pod's sibling record of her medical care.
-v4:
+tpod:
   category: "podcat:PetsCareAndFeeding"
   creator: ":Self"
   owner: ":Self"
   userTag:
     - "Ginger"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-58"
+    - id: "http://www.example.org/tpod/graphs/graph-58"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-59"
+    - id: "http://www.example.org/tpod/graphs/graph-59"
       claimant: ":Paula_Walker"
       subject: ":Paula_Walker"
       shape: "pshapes:ContactInfoShape"
@@ -25,7 +25,7 @@ v4:
     - type: "form"
       formTopic: ":Ginger"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-60"
+        - id: "http://www.example.org/tpod/graphs/graph-60"
           claimant: ":Self"
 ---
 
@@ -42,8 +42,8 @@ This graph is one of the pod's two `member` entries, satisfying the two-member b
 
 ```turtle
 <!-- databook:id: alice-ginger-care-feeding-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-58#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-58#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -68,8 +68,8 @@ This pod was created by Alice and later shared with Paula, making the pod a two-
 
 ```turtle
 <!-- databook:id: paula-ginger-care-feeding-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-59#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-59#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -94,8 +94,8 @@ This graph captures Alice's day-to-day care and feeding instructions for her cat
 
 ```turtle
 <!-- databook:id: ginger-care-feeding-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-60#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-60#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .

@@ -16,7 +16,7 @@ Each pod gets two passes:
 
 1. **Pod pass** — the pod's whole content at once: every one of its
    embedded graphs' Turtle, plus the `pod:` triples synthesized from its own
-   `v4.*` frontmatter (databook_graphs.process_pod_databook). Validated
+   `tpod.*` frontmatter (databook_graphs.process_pod_databook). Validated
    against the four general shapes files — pod-shacl (the pod model
    itself), persona-shacl, organization-shacl, service-shacl. The graph Turtle
    has to be in here, not just the frontmatter triples: pod-shacl's
@@ -366,7 +366,7 @@ def main():
         fm, body = frontmatter(pod_path)
         if not fm or fm.get("type") != "pod-databook":
             continue
-        v4 = fm.get("v4", {}) or {}
+        tpod = fm.get("tpod", {}) or {}
 
         # --- Pod pass: the pod's whole content against the general shapes.
         data_path = pod_data(pod_path, fm, body, pod_base_path)
@@ -379,7 +379,7 @@ def main():
             violations += 1
 
         # --- Template pass: each templated graph against its own shape.
-        for entry in graph_entries(v4):
+        for entry in graph_entries(tpod):
             if not isinstance(entry, dict):
                 continue
             gid = entry["id"]

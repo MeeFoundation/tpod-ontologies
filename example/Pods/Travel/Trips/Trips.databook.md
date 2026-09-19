@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-46
+id: http://www.example.org/tpod/pods/pod-46
 title: "Trips"
 type: pod-databook
 version: 1.1.0
@@ -10,12 +10,12 @@ description: >
   organizational category node with no content or relationship of its own beyond Alice's required
   membership. Nested inside it is the "Kyoto Trip 2027" pod for a specific trip. also carries an empty tool graph, since podcat:Trips's own
   TemplatePod declares a form tool — the real content lives in this category's own leaf pod (Kyoto Trip 2027) instead.
-v4:
+tpod:
   category: "podcat:Trips"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-65"
+    id: "http://www.example.org/tpod/graphs/graph-65"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -23,7 +23,7 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-90"
+        - id: "http://www.example.org/tpod/graphs/graph-90"
           claimant: ":Self"
 ---
 
@@ -40,8 +40,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-trips-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-65#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-65#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -67,5 +67,5 @@ This graph is the pod's required tool graph — required since `podcat:Trips`'s 
 
 ```turtle
 <!-- databook:id: alice-trips-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-90#graph -->
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-90#graph -->
 ```

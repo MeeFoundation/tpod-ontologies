@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-03
+id: http://www.example.org/tpod/pods/pod-03
 title: "Google"
 type: pod-databook
 version: 2.0.0
@@ -9,12 +9,12 @@ description: >
   member entry about :Self and one graph about :Alice_Google_Account (the pod's subject), typed
   serviceaccounts:ServiceAccount and cco:ent00000033 (Online Service Account), carrying the service name,
   account username, and password for Alice's Google account.
-v4:
+tpod:
   category: "podcat:Companies"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-16"
+    id: "http://www.example.org/tpod/graphs/graph-16"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -22,7 +22,7 @@ v4:
     - type: "form"
       formTopic: ":Alice_Google_Account"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-73"
+        - id: "http://www.example.org/tpod/graphs/graph-73"
           claimant: ":Self"
           shape: "sashapes:ServiceAccountShape"
 ---
@@ -40,8 +40,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-google-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-16#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-16#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -75,8 +75,8 @@ This graph captures Alice's basic claim about her Google account itself — just
 
 ```turtle
 <!-- databook:id: alice-google-subject-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-73#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-73#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

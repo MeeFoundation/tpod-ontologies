@@ -1,23 +1,23 @@
 ---
-id: http://www.example.org/v4/pods/pod-40
+id: http://www.example.org/tpod/pods/pod-40
 title: "Medical"
 type: pod-databook
 version: 2.2.0
 created: 2026-08-21
 description: >
   Pod DataBook for folder "Medical" (pod:category: podcat:PetsMedical). It is a two-member pod, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the pod's subject).
-v4:
+tpod:
   category: "podcat:PetsMedical"
   creator: ":Self"
   owner: ":Self"
   userTag:
     - "Ginger"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-33"
+    - id: "http://www.example.org/tpod/graphs/graph-33"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-57"
+    - id: "http://www.example.org/tpod/graphs/graph-57"
       claimant: ":Paula_Walker"
       subject: ":Paula_Walker"
       shape: "pshapes:ContactInfoShape"
@@ -25,7 +25,7 @@ v4:
     - type: "form"
       formTopic: ":Ginger"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-32"
+        - id: "http://www.example.org/tpod/graphs/graph-32"
           claimant: ":Self"
           shape: "petshapes:PetMedicationRecordShape"
 ---
@@ -43,8 +43,8 @@ This graph is one of the pod's two `member` entries, satisfying the two-member b
 
 ```turtle
 <!-- databook:id: alice-ginger-medications-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-33#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-33#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -78,8 +78,8 @@ This pod was created by Alice and later shared with Paula, making the pod a two-
 
 ```turtle
 <!-- databook:id: paula-ginger-medications-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-57#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-57#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -114,8 +114,8 @@ This graph captures Alice's record of her cat Ginger's medications — an amoxic
 
 ```turtle
 <!-- databook:id: ginger-medications-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-32#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-32#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix pets: <http://mee.foundation/ontologies/pets#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

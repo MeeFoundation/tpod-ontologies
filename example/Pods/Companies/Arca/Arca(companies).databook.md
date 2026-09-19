@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-50
+id: http://www.example.org/tpod/pods/pod-50
 title: "Arca"
 type: pod-databook
 version: 1.1.0
@@ -13,16 +13,16 @@ description: >
   a backup service is not any one member's delegate and has no service:actsFor value — it serves the
   pod itself. The account Alice holds with Arca is the topic of the pod's tool (graph-97), the same
   sa:ServiceAccount pattern the Google and ATT pods already use.
-v4:
+tpod:
   category: "podcat:Companies"
   creator: ":Self"
   owner: ":Self"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-95"
+    - id: "http://www.example.org/tpod/graphs/graph-95"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-96"
+    - id: "http://www.example.org/tpod/graphs/graph-96"
       claimant: ":Arca_Backup"
       subject: ":Arca_Backup"
       shape: "pshapes:ContactInfoShape"
@@ -30,7 +30,7 @@ v4:
     - type: "form"
       formTopic: ":Alice_Arca_Account"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-97"
+        - id: "http://www.example.org/tpod/graphs/graph-97"
           claimant: ":Self"
           shape: "sashapes:ServiceAccountShape"
 ---
@@ -48,8 +48,8 @@ This graph is one of the pod's two required `member` entries — Alice's own bar
 
 ```turtle
 <!-- databook:id: alice-arca-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-95#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-95#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -77,8 +77,8 @@ Like graph 01 and graph 27, this `member` graph declares `pshapes:ContactInfoSha
 
 ```turtle
 <!-- databook:id: arca-backup-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-96#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-96#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix service: <http://mee.foundation/ontologies/service#> .
@@ -113,8 +113,8 @@ This graph captures Alice's basic claim about her Arca account itself — as the
 
 ```turtle
 <!-- databook:id: alice-arca-subject-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-97#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-97#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

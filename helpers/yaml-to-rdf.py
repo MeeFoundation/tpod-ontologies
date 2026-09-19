@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-yaml-to-rdf.py  —  Synthesize pod: triples from the `v4.` YAML
+yaml-to-rdf.py  —  Synthesize pod: triples from the `tpod.` YAML
 frontmatter of pod-databooks.
 
 Why this exists: Turtle-block extraction only pulls fenced Turtle out of a
-DataBook — but pod-databook files carry most of their content as `v4.`
+DataBook — but pod-databook files carry most of their content as `tpod.`
 YAML frontmatter, not Turtle. Without this script, pod:Pod individuals
 (and pod:MemberGraph's subject/claimant) never appear in the graph SHACL
 validates, so shacl/pod-shacl.ttl's :MemberGraphShape never fires against real
-instance data. This script closes that gap by mapping each `v4.` field to
+instance data. This script closes that gap by mapping each `tpod.` field to
 its corresponding ontology property, matching the mapping tables
-documented in pod-databook.md's "The `v4` Block" section.
+documented in pod-databook.md's "The `tpod` Block" section.
 
 There is no category-side synthesis here at all — pod-categories.ttl 1.31.0
 deleted podcat:Folder and its subclasses podcat:CategoryDefined/podcat:UserDefined
@@ -20,21 +20,21 @@ state in that member's own store, and in this repo's scaffolding it is simply
 which folder the pod-databook physically lives in, with no RDF individual
 representing either. The only remaining RDF-level record of a pod's
 classification is
-pod:category (pod.ttl 3.20.0), read directly from the explicit `v4.category`
+pod:category (pod.ttl 3.20.0), read directly from the explicit `tpod.category`
 YAML field below — never derived from filename-parsing.
 
 Since graph-databooks were merged into their owning pod-databooks (each
 graph's Turtle content and Overview now live in that pod file's body; its
 `id`/`claimant`/`shape`, plus the `subject` a member entry carries
 list calls for, now live directly on that same graph's own
-`v4.member`/`v4.tool[].graph` entry — see pod-databook.md's "Graph Ids
+`tpod.member`/`tpod.tool[].graph` entry — see pod-databook.md's "Graph Ids
 and Named Graphs" section), there is no separate `example/graphs/*.databook.md`
 glob any more: `process_pod_databook` below also emits the same triples per
 `member`/`tool[].graph` entry that a standalone graph-databook file's frontmatter
 used to supply.
 
 A graph's `claimant` and its about-ness value are typed on its plain
-`v4.member[]`/`v4.tool[].graph[].id`, not that id + "#graph" — matching pod.ttl's
+`tpod.member[]`/`tpod.tool[].graph[].id`, not that id + "#graph" — matching pod.ttl's
 pod:claimant/pod:subject doc comments, and the IRI
 pod:member/pod:formGraph actually reference.
 

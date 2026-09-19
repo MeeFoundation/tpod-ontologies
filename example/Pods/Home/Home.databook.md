@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-48
+id: http://www.example.org/tpod/pods/pod-48
 title: "Home"
 type: pod-databook
 version: 1.1.0
@@ -12,12 +12,12 @@ description: >
   also carries an empty tool graph, since podcat:Home's own
   TemplatePod declares a form tool — the real content
   lives in this category's own leaf pods (Paradise, Boston) instead.
-v4:
+tpod:
   category: "podcat:Home"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-71"
+    id: "http://www.example.org/tpod/graphs/graph-71"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -25,7 +25,7 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-87"
+        - id: "http://www.example.org/tpod/graphs/graph-87"
           claimant: ":Self"
 ---
 
@@ -42,8 +42,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-home-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-71#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-71#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -69,5 +69,5 @@ This graph is the pod's required tool graph — required since `podcat:Home`'s o
 
 ```turtle
 <!-- databook:id: alice-home-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-87#graph -->
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-87#graph -->
 ```

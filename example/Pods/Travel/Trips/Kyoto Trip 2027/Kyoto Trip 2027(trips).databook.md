@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-47
+id: http://www.example.org/tpod/pods/pod-47
 title: "Kyoto Trip 2027"
 type: pod-databook
 version: 1.2.0
@@ -16,20 +16,20 @@ description: >
   pod:formGraph's real upper bound (one graph per member, see YAML-8) and mirroring how a
   tool's topic may be claimed from more than one side (see the Medical Appointment pod's two
   "Med. Appt mt." squares in README.md's Representative Pods diagram).
-v4:
+tpod:
   category: "podcat:Trips"
   creator: ":Self"
   owner: ":Self"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-66"
+    - id: "http://www.example.org/tpod/graphs/graph-66"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-67"
+    - id: "http://www.example.org/tpod/graphs/graph-67"
       claimant: ":Alice_Travel_Agent"
       subject: ":Alice_Travel_Agent"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-68"
+    - id: "http://www.example.org/tpod/graphs/graph-68"
       claimant: ":Dave"
       subject: ":Dave"
       shape: "pshapes:ContactInfoShape"
@@ -37,13 +37,13 @@ v4:
     - type: "form"
       formTopic: ":Kyoto_Trip_2027"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-69"
+        - id: "http://www.example.org/tpod/graphs/graph-69"
           claimant: ":Self"
           shape: "itineraryshapes:ItineraryShape"
-        - id: "http://www.example.org/v4/graphs/graph-70"
+        - id: "http://www.example.org/tpod/graphs/graph-70"
           claimant: ":Alice_Travel_Agent"
           shape: "itineraryshapes:ItineraryShape"
-        - id: "http://www.example.org/v4/graphs/graph-91"
+        - id: "http://www.example.org/tpod/graphs/graph-91"
           claimant: ":Dave"
           shape: "itineraryshapes:ItineraryShape"
 ---
@@ -61,8 +61,8 @@ This graph is one of the pod's three required `member` entries — Alice's own b
 
 ```turtle
 <!-- databook:id: alice-kyoto-trip-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-66#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-66#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -102,8 +102,8 @@ This graph is another of the pod's three required `member` entries — Alice's o
 
 ```turtle
 <!-- databook:id: alice-travel-agent-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-67#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-67#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix service: <http://mee.foundation/ontologies/service#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -135,8 +135,8 @@ This graph is the pod's third required `member` entry — Dave's own self-claime
 
 ```turtle
 <!-- databook:id: dave-dave-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-68#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-68#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -163,8 +163,8 @@ This graph is one of the pod's three tool graphs — Alice's own basic claim ide
 
 ```turtle
 <!-- databook:id: alice-kyoto-trip-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-69#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-69#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -187,8 +187,8 @@ This graph is one of the pod's three tool graphs — Alice's travel agent's own 
 
 ```turtle
 <!-- databook:id: alice-travel-agent-kyoto-trip-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-70#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-70#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -211,8 +211,8 @@ This graph is the pod's third tool graph — Dave's own contribution to the trip
 
 ```turtle
 <!-- databook:id: dave-kyoto-trip-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-91#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-91#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .

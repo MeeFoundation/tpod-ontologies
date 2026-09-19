@@ -4,7 +4,7 @@
 
 Apple Contacts is a **tool** (`pod:Contacts`), not a service: the module never joins a pod as a member, it backs a capability the pod carries. See app-behavior.md's Tool Modules section.
 
-V4 is a strict superset of Apple Contacts in every dimension. This means importing from Apple Contacts into the app is straightforward, but exporting from the app back to Apple Contacts requires explicit design decisions. Round-tripping losslessly is achievable but requires an anchor strategy (see below).
+Tellipod is a strict superset of Apple Contacts in every dimension. This means importing from Apple Contacts into the app is straightforward, but exporting from the app back to Apple Contacts requires explicit design decisions. Round-tripping losslessly is achievable but requires an anchor strategy (see below).
 
 There are two levels to address:
 
@@ -50,7 +50,7 @@ Note that these tags never propagate when a pod is shared: they are one member's
 
 vCard supports custom extension fields (`X-` prefix). Storing app IRIs in these fields lets the app re-identify records on re-import without duplication or drift:
 
-- `X-V4-PERSON-IRI` on a contact record — points to the `p:Person` individual IRI
+- `X-TPOD-PERSON-IRI` on a contact record — points to the `p:Person` individual IRI
 
 Groups need no anchor field of their own: the hidden service tag already holds the group's name verbatim on the pod, and re-identification is by that value (see the rename-safety note above for when a `groupID` tag is worth writing alongside it).
 
@@ -62,7 +62,7 @@ These fields are ignored by Apple Contacts and other vCard consumers but survive
 
 | Dimension | Import | Export | Lossless? |
 |-----------|--------|--------|-----------|
-| Contact fields | Direct field mapping | Merge all graphs into one vCard | Yes, with `X-V4-PERSON-IRI` anchor |
+| Contact fields | Direct field mapping | Merge all graphs into one vCard | Yes, with `X-TPOD-PERSON-IRI` anchor |
 | Multiple graphs per person | Each → a separate graph embedded in the person's pod DataBook | Flatten to single vCard; multiple values per label are correct | Yes |
 | Group membership | Each group → one hidden service tag on the pod | Tags in this module's namespace with key `group` → group membership | Yes — the group name round-trips verbatim |
-| App-specific metadata | Stored in graph DataBook | Store IRI in `X-V4-*` vCard field | Yes, with anchor fields |
+| App-specific metadata | Stored in graph DataBook | Store IRI in `X-TPOD-*` vCard field | Yes, with anchor fields |

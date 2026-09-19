@@ -8,10 +8,10 @@
 @base <http://mee.foundation/ontologies/pod-categories> .
 
 <http://mee.foundation/ontologies/pod-categories> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/pod-categories/2.10.0> ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod-categories/2.11.0> ;
     dc:date "2026-09-19"^^xsd:date ;
     rdfs:label "Pod Categories"@en ;
-    rdfs:comment """Pod Categories for the V4 App."""@en .
+    rdfs:comment """Pod Categories for the Tellipod App."""@en .
 
 
 #################################################################

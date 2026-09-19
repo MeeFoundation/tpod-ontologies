@@ -7,14 +7,14 @@ extract-graph.py, extract-all.py, yaml-to-rdf.py and validate.py.
 
 Since graph-databooks were merged into their owning pod-databooks, a pod
 file's body may contain several ```turtle fences — one per embedded graph
-(each `v4.member`/`v4.tool[].graph` entry in that pod's frontmatter is one such
+(each `tpod.member`/`tpod.tool[].graph` entry in that pod's frontmatter is one such
 graph's own metadata dict). Each fence still carries its own
 `<!-- databook:graph: {graph_id}#graph -->` marker, computed from the
 graph's own `id` per the unchanged `{id}#graph` named-graph convention
 (pod-databook.md's "Graph Ids and Named Graphs") — so isolating one graph's fence
 only requires knowing that graph's `id`, no new marker scheme.
 
-Also carries `resolve()`/`as_list()` — needed wherever a `v4.*` YAML value
+Also carries `resolve()`/`as_list()` — needed wherever a `tpod.*` YAML value
 (a CURIE or a bare `:X` local name) must become the same full IRI — and the
 `pod:` triple synthesis (`process_pod_databook()`/`process_embedded_graph()`)
 that turns one pod-databook's frontmatter into Turtle. Both `yaml-to-rdf.py`
@@ -26,7 +26,7 @@ import re
 
 FRONTMATTER_RE = re.compile(r"^(---\n)(.*?\n)(---\n?)(.*)$", re.DOTALL)
 
-V4_NS = "http://www.example.org/v4#"
+TPOD_NS = "http://www.example.org/tpod#"
 POD = "http://mee.foundation/ontologies/pod#"
 
 PREFIXES = {
@@ -35,16 +35,16 @@ PREFIXES = {
     "persona": "http://mee.foundation/ontologies/persona#",
     "pets": "http://mee.foundation/ontologies/pets#",
     "vehicles": "http://mee.foundation/ontologies/vehicles#",
-    # A category extension's own namespace (pod-category-ext/). A v4.category
+    # A category extension's own namespace (pod-category-ext/). A tpod.category
     # value may name a concept in an extension's scheme rather than in
     # podcat:PodCategoryScheme — see pod.ttl's pod:category comment. One entry
     # per published extension.
     "bhscat": "http://mee.foundation/ontologies/pod-category-ext/boston-hub-society#",
-    # Shape namespaces — a v4.member[]/v4.tool[].graph[].shape value is a
+    # Shape namespaces — a tpod.member[]/tpod.tool[].graph[].shape value is a
     # sh:NodeShape CURIE (pod:shape's range, pod.ttl), not a type label
     # class name, so these must resolve too. Same base URIs pod-category-templates.ttl
     # and each extension's own @prefix block declare. An unlisted prefix does
-    # not raise — resolve() falls through to the v4 example namespace — so a
+    # not raise — resolve() falls through to the tpod example namespace — so a
     # missing row here is silent, and every shape prefix in use needs one.
     "pshapes": "http://mee.foundation/ontologies/persona/shapes#",
     "petshapes": "http://mee.foundation/ontologies/pets/shapes#",
@@ -61,7 +61,7 @@ PREFIXES = {
     "bhsshapes": "http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes#",
 }
 
-# The three sub-keys of one v4.serviceTag entry, mapped to the
+# The three sub-keys of one tpod.serviceTag entry, mapped to the
 # pod:ServiceTag datatype property each becomes (pod.ttl's Service
 # Tag section). Spelled out rather than derived from the key name, so a grep
 # for pod:tagNamespace finds this line.
@@ -71,7 +71,7 @@ TAG_SUBKEYS = {
     "value": "tagValue",
 }
 
-# Which pod:Tool subclass a v4.tool entry's own `type` key names (pod.ttl's
+# Which pod:Tool subclass a tpod.tool entry's own `type` key names (pod.ttl's
 # Pod Tools section). Spelled out rather than title-cased from the key, so a
 # grep for pod:Form finds this line, and so an unknown type is a
 # KeyError here rather than a triple naming a class that does not exist.
@@ -84,19 +84,19 @@ TOOL_TYPES = {
 
 
 def resolve(val):
-    """Resolve a YAML-string value (curie or bare V4 local name) to a full
-    IRI. A `v4.member`/`v4.tool[].graph` entry's own `id` is already a full IRI
+    """Resolve a YAML-string value (curie or bare tpod local name) to a full
+    IRI. A `tpod.member`/`tpod.tool[].graph` entry's own `id` is already a full IRI
     (it doubles as the graph's actual named-graph identity), so it's used
     directly rather than passed through here."""
     if val.startswith("http://") or val.startswith("https://"):
         return val
     if val.startswith(":"):
-        return V4_NS + val[1:]
+        return TPOD_NS + val[1:]
     if ":" in val:
         prefix, local = val.split(":", 1)
         if prefix in PREFIXES:
             return PREFIXES[prefix] + local
-    return V4_NS + val
+    return TPOD_NS + val
 
 
 def as_list(v):
@@ -152,9 +152,9 @@ def extract_graph_block(body_text, target_graph):
     return None
 
 
-def graph_entries(v4):
-    """Every graph entry a pod links, flattened into one list: its v4.member
-    entries first, then the graphs nested under each v4.tool. Tool graphs sit
+def graph_entries(tpod):
+    """Every graph entry a pod links, flattened into one list: its tpod.member
+    entries first, then the graphs nested under each tpod.tool. Tool graphs sit
     one level deeper than member entries because a tool states its own
     formTopic once, above them; so that a caller reading a single graph does
     not have to walk back up to find it, each tool graph is returned with its
@@ -162,8 +162,8 @@ def graph_entries(v4):
     read-time convenience only and are never written back to a databook —
     storing them per graph is exactly what carrying formTopic on the tool
     avoids."""
-    out = list(as_list(v4.get("member")))
-    for tool in as_list(v4.get("tool")):
+    out = list(as_list(tpod.get("member")))
+    for tool in as_list(tpod.get("tool")):
         if not isinstance(tool, dict):
             continue
         for g in as_list(tool.get("graph")):
@@ -176,7 +176,7 @@ def graph_entries(v4):
 
 def find_graph_entry(entries, graph_arg):
     """Match graph_arg (an id or id-local-name) against an iterable of graph
-    entry dicts — callers pass in graph_entries(v4), since a member entry or
+    entry dicts — callers pass in graph_entries(tpod), since a member entry or
     any tool's own graph can hold the graph being looked for."""
     for g in entries or []:
         if not isinstance(g, dict):
@@ -198,7 +198,7 @@ def term(node):
 def tag_node(pod_id, index):
     """A stable blank-node label for one pod:ServiceTag value node,
     derived from the pod's own id local-name plus the value's position in
-    v4.serviceTag. Turtle scopes a blank-node label to one document and
+    tpod.serviceTag. Turtle scopes a blank-node label to one document and
     yaml-to-rdf.py emits every pod in the tree into a single document, so a
     label unique only within one process_pod_databook() call would silently
     merge two pods' tag nodes into one. A pod id is already globally unique
@@ -210,7 +210,7 @@ def tag_node(pod_id, index):
 def tool_node(pod_id, index):
     """A stable blank-node label for one pod:Tool value node, derived the
     same way tag_node() derives a pod:ServiceTag's — from the pod's own id
-    local-name plus the tool's position in v4.tool — and for the same reason:
+    local-name plus the tool's position in tpod.tool — and for the same reason:
     yaml-to-rdf.py emits every pod in the tree into one Turtle document, so a
     label unique only within a single process_pod_databook() call would
     silently merge two pods' tools into one node."""
@@ -227,7 +227,7 @@ def emit_obj(triples, subj, prop, obj_iri):
 
 def emit_lit(triples, subj, prop, lit):
     """Emit an xsd:string-typed literal triple — pod:userTag and the three
-    pod:ServiceTag parts are the only `v4.` values that are literals
+    pod:ServiceTag parts are the only `tpod.` values that are literals
     rather than IRIs, so they can't go through emit_obj()/resolve(): a tag is
     a plain string, never a CURIE or a local name."""
     escaped = str(lit).replace("\\", "\\\\").replace('"', '\\"')
@@ -238,47 +238,47 @@ def emit_lit(triples, subj, prop, lit):
 
 def process_pod_databook(fm, triples):
     subj = fm["id"]
-    v4 = fm.get("v4", {}) or {}
+    tpod = fm.get("tpod", {}) or {}
 
     emit_type(triples, subj, POD + "Pod")
 
-    if v4.get("category"):
+    if tpod.get("category"):
         # pod:category — domain pod:Pod, so asserted on every pod
         # regardless of facet (pod.ttl 3.45.0, renamed from pod:origin).
-        emit_obj(triples, subj, POD + "category", resolve(v4["category"]))
+        emit_obj(triples, subj, POD + "category", resolve(tpod["category"]))
 
     # Every real pod-databook is always also typed pod:InstancePod — no
     # bare tree-position-only pod with no member content; a category node
     # with nothing substantive to say still carries a minimal stub
     # pod:member entry rather than omitting member content. Member count
     # itself is never stored — it's simply the number of distinct
-    # subject values among v4.member, derivable by counting whenever
+    # subject values among tpod.member, derivable by counting whenever
     # needed. There is no second pod type to emit: a pod that carries
     # a tool holds pod:tool values, not a subclass.
     emit_type(triples, subj, POD + "InstancePod")
 
-    if v4.get("creator"):
-        emit_obj(triples, subj, POD + "creator", resolve(v4["creator"]))
+    if tpod.get("creator"):
+        emit_obj(triples, subj, POD + "creator", resolve(tpod["creator"]))
 
     # pod:owner — one or more p:Person IRIs, resolved the same way as
     # pod:creator (never a bare graph-local-name).
-    for owner_iri in as_list(v4.get("owner")):
+    for owner_iri in as_list(tpod.get("owner")):
         emit_obj(triples, subj, POD + "owner", resolve(owner_iri))
 
     # pod:userTag — 0..N plain xsd:string values, domain pod:InstancePod
     # (pod.ttl's Pod Tags section), so emitted after the pod:InstancePod
     # typing above. as_list() lets a single bare string stand in for a
-    # one-element list, the same latitude v4.owner and a graph entry's own
+    # one-element list, the same latitude tpod.owner and a graph entry's own
     # template already get. No resolve() here — a user tag is a literal, not
     # a CURIE.
-    for tag in as_list(v4.get("userTag")):
+    for tag in as_list(tpod.get("userTag")):
         emit_lit(triples, subj, POD + "userTag", tag)
 
     # pod:serviceTag — 0..N, each value a pod:ServiceTag node
     # rather than a literal (an owl:ObjectProperty), carrying exactly one
     # pod:tagNamespace/pod:tagKey/pod:tagValue. as_list() applies to the
     # outer sequence only — a lone mapping may stand in for a one-element
-    # list, the same latitude v4.member gets — and never to the three
+    # list, the same latitude tpod.member gets — and never to the three
     # sub-values, each of which is exactly one scalar; coercing there would
     # turn a YAML error into a confusing sh:maxCount violation. The node and
     # its type are emitted even when the entry is malformed, so a missing
@@ -286,7 +286,7 @@ def process_pod_databook(fm, triples):
     # rather than the tag vanishing from the synthesized graph unremarked;
     # integrity.md's YAML-9 catches the same thing at YAML level, where it
     # can name the file and the sub-key.
-    for i, tag in enumerate(as_list(v4.get("serviceTag"))):
+    for i, tag in enumerate(as_list(tpod.get("serviceTag"))):
         node = tag_node(subj, i)
         emit_obj(triples, subj, POD + "serviceTag", node)
         emit_type(triples, node, POD + "ServiceTag")
@@ -296,7 +296,7 @@ def process_pod_databook(fm, triples):
             if sub_key in tag:
                 emit_lit(triples, node, POD + prop, tag[sub_key])
 
-    for entry in as_list(v4.get("member")):
+    for entry in as_list(tpod.get("member")):
         emit_obj(triples, subj, POD + "member", entry["id"])
         process_embedded_graph(entry, triples, "member")
 
@@ -307,7 +307,7 @@ def process_pod_databook(fm, triples):
     # content is about, is carried once by the tool rather than repeated on
     # each graph beneath it, which is what makes its graphs unable to
     # disagree about what they are about.
-    for i, entry in enumerate(as_list(v4.get("tool"))):
+    for i, entry in enumerate(as_list(tpod.get("tool"))):
         node = tool_node(subj, i)
         emit_obj(triples, subj, POD + "tool", node)
         emit_type(triples, node, POD + TOOL_TYPES[entry.get("type", "form")])
@@ -330,8 +330,8 @@ def process_pod_databook(fm, triples):
 
 
 def process_embedded_graph(graph, triples, kind):
-    """Emit the graph typing plus claimant/shape for one v4.member[] or
-    v4.tool[].graph[] entry. `kind` is "member" or "tool", and is what decides
+    """Emit the graph typing plus claimant/shape for one tpod.member[] or
+    tpod.tool[].graph[] entry. `kind` is "member" or "tool", and is what decides
     the type: pod:MemberGraph for a member entry, pod:FormGraph for a tool's own
     graph (pod.ttl's two disjoint pod:CGraph leaves). Nothing in the entry
     itself marks which kind it is; the list it was read from settles it,

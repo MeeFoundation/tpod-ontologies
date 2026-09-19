@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-06
+id: http://www.example.org/tpod/pods/pod-06
 title: "SSN"
 type: pod-databook
 version: 2.0.0
@@ -8,12 +8,12 @@ description: >
   Pod DataBook for folder "SSN" (pod:category: podcat:SSN). It is a one-member pod with one
   member entry about :Self and one tool graph about :Self (the pod's subject), carrying
   Alice's Social Security number.
-v4:
+tpod:
   category: "podcat:SSN"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-23"
+    id: "http://www.example.org/tpod/graphs/graph-23"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -21,7 +21,7 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-80"
+        - id: "http://www.example.org/tpod/graphs/graph-80"
           claimant: ":Self"
           shape: "pshapes:SSNShape"
 ---
@@ -39,8 +39,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-ssn-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-23#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-23#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -66,8 +66,8 @@ This graph captures Alice Walker's Social Security Administration record — mov
 
 ```turtle
 <!-- databook:id: alice-ssa-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-80#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-80#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

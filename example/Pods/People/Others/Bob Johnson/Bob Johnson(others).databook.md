@@ -1,12 +1,12 @@
 ---
-id: http://www.example.org/v4/pods/pod-16
+id: http://www.example.org/tpod/pods/pod-16
 title: "Bob Johnson"
 type: pod-databook
 version: 1.3.0
 created: 2026-07-10
 description: >
   Pod DataBook for folder "Bob Johnson" (pod:category: podcat:Others). It is a two-member pod with four members (two about :Bob_Johnson and two about :Self).
-v4:
+tpod:
   category: "podcat:Others"
   creator: ":Self"
   owner: ":Self"
@@ -15,19 +15,19 @@ v4:
       key: "group"
       value: "Christmas List"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-02"
+    - id: "http://www.example.org/tpod/graphs/graph-02"
       claimant: ":Bob_Johnson"
       subject: ":Bob_Johnson"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-12"
+    - id: "http://www.example.org/tpod/graphs/graph-12"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-04"
+    - id: "http://www.example.org/tpod/graphs/graph-04"
       claimant: ":Self"
       subject: ":Bob_Johnson"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-08"
+    - id: "http://www.example.org/tpod/graphs/graph-08"
       claimant: ":Bob_Johnson"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
@@ -46,8 +46,8 @@ This graph captures Bob Johnson's self-claimed Bob-graph persona, transmitted fr
 
 ```turtle
 <!-- databook:id: bob-bob-bob-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-02#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-02#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -89,8 +89,8 @@ This graph captures Alice's record of Bob Johnson in their 1:1 relationship grap
 
 ```turtle
 <!-- databook:id: bob-bob-alice-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-04#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-04#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -123,8 +123,8 @@ This graph captures Bob's record of Alice in their 1:1 relationship graph, trans
 
 ```turtle
 <!-- databook:id: alice-bob-bob-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-08#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-08#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -156,8 +156,8 @@ This graph captures Alice Walker's self-claimed persona in her 1:1 relationship 
 
 ```turtle
 <!-- databook:id: alice-bob-alice-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-12#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-12#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

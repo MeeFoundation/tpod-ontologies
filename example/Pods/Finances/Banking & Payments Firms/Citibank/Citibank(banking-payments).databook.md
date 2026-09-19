@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-04
+id: http://www.example.org/tpod/pods/pod-04
 title: "Citibank"
 type: pod-databook
 version: 2.1.0
@@ -12,16 +12,16 @@ description: >
   member-capable, so the bank participates through :Citibank_Service, the service:ServiceProvider
   it provides; both that member graph and the tool graph are claimed by :Citibank itself, the
   party really making those claims.
-v4:
+tpod:
   category: "podcat:BankingPayments"
   creator: ":Self"
   owner: ":Self"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-27"
+    - id: "http://www.example.org/tpod/graphs/graph-27"
       claimant: ":Citibank"
       subject: ":Citibank_Service"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-77"
+    - id: "http://www.example.org/tpod/graphs/graph-77"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
@@ -29,10 +29,10 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-75"
+        - id: "http://www.example.org/tpod/graphs/graph-75"
           claimant: ":Self"
           shape: "sashapes:ServiceAccountShape"
-        - id: "http://www.example.org/v4/graphs/graph-76"
+        - id: "http://www.example.org/tpod/graphs/graph-76"
           claimant: ":Citibank"
           shape:
             - "sashapes:ServiceAccountShape"
@@ -53,8 +53,8 @@ This graph captures the identity Citibank presents as one of the pod's two membe
 
 ```turtle
 <!-- databook:id: citibank-org-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-27#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-27#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix service: <http://mee.foundation/ontologies/service#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
@@ -90,8 +90,8 @@ This graph is one of the pod's two required `member` entries, claimed by and abo
 
 ```turtle
 <!-- databook:id: alice-citibank-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-77#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-77#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -128,8 +128,8 @@ This graph is Alice's own self-asserted claim about her Citibank online service 
 
 ```turtle
 <!-- databook:id: alice-citibank-self-asserted-account-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-75#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-75#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -159,8 +159,8 @@ This graph captures Alice Walker's financial relationship with Citibank. Citiban
 
 ```turtle
 <!-- databook:id: citibank-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-76#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-76#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .

@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-51
+id: http://www.example.org/tpod/pods/pod-51
 title: "Provider"
 type: pod-databook
 version: 1.1.0
@@ -12,12 +12,12 @@ description: >
   tool graph podcat:TravelProvider's own TemplatePod requires,
   deliberately empty, since its real content lives in its own leaf pod (Hilton)
   instead.
-v4:
+tpod:
   category: "podcat:TravelProvider"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-98"
+    id: "http://www.example.org/tpod/graphs/graph-98"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -25,7 +25,7 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-56"
+        - id: "http://www.example.org/tpod/graphs/graph-56"
           claimant: ":Self"
 ---
 
@@ -42,8 +42,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-travel-provider-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-98#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-98#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -69,5 +69,5 @@ This graph is the pod's required tool graph — required since `podcat:TravelPro
 
 ```turtle
 <!-- databook:id: alice-travel-provider-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-56#graph -->
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-56#graph -->
 ```

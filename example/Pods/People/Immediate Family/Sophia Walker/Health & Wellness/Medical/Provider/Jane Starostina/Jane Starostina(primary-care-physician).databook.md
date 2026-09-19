@@ -1,17 +1,17 @@
 ---
-id: http://www.example.org/v4/pods/pod-14
+id: http://www.example.org/tpod/pods/pod-14
 title: "Jane Starostina"
 type: pod-databook
 version: 1.4.0
 created: 2026-07-10
 description: >
   Pod DataBook for folder "Jane Starostina" (pod:category: podcat:PrimaryCarePhysician). It is a one-member pod with one member entry about :Self and one graph about :Jane_Starostina (the pod's subject).
-v4:
+tpod:
   category: "podcat:PrimaryCarePhysician"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-34"
+    id: "http://www.example.org/tpod/graphs/graph-34"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -19,7 +19,7 @@ v4:
     - type: "form"
       formTopic: ":Jane_Starostina"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-25"
+        - id: "http://www.example.org/tpod/graphs/graph-25"
           claimant: ":Self"
           shape:
             - "pshapes:PrimaryCarePhysicianShape"
@@ -39,8 +39,8 @@ This graph captures Alice's own bare identity claim (just her given name) — th
 
 ```turtle
 <!-- databook:id: alice-jane-starostina-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-34#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-34#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -66,8 +66,8 @@ This graph captures Alice's record of Dr. Jane Starostina, who is the primary ca
 
 ```turtle
 <!-- databook:id: jane-starostina-alice-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-25#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-25#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

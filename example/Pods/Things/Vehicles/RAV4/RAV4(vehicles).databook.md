@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-44
+id: http://www.example.org/tpod/pods/pod-44
 title: "RAV4"
 type: pod-databook
 version: 1.0.0
@@ -11,12 +11,12 @@ description: >
   entry about :Self and one graph about :Alice_RAV4 (the pod's subject), typed vehicles:Vehicle and
   carrying its vehicle type, make, model, model year, VIN, color, body type, fuel type, drive wheel
   configuration, odometer reading, and engine specification.
-v4:
+tpod:
   category: "podcat:Vehicles"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-62"
+    id: "http://www.example.org/tpod/graphs/graph-62"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -24,7 +24,7 @@ v4:
     - type: "form"
       formTopic: ":Alice_RAV4"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-63"
+        - id: "http://www.example.org/tpod/graphs/graph-63"
           claimant: ":Self"
           shape: "vehicleshapes:VehicleShape"
 ---
@@ -42,8 +42,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-rav4-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-62#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-62#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -77,8 +77,8 @@ This graph captures Alice's basic claim about her car itself — just enough to 
 
 ```turtle
 <!-- databook:id: alice-rav4-subject-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-63#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-63#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix vehicles: <http://mee.foundation/ontologies/vehicles#> .
 @prefix wd: <http://www.wikidata.org/entity/> .

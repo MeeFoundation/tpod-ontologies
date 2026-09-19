@@ -175,7 +175,7 @@ SKIP_PROPS = {
 }
 
 SKIP_TYPES = {OWL.NamedIndividual, OWL.Thing, OWL.Ontology}
-V4_NS = "http://www.example.org/v4#"
+TPOD_NS = "http://www.example.org/tpod#"
 
 
 def lbl(iri: URIRef) -> str:
@@ -199,7 +199,7 @@ def esc(s: str) -> str:
 def load_databook(path: Path, graph_id: str | None = None):
     """Parse a pod-databook's frontmatter, and (when graph_id is given)
     isolate just that one embedded graph's turtle fence — a merged pod
-    file's body may contain several fences, one per v4.member/v4.tool graph
+    file's body may contain several fences, one per tpod.member/tpod.tool graph
     entry, so concatenating all of them (the old, pre-merge behavior) would
     wrongly combine sibling graphs' RDF into one graph."""
     content = path.read_text()
@@ -263,22 +263,22 @@ def _dyad_label(dyad_iri: str, src_dir: Path | None) -> str:
     return stem
 
 
-def _meta_subgraph(v4: dict, src_dir: Path | None = None) -> list[str]:
-    """Build a Mermaid subgraph showing the v4: YAML properties as a metadata box."""
+def _meta_subgraph(tpod: dict, src_dir: Path | None = None) -> list[str]:
+    """Build a Mermaid subgraph showing the tpod: YAML properties as a metadata box."""
     props = []
-    if name := v4.get("name"):
+    if name := tpod.get("name"):
         props.append(f"name: {name}")
-    if cat := v4.get("contextCategory"):
+    if cat := tpod.get("contextCategory"):
         props.append(f"category: {cat.removeprefix('context:')}")
-    if claimant := v4.get("claimant"):
+    if claimant := tpod.get("claimant"):
         props.append(f"claimant: {claimant}")
-    if graph_subject := v4.get("subject"):
+    if graph_subject := tpod.get("subject"):
         props.append(f"subject: {graph_subject}")
-    if tool_topic := v4.get("formTopic"):
+    if tool_topic := tpod.get("formTopic"):
         props.append(f"formTopic: {tool_topic}")
-    if form_shape := v4.get("shape"):
+    if form_shape := tpod.get("shape"):
         props.append(f"shape: {form_shape}")
-    if dyad := v4.get("dyad"):
+    if dyad := tpod.get("dyad"):
         props.append(f"dyad: {_dyad_label(str(dyad), src_dir)}")
     if not props:
         return []
@@ -292,8 +292,8 @@ def _meta_subgraph(v4: dict, src_dir: Path | None = None) -> list[str]:
 
 
 def build_mermaid(g: Graph, frontmatter: dict | None = None, src_dir: Path | None = None) -> str:
-    v4 = (frontmatter or {}).get("v4") or {}
-    context_category_label = v4.get("contextCategory")
+    tpod = (frontmatter or {}).get("tpod") or {}
+    context_category_label = tpod.get("contextCategory")
 
     header = []
     if context_category_label:
@@ -395,7 +395,7 @@ def build_mermaid(g: Graph, frontmatter: dict | None = None, src_dir: Path | Non
             elif isinstance(obj, URIRef):
                 if obj in individuals:
                     edge_lines.append(f'    {src} -->|"{esc(plabel)}"| {ensure_ind(obj)}')
-                elif str(obj).startswith(V4_NS):
+                elif str(obj).startswith(TPOD_NS):
                     edge_lines.append(f'    {src} -->|"{esc(plabel)}"| {ensure_ext(obj)}')
                 else:
                     val = lbl(obj)
@@ -406,7 +406,7 @@ def build_mermaid(g: Graph, frontmatter: dict | None = None, src_dir: Path | Non
                 tgt = ensure_lit(str(obj), str(ind) + str(pred) + str(obj))
                 edge_lines.append(f'    {src} -->|"{esc(plabel)}"| {tgt}')
 
-    meta_lines = _meta_subgraph(v4, src_dir)
+    meta_lines = _meta_subgraph(tpod, src_dir)
 
     parts = header + [""]
     if meta_lines:
@@ -483,11 +483,11 @@ def main() -> None:
             )
         graph_arg = sys.argv[2]
         _, pod_fm = load_databook(src)  # frontmatter only — no graph_id yet
-        v4 = pod_fm.get("v4") or {}
-        entries = graph_entries(v4)
+        tpod = pod_fm.get("tpod") or {}
+        entries = graph_entries(tpod)
         match = find_graph_entry(entries, graph_arg)
         if not match:
-            sys.exit(f"No v4.member or v4.tool[].graph entry with id/local-name {graph_arg!r} in {src}")
+            sys.exit(f"No tpod.member or tpod.tool[].graph entry with id/local-name {graph_arg!r} in {src}")
         graph_id = match["id"]
         stem = graph_id.rsplit("/", 1)[-1]  # unchanged filename-stem convention
         g, _ = load_databook(src, graph_id)
@@ -497,11 +497,11 @@ def main() -> None:
         # `individuals` set (built from an in-graph owl:NamedIndividual typing)
         # picks it up from the graph's own content like any other individual.
         # Use this one graph's own claimant/subject/shape for the "Graph"
-        # metadata box — not the owning pod's aggregate v4.creator
-        # (the pod has no aggregate v4.subject of its own; the subject
+        # metadata box — not the owning pod's aggregate tpod.creator
+        # (the pod has no aggregate tpod.subject of its own; the subject
         # key sits inside each member entry, and a pod's own subject is
         # derived from its tools/members).
-        frontmatter = {"v4": {
+        frontmatter = {"tpod": {
             "claimant": match.get("claimant"),
             "subject": match.get("subject"),
             "formTopic": match.get("formTopic"),
@@ -516,7 +516,7 @@ def main() -> None:
         if ontology_iri:
             ctype = g.value(ontology_iri, PERSONA.contextType)
             if ctype:
-                frontmatter = {"v4": {"contextCategory": lbl(ctype)}}
+                frontmatter = {"tpod": {"contextCategory": lbl(ctype)}}
         stem = src.stem
         # Write to images/ subdirectory if it exists, otherwise alongside the source
         images_dir = src.parent / "images"

@@ -1,17 +1,17 @@
 ---
-id: http://www.example.org/v4/pods/pod-13
+id: http://www.example.org/tpod/pods/pod-13
 title: "Health & Wellness"
 type: pod-databook
 version: 1.3.0
 created: 2026-07-10
 description: >
   Pod DataBook for folder "Health & Wellness" (pod:category: podcat:HealthWellness). It is a one-member pod with one member entry about :Self and one graph about :Sophia_Walker (the pod's subject).
-v4:
+tpod:
   category: "podcat:HealthWellness"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-35"
+    id: "http://www.example.org/tpod/graphs/graph-35"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -19,7 +19,7 @@ v4:
     - type: "form"
       formTopic: ":Sophia_Walker"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-17"
+        - id: "http://www.example.org/tpod/graphs/graph-17"
           claimant: ":Self"
           shape: "pshapes:HealthWellnessShape"
 ---
@@ -37,8 +37,8 @@ This graph captures Alice's own bare identity claim (just her given name) — th
 
 ```turtle
 <!-- databook:id: alice-health-wellness-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-35#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-35#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -64,8 +64,8 @@ This graph captures Sophia Walker's physical body characteristics — properties
 
 ```turtle
 <!-- databook:id: sophia-health-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-17#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-17#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

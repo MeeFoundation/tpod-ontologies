@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-52
+id: http://www.example.org/tpod/pods/pod-52
 title: "Hilton"
 type: pod-databook
 version: 1.3.0
@@ -15,12 +15,12 @@ description: >
   that tool is template-driven and the pod carries it from the start.
   The pod carries no tag: what makes it findable is the loyaltyProgramID in its
   own tool graph, which a search for that property returns directly.
-v4:
+tpod:
   category: "podcat:TravelProvider"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-99"
+    id: "http://www.example.org/tpod/graphs/graph-99"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -28,7 +28,7 @@ v4:
     - type: "form"
       formTopic: ":Alice_Hilton_Account"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-84"
+        - id: "http://www.example.org/tpod/graphs/graph-84"
           claimant: ":Self"
           shape: "sashapes:ServiceAccountShape"
 ---
@@ -46,8 +46,8 @@ This graph is the pod's one required `member` entry, claimed by and about `:Self
 
 ```turtle
 <!-- databook:id: alice-hilton-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-99#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-99#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -73,8 +73,8 @@ This graph captures Alice's own claim about her Hilton Honors account — the po
 
 ```turtle
 <!-- databook:id: alice-hilton-account-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-84#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-84#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

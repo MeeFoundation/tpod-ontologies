@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-02
+id: http://www.example.org/tpod/pods/pod-02
 title: "ATT"
 type: pod-databook
 version: 2.0.0
@@ -9,12 +9,12 @@ description: >
   member entry about :Self and one graph about :Alice_ATT_Account (the pod's subject), typed
   serviceaccounts:ServiceAccount and cco:ent00000033 (Online Service Account), carrying the service name,
   account username, and password for Alice's AT&T account.
-v4:
+tpod:
   category: "podcat:Companies"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-11"
+    id: "http://www.example.org/tpod/graphs/graph-11"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -22,7 +22,7 @@ v4:
     - type: "form"
       formTopic: ":Alice_ATT_Account"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-74"
+        - id: "http://www.example.org/tpod/graphs/graph-74"
           claimant: ":Self"
           shape: "sashapes:ServiceAccountShape"
 ---
@@ -40,8 +40,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-att-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-11#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-11#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -75,8 +75,8 @@ This graph captures Alice's basic claim about her AT&T account itself — just e
 
 ```turtle
 <!-- databook:id: alice-att-subject-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-74#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-74#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

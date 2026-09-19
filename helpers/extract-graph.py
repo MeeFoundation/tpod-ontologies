@@ -28,11 +28,11 @@ def main():
     text = open(path, encoding="utf-8").read()
     fm_text, _, body = split_frontmatter(text)
     fm = yaml.safe_load(fm_text)
-    v4 = fm.get("v4") or {}
-    entries = graph_entries(v4)
+    tpod = fm.get("tpod") or {}
+    entries = graph_entries(tpod)
     match = find_graph_entry(entries, graph_arg)
     if not match:
-        sys.exit(f"No v4.member or v4.tool[].graph entry with id/local-name {graph_arg!r} in {path}")
+        sys.exit(f"No tpod.member or tpod.tool[].graph entry with id/local-name {graph_arg!r} in {path}")
     lines = extract_graph_block(body, f"{match['id']}#graph")
     if lines is None:
         sys.exit(f"No turtle block found for {match['id']!r} in {path}")

@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-43
+id: http://www.example.org/tpod/pods/pod-43
 title: "Vehicles"
 type: pod-databook
 version: 1.1.0
@@ -11,12 +11,12 @@ description: >
   membership. Also carries an empty tool graph, since podcat:Vehicles's own TemplatePod
   declares a form tool — the real content lives in this category's own leaf pod
   (RAV4) instead.
-v4:
+tpod:
   category: "podcat:Vehicles"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-61"
+    id: "http://www.example.org/tpod/graphs/graph-61"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -24,7 +24,7 @@ v4:
     - type: "form"
       formTopic: ":Self"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-89"
+        - id: "http://www.example.org/tpod/graphs/graph-89"
           claimant: ":Self"
 ---
 
@@ -41,8 +41,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-vehicles-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-61#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-61#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -68,5 +68,5 @@ This graph is the pod's required tool graph — required since `podcat:Vehicles`
 
 ```turtle
 <!-- databook:id: alice-vehicles-tool-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-89#graph -->
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-89#graph -->
 ```

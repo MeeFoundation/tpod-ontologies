@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-45
+id: http://www.example.org/tpod/pods/pod-45
 title: "Travel"
 type: pod-databook
 version: 1.0.0
@@ -9,12 +9,12 @@ description: >
   member entry about :Self — a minimal stub, since "Travel" is a purely organizational category
   node with no content or relationship of its own beyond Alice's required membership. Nested inside
   it is the "Kyoto Trip 2027" pod for a specific trip.
-v4:
+tpod:
   category: "podcat:Travel"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-64"
+    id: "http://www.example.org/tpod/graphs/graph-64"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -33,8 +33,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-travel-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-64#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-64#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .

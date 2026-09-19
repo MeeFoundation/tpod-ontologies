@@ -12,10 +12,10 @@
 @base <http://mee.foundation/ontologies/pod> .
 
 <http://mee.foundation/ontologies/pod> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/pod/9.9.0> ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod/9.10.0> ;
     dc:date "2026-09-19"^^xsd:date ;
     rdfs:label "Pod Ontology"@en ;
-    rdfs:comment """Pod Ontology for the V4 App. A pod is the atomic unit of the user's tree, a unit the app manages and holds entirely in its own store — V4 persists nothing in the user's filesystem (see storage.md). Defines pod:Pod — the self-contained content facet of a pod. pod:Pod stores no property recording the pod's own tree position: a pod's parent is per-member state in that member's own store, never shared content, and not a fact this RDF individual needs to carry. pod:Pod splits into two disjoint kinds: pod:TemplatePod (a reusable, class-level template) and pod:InstancePod (an actual pod instantiated in a user's own tree) — a pod is always exactly one of the two, never both. There are no further kinds of pod: an instance pod that carries anything beyond its pod:member baseline carries it as a pod:Tool — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI (pod:Form, pod:Calendar, pod:Canvas, pod:Map), zero or more per pod, rather than in a subclass of its own. pod:InstancePod also carries the two tag properties — pod:userTag, a plain xsd:string, and pod:serviceTag, whose values are pod:ServiceTag nodes (also defined here) carrying a namespace, a key and a label — each zero or more values, a retrieval dimension orthogonal to pod:category's single filing hint. Also defines the graph-DataBook classes pod:member/pod:formGraph link to — pod:Graph, its abstract pod:CGraph subclass, and that class's two disjoint leaves pod:MemberGraph (pod:member's range) and pod:FormGraph (pod:formGraph's range) — along with their pod:shape/pod:claimant/pod:subject annotation properties, since a graph DataBook only ever exists to be linked from a pod. pod:MemberGraph and pod:FormGraph are split apart because a pod:subject value always maps to a PDN node subject identity while a pod:formTopic value — the tool-level statement of what the tool's content is about — need not."""@en .
+    rdfs:comment """Pod Ontology for the Tellipod App. A pod is the atomic unit of the user's tree, a unit the app manages and holds entirely in its own store — Tellipod persists nothing in the user's filesystem (see storage.md). Defines pod:Pod — the self-contained content facet of a pod. pod:Pod stores no property recording the pod's own tree position: a pod's parent is per-member state in that member's own store, never shared content, and not a fact this RDF individual needs to carry. pod:Pod splits into two disjoint kinds: pod:TemplatePod (a reusable, class-level template) and pod:InstancePod (an actual pod instantiated in a user's own tree) — a pod is always exactly one of the two, never both. There are no further kinds of pod: an instance pod that carries anything beyond its pod:member baseline carries it as a pod:Tool — a form, a calendar, a drawing canvas or a map, each with its own data format and its own contribution to the app's UI (pod:Form, pod:Calendar, pod:Canvas, pod:Map), zero or more per pod, rather than in a subclass of its own. pod:InstancePod also carries the two tag properties — pod:userTag, a plain xsd:string, and pod:serviceTag, whose values are pod:ServiceTag nodes (also defined here) carrying a namespace, a key and a label — each zero or more values, a retrieval dimension orthogonal to pod:category's single filing hint. Also defines the graph-DataBook classes pod:member/pod:formGraph link to — pod:Graph, its abstract pod:CGraph subclass, and that class's two disjoint leaves pod:MemberGraph (pod:member's range) and pod:FormGraph (pod:formGraph's range) — along with their pod:shape/pod:claimant/pod:subject annotation properties, since a graph DataBook only ever exists to be linked from a pod. pod:MemberGraph and pod:FormGraph are split apart because a pod:subject value always maps to a PDN node subject identity while a pod:formTopic value — the tool-level statement of what the tool's content is about — need not."""@en .
 
 
 #################################################################
@@ -39,14 +39,14 @@ pod:abstract rdf:type owl:AnnotationProperty ;
 #    what lets two members of a shared pod each file it wherever
 #    they like without touching what the other sees.
 #    A pod's content lives entirely inside the app, in a protected
-#    store, encrypted at rest — V4 persists nothing in the user's
+#    store, encrypted at rest — Tellipod persists nothing in the user's
 #    filesystem: no folder stands for a pod, no file holds its note,
 #    and no directory holds its attachments (storage.md).
 #    This repo carries the example tree on disk instead, as one
 #    folder per pod holding a pod-databook file, a note file, a
 #    _pod-attachments folder and the member's own private files. All
 #    of that is development scaffolding and none of it exists in a
-#    running v4 (pod-databook.md's Development Scaffolding section).
+#    running Tellipod (pod-databook.md's Development Scaffolding section).
 #
 #    pod:Pod itself carries only what's common to every pod
 #    regardless of facet: inherent classification (pod:category).
@@ -269,7 +269,7 @@ pod:serviceTag rdf:type owl:ObjectProperty ;
 #    tags, not one.
 #
 #    A blank node in practice: helpers/databook_graphs.py
-#    synthesizes one per v4.serviceTag entry, since a tag
+#    synthesizes one per tpod.serviceTag entry, since a tag
 #    node has no identity worth naming and a pod-databook's
 #    frontmatter has nowhere to mint an IRI. Nothing in the model
 #    requires that — :ServiceTagShape accepts a named
@@ -361,7 +361,7 @@ pod:tagValue rdf:type owl:DatatypeProperty ;
 #    the same tool classes.
 #
 #    A tool is a blank node in practice: helpers/databook_graphs.py
-#    synthesizes one per v4.tool entry, so instances are not typed
+#    synthesizes one per tpod.tool entry, so instances are not typed
 #    owl:NamedIndividual.
 #################################################################
 
@@ -628,7 +628,7 @@ pod:member rdf:type owl:ObjectProperty ;
 #    Pod Content (the Attachments Tab)
 #
 #    A pod's content lives entirely inside the app, in a protected
-#    store, encrypted at rest. V4 persists nothing in the user's
+#    store, encrypted at rest. Tellipod persists nothing in the user's
 #    filesystem, so there is no folder standing for a pod and
 #    nothing for pod:Pod to point back at; see storage.md.
 #
@@ -677,7 +677,7 @@ pod:member rdf:type owl:ObjectProperty ;
 #    a note file named after the folder, a reserved _pod-attachments
 #    folder and the member's own private files loose beside it — which
 #    is where the folder-shaped vocabulary in this project's checks
-#    and helper scripts comes from. None of it exists in a running v4
+#    and helper scripts comes from. None of it exists in a running Tellipod
 #    (pod-databook.md's Development Scaffolding section).
 #################################################################
 

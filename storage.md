@@ -1,10 +1,10 @@
 # Storage
 
-V4 persists **no data in the user's filesystem**. Every pod and everything in it lives in a
+Tellipod persists **no data in the user's filesystem**. Every pod and everything in it lives in a
 protected, app-managed store, encrypted at rest.
 
 This document is the canonical statement of that decision and of what follows from it — in
-particular, which parts of this repository are real v4 and which are development scaffolding. It is
+particular, which parts of this repository are real Tellipod and which are development scaffolding. It is
 linked from [README.md](README.md), [app-behavior.md](app-behavior.md),
 [pod-databook.md](pod-databook.md) and [CLAUDE.md](CLAUDE.md), which describe the model itself and
 point here rather than restating any of this.
@@ -31,13 +31,13 @@ filesystems and platforms. Dan Luu's [survey of file-consistency
 bugs](https://danluu.com/file-consistency/) collects the evidence. A single store the app controls
 end to end is the tractable version of the problem.
 
-**Security, which is the product's whole point.** V4 exists so that two people can share information
+**Security, which is the product's whole point.** Tellipod exists so that two people can share information
 directly, end-to-end encrypted, with no corporate intermediary in the middle. Data transmission was
 already built to that standard. Leaving the same content sitting as plaintext files in the user's
 filesystem — where any other process, sync client, backup agent or indexer on the machine can read
 it — undercuts exactly the guarantee the transport layer provides. The risk is not acceptable for
 notes, and it is not acceptable for attachments either. Encryption at rest is therefore a property
-of *all* v4 data, with no carve-out for the unstructured parts.
+of *all* Tellipod data, with no carve-out for the unstructured parts.
 
 ## What this changes, and what it does not
 
@@ -61,12 +61,12 @@ The model is unaffected. What changes is where it lives and how some of its rule
 - **The note.** Still exactly one per pod, still Markdown, still supporting `[[wikilinks]]` that
   resolve by target pod id. It is no longer a file, so the folder-note convention that once tied it
   to a filename is gone.
-- **PKM vault interoperability is retired.** Running v4's storage as, or alongside, an Obsidian-style
+- **PKM vault interoperability is retired.** Running Tellipod's storage as, or alongside, an Obsidian-style
   vault was a consequence of keeping notes and attachments as ordinary files in ordinary folders.
   With the files gone, so is the property. The note's Markdown and the wikilink syntax remain, for
   their own reasons.
 
-## What is real v4, and what is scaffolding
+## What is real Tellipod, and what is scaffolding
 
 The app does not exist yet. This repository develops the ontologies for it and documents the use
 cases they have to serve, and it needs real content to do that against — so it carries a worked
@@ -74,7 +74,7 @@ example on disk, in the only form available to a repository. **That on-disk form
 scaffolding in its entirety**: not merely the `.databook.md` files, but the folder layout around
 them too.
 
-| Ships as v4 | Development scaffolding |
+| Ships as Tellipod | Development scaffolding |
 |---|---|
 | Every `*.ttl` ontology — `persona.ttl`, `pod.ttl`, `pod-categories.ttl`, `pod-category-templates.ttl`, `service.ttl`, `organization.ttl`, and every `other/`, `persona-ext/` and `pod-category-ext/` peer file (possibly expressed differently in the app) | Every `*.databook.md` file, and the whole format specified in [pod-databook.md](pod-databook.md) |
 | Every `**/shacl/*.ttl` shapes file | The `example/Pods/` tree, and every folder in it |
@@ -83,7 +83,7 @@ them too.
 
 The scaffolding is genuinely useful and is not going away before the app arrives: it is how the
 ontologies get exercised, validated and diagrammed against real content, and it is a diagnostic
-independent of any implementation. But nothing in it is a commitment about how v4 stores anything.
+independent of any implementation. But nothing in it is a commitment about how Tellipod stores anything.
 Where a document in this repo describes a folder, a filename, or a file on disk, it is describing
 this repository — see [Development Scaffolding](pod-databook.md#development-scaffolding) in
 pod-databook.md for the detailed account, and

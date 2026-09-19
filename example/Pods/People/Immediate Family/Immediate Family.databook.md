@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-30
+id: http://www.example.org/tpod/pods/pod-30
 title: "Immediate Family"
 type: pod-databook
 version: 1.1.0
@@ -11,12 +11,12 @@ description: >
   Alice's required membership, though that member entry now carries a
   minimal ContactInfo-style claim (given name,
   organization name, email), per podcat:ImmediateFamily's own pod:TemplatePod.
-v4:
+tpod:
   category: "podcat:ImmediateFamily"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-48"
+    id: "http://www.example.org/tpod/graphs/graph-48"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -35,8 +35,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-immediate-family-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-48#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-48#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .

@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-35
+id: http://www.example.org/tpod/pods/pod-35
 title: "Acme"
 type: pod-databook
 version: 1.2.0
@@ -9,12 +9,12 @@ description: >
   one-member pod with one member entry about :Self, plus one form tool about
   :Acme itself — Alice's employer's own o:Organization profile, since
   podcat:Organization's own TemplatePod declares that tool.
-v4:
+tpod:
   category: "podcat:Organization"
   creator: ":Self"
   owner: ":Self"
   member:
-    id: "http://www.example.org/v4/graphs/graph-53"
+    id: "http://www.example.org/tpod/graphs/graph-53"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -22,7 +22,7 @@ v4:
     - type: "form"
       formTopic: ":Acme"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-94"
+        - id: "http://www.example.org/tpod/graphs/graph-94"
           claimant: ":Self"
           shape: "oshapes:OrganizationShape"
 ---
@@ -40,8 +40,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-acme-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-53#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-53#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -70,8 +70,8 @@ about Acme.
 
 ```turtle
 <!-- databook:id: alice-acme-org-profile-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-94#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-94#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .

@@ -11,13 +11,13 @@
 @base <http://mee.foundation/ontologies/service> .
 
 <http://mee.foundation/ontologies/service> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/service/2.8.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 2.8.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/service/2.9.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 2.9.0 - the app renamed to Tellipod, with the v4 token becoming tpod"@en ;
     owl:imports <https://w3id.org/cco-domains/cco/AgentOntology> ,
                 <http://mee.foundation/ontologies/prov-upper-subset> ;
     rdfs:label "Service Ontology"@en ;
-    rdfs:comment """Service Ontology for the V4 App.
+    rdfs:comment """Service Ontology for the Tellipod App.
                     Describes the non-human services a person invites to collaborate inside a
                     shared pod — the second kind of first-class, member-capable participant,
                     peer to persona.ttl (models Person). A service is not a service plus some

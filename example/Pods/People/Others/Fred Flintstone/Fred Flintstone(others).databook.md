@@ -1,12 +1,12 @@
 ---
-id: http://www.example.org/v4/pods/pod-17
+id: http://www.example.org/tpod/pods/pod-17
 title: "Fred Flintstone"
 type: pod-databook
 version: 1.3.0
 created: 2026-08-03
 description: >
   Pod DataBook for folder "Fred Flintstone" (pod:category: podcat:Others). It is a two-member pod with two members about :Fred_Flintstone and :Self.
-v4:
+tpod:
   category: "podcat:Others"
   creator: ":Self"
   owner: ":Self"
@@ -15,11 +15,11 @@ v4:
       key: "group"
       value: "Christmas List"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-31"
+    - id: "http://www.example.org/tpod/graphs/graph-31"
       claimant: ":Fred_Flintstone"
       subject: ":Fred_Flintstone"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-29"
+    - id: "http://www.example.org/tpod/graphs/graph-29"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
@@ -38,8 +38,8 @@ This graph captures Alice Walker's self-claimed persona in her 1:1 relationship 
 
 ```turtle
 <!-- databook:id: alice-fred-alice-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-29#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-29#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -86,8 +86,8 @@ This graph captures Fred Flintstone's self-claimed persona, transmitted from Fre
 
 ```turtle
 <!-- databook:id: fred-fred-fred-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-31#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-31#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

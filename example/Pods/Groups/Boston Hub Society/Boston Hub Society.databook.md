@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-01
+id: http://www.example.org/tpod/pods/pod-01
 title: "Boston Hub Society"
 type: pod-databook
 version: 1.5.0
@@ -14,20 +14,20 @@ description: >
   concept in the society's own skos:ConceptScheme, skos:broadMatch'd to podcat:Groups, whose template
   pod names bhsshapes:MemberShape as its pod:memberShape — so each member graph here is validated
   against the society's own two-page directory form rather than against pshapes:ContactInfoShape.
-v4:
+tpod:
   category: "bhscat:BostonHubSociety"
   creator: ":Self"
   owner: ":Self"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-01"
+    - id: "http://www.example.org/tpod/graphs/graph-01"
       claimant: ":BHS"
       subject: ":BHS_Service"
       shape: "bhsshapes:MemberShape"
-    - id: "http://www.example.org/v4/graphs/graph-14"
+    - id: "http://www.example.org/tpod/graphs/graph-14"
       claimant: ":Self"
       subject: ":Self"
       shape: "bhsshapes:MemberShape"
-    - id: "http://www.example.org/v4/graphs/graph-03"
+    - id: "http://www.example.org/tpod/graphs/graph-03"
       claimant: ":Bob_Johnson"
       subject: ":Bob_Johnson"
       shape: "bhsshapes:MemberShape"
@@ -35,7 +35,7 @@ v4:
     - type: "form"
       formTopic: ":BHS"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-92"
+        - id: "http://www.example.org/tpod/graphs/graph-92"
           claimant: ":BHS"
           shape: "oshapes:OrganizationShape"
 ---
@@ -53,8 +53,8 @@ This graph captures the identity the Boston Hub Society presents as one of the p
 
 ```turtle
 <!-- databook:id: bhs-org-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-01#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-01#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix service: <http://mee.foundation/ontologies/service#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
@@ -88,8 +88,8 @@ This graph captures Bob Johnson's BHS profile as transmitted from Bob's own inst
 
 ```turtle
 <!-- databook:id: bob-bhs-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-03#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-03#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix directoryprofile: <http://mee.foundation/ontologies/directory-profile#> .
 @prefix education: <http://mee.foundation/ontologies/education#> .
@@ -147,8 +147,8 @@ The vocabulary is entirely shared: names, birth date, employer, job title, addre
 
 ```turtle
 <!-- databook:id: alice-bhs-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-14#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-14#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix directoryprofile: <http://mee.foundation/ontologies/directory-profile#> .
 @prefix education: <http://mee.foundation/ontologies/education#> .
@@ -393,8 +393,8 @@ BHS presents as one of the three parties to this pod. BHS is the claimant.
 
 ```turtle
 <!-- databook:id: bhs-org-profile-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-92#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-92#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .

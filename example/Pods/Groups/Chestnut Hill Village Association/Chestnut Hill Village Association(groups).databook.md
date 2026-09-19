@@ -1,5 +1,5 @@
 ---
-id: http://www.example.org/v4/pods/pod-27
+id: http://www.example.org/tpod/pods/pod-27
 title: "Chestnut Hill Village Association"
 type: pod-databook
 version: 1.0.0
@@ -11,20 +11,20 @@ description: >
   association's own organizational profile. Unlike the Boston Hub Society, the association runs no PDN
   node of its own, so it joins the pod through no service:ServiceProvider of its own and Alice
   self-enters its profile: every one of this pod's graphs is claimed by one of its three human members.
-v4:
+tpod:
   category: "podcat:Groups"
   creator: ":Self"
   owner: ":Self"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-09"
+    - id: "http://www.example.org/tpod/graphs/graph-09"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-45"
+    - id: "http://www.example.org/tpod/graphs/graph-45"
       claimant: ":Marcy"
       subject: ":Marcy"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-100"
+    - id: "http://www.example.org/tpod/graphs/graph-100"
       claimant: ":Henry"
       subject: ":Henry"
       shape: "pshapes:ContactInfoShape"
@@ -32,7 +32,7 @@ v4:
     - type: "form"
       formTopic: ":CHVA"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-101"
+        - id: "http://www.example.org/tpod/graphs/graph-101"
           claimant: ":Self"
           shape: "oshapes:OrganizationShape"
 ---
@@ -50,8 +50,8 @@ This graph captures Alice Walker's Chestnut Hill Village Association profile —
 
 ```turtle
 <!-- databook:id: alice-chva-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-09#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-09#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -105,8 +105,8 @@ This graph captures Marcy's Chestnut Hill Village Association profile as transmi
 
 ```turtle
 <!-- databook:id: marcy-chva-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-45#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-45#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -139,8 +139,8 @@ This graph captures Henry's Chestnut Hill Village Association profile as transmi
 
 ```turtle
 <!-- databook:id: henry-chva-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-100#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-100#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -173,8 +173,8 @@ This graph captures the Chestnut Hill Village Association's own organizational p
 
 ```turtle
 <!-- databook:id: chva-org-profile-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-101#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-101#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

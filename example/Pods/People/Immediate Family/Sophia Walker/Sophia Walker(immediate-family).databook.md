@@ -1,21 +1,21 @@
 ---
-id: http://www.example.org/v4/pods/pod-12
+id: http://www.example.org/tpod/pods/pod-12
 title: "Sophia Walker"
 type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
   Pod DataBook for folder "Sophia Walker" (pod:category: podcat:ImmediateFamily). It is a two-member pod — Alice (:Self) and her husband Dave — that also carries a form tool about :Sophia_Walker, Alice's daughter. Sophia has no instance of the app, so she is the pod's subject rather than one of its members: Alice added the tool manually and chose the Contact Info template (pshapes:ContactInfoShape) for it, even though podcat:ImmediateFamily's own template pod declares no tool.
-v4:
+tpod:
   category: "podcat:ImmediateFamily"
   creator: ":Self"
   owner: ":Self"
   member:
-    - id: "http://www.example.org/v4/graphs/graph-21"
+    - id: "http://www.example.org/tpod/graphs/graph-21"
       claimant: ":Self"
       subject: ":Self"
       shape: "pshapes:ContactInfoShape"
-    - id: "http://www.example.org/v4/graphs/graph-05"
+    - id: "http://www.example.org/tpod/graphs/graph-05"
       claimant: ":Dave"
       subject: ":Dave"
       shape: "pshapes:ContactInfoShape"
@@ -23,7 +23,7 @@ v4:
     - type: "form"
       formTopic: ":Sophia_Walker"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-07"
+        - id: "http://www.example.org/tpod/graphs/graph-07"
           claimant: ":Self"
           shape: "pshapes:ContactInfoShape"
 ---
@@ -41,8 +41,8 @@ This graph captures Dave's self-claimed family persona as transmitted from Dave'
 
 ```turtle
 <!-- databook:id: dave-family-dave-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-05#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-05#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -70,8 +70,8 @@ This graph captures Alice's Contact Info record of her daughter Sophia Walker. S
 
 ```turtle
 <!-- databook:id: sophia-family-alice-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-07#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-07#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
@@ -104,8 +104,8 @@ This graph captures Alice Walker's family relationships. It records that Sophia 
 
 ```turtle
 <!-- databook:id: alice-family-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-21#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-21#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

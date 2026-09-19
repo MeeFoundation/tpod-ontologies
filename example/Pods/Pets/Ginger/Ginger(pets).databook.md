@@ -1,19 +1,19 @@
 ---
-id: http://www.example.org/v4/pods/pod-41
+id: http://www.example.org/tpod/pods/pod-41
 title: "Ginger"
 type: pod-databook
 version: 1.5.0
 created: 2026-08-22
 description: >
   Pod DataBook for folder "Ginger" (pod:category: podcat:Pets). A user-defined instance folder for Alice's specific cat, Ginger, nested under the generic Pets category — mirroring how e.g. "Bob Johnson" reuses its parent "Others" folder's own origin class rather than being Custom. It is a one-member pod with one member entry about :Self and one graph about :Ginger (the pod's subject), typed pets:Pet and carrying her name, species, breed, birth date, current body weight, sex, and spay/neuter status.
-v4:
+tpod:
   category: "podcat:Pets"
   creator: ":Self"
   owner: ":Self"
   userTag:
     - "Ginger"
   member:
-    id: "http://www.example.org/v4/graphs/graph-36"
+    id: "http://www.example.org/tpod/graphs/graph-36"
     claimant: ":Self"
     subject: ":Self"
     shape: "pshapes:ContactInfoShape"
@@ -21,7 +21,7 @@ v4:
     - type: "form"
       formTopic: ":Ginger"
       graph:
-        - id: "http://www.example.org/v4/graphs/graph-37"
+        - id: "http://www.example.org/tpod/graphs/graph-37"
           claimant: ":Self"
           shape: "petshapes:PetShape"
 ---
@@ -39,8 +39,8 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 ```turtle
 <!-- databook:id: alice-ginger-member-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-36#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-36#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -74,8 +74,8 @@ This graph captures Alice's basic claim about Ginger herself — just enough to 
 
 ```turtle
 <!-- databook:id: alice-ginger-subject-graph -->
-<!-- databook:graph: http://www.example.org/v4/graphs/graph-37#graph -->
-@prefix : <http://www.example.org/v4#> .
+<!-- databook:graph: http://www.example.org/tpod/graphs/graph-37#graph -->
+@prefix : <http://www.example.org/tpod#> .
 @prefix persona: <http://mee.foundation/ontologies/persona#> .
 @prefix pets: <http://mee.foundation/ontologies/pets#> .
 @prefix cco: <https://w3id.org/cco-domains/cco/> .
