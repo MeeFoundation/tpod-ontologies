@@ -2,7 +2,7 @@
 description: Reconcile category.ttl leaf-category rdfs:comment text against README.md's Personal/Organizational Categories descriptions (README is authoritative)
 ---
 
-Reconcile `category.ttl`'s `rdfs:comment` text for every leaf category under `cat:Person` and `cat:Organization` against the corresponding bullet description in `README.md`'s **Personal Categories** and **Organizational Categories** sections (under the "Category Taxonomy" heading).
+Reconcile `category.ttl`'s `rdfs:comment` text for every leaf category under `cat:Person` and `cat:Organization` against the corresponding bullet description in `README.md`'s **Personal Categories** and **Organizational Categories** sections (under the "Pod Categories" heading).
 
 **README.md is authoritative.** Where the two differ in substance, rewrite the `category.ttl` comment to match the README's wording — not the other way around. This is a one-directional sync: README → category.ttl.
 

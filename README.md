@@ -22,7 +22,7 @@ The following **domain ontologies** model claims about people, organizations, an
   - **Residences ontology** (`other/residences.ttl`) — models a place a person has lived, current or past. See [Residences Ontology](#residences-ontology).
   - **Itineraries ontology** (`other/itineraries.ttl`) — models a specific trip a person is planning or taking. See [Itineraries Ontology](#itineraries-ontology).
 
-Also included are the Category **taxonomy** and the Pod **ontology**, the app's metadata layer. A *pod* is the atomic unit of information. A pod and everything in it live inside the app, in a protected store, encrypted at rest: V4 persists no data in the user's filesystem at all — see [storage.md](storage.md). In this repo a pod is carried on disk instead, as a folder holding a pod DataBook file, which is development scaffolding (see [Development Scaffolding](pod-databook.md#development-scaffolding) in pod-databook.md). Pods nest inside pods, forming a tree. A pod usually carries a **category** — a classification, described in the Category taxonomy, recording what kind of information it holds. A pod contains various kinds of content including markdown notes, chat streams, and other file attachments. It also contains structured information blocks (called *graphs*, defined as part of the Pod ontology — see [Graphs](#graphs)) whose schemas differ based on the pod's category.
+Also included are the Pod **ontology** and the **pod categories**, the app's metadata layer. A *pod* is the atomic unit of information. A pod and everything in it live inside the app, in a protected store, encrypted at rest: V4 persists no data in the user's filesystem at all — see [storage.md](storage.md). In this repo a pod is carried on disk instead, as a folder holding a pod DataBook file, which is development scaffolding (see [Development Scaffolding](pod-databook.md#development-scaffolding) in pod-databook.md). Pods nest inside pods, forming a tree. A pod usually carries a **category** — a classification, described in [Pod Categories](#pod-categories), recording what kind of information it holds. A pod contains various kinds of content including markdown notes, chat streams, and other file attachments. It also contains structured information blocks (called *graphs*, defined as part of the Pod ontology — see [Graphs](#graphs)) whose schemas differ based on the pod's category.
 
 Throughout this document we use these short-hands:
 
@@ -41,173 +41,6 @@ Throughout this document we use these short-hands:
 - `itineraries:` for the `other/itineraries.ttl` namespace (`http://mee.foundation/ontologies/itineraries#`) — see [Itineraries Ontology](#itineraries-ontology)
 
 See [**example.md**](example.md) for an illustration of the use of these ontologies by a hypothetical user, Alice, along with diagram-generation and validation instructions for the example dataset, [**storage.md**](storage.md) for where v4 actually keeps this data and what in this repo is development scaffolding, and [**app-behavior.md**](app-behavior.md) for how the app behaves on top of this data — pod naming/renaming/sharing, storage, permissions, and filing heuristics.
-
-## Category Taxonomy
-
-To help the user organize their information, the app comes with a pre-defined tree structure of categories. Although the user is free to organize their pods however they like, we think many users will choose to create their own tree of pods based on the pattern of the tree of category concepts. Pods that are created based on a pre-defined category have a `pod:category` property whose value is that category.
-
-The tree below is the taxonomy the app ships with. An organization can add a category of its own without it being added here, by publishing a **category extension** — its own SKOS concept scheme, linked into this tree by `skos:broadMatch`. See [Category Extensions](#category-extensions).
-
-<p align="center"><img src="images/category-ontology/category.png" alt="Category hierarchy"></p>
-
-These categories vary in scope from broad groupings of information to narrower ones. In the social domain, for example, a category might be about "People", or more narrowly about "Immediate Family", and ultimately about just one family member. All pre-defined categories are *symmetric*. For example, "Extended Family" is symmetric because if Alice is a member of Bob's extended family, the reverse is also always true.
-
-The category tree is modeled as a `skos:ConceptScheme` (`cat:CategoryScheme`), not an OWL class hierarchy — each category is a plain `skos:Concept` individual, connected to its parent via `skos:broader`, rooted at two top concepts, `cat:Person` and `cat:Organization` (`skos:hasTopConcept`). This is a deliberate choice: an OWL class hierarchy would carry real subsumption semantics — `cat:Pets rdfs:subClassOf cat:Person` would mean "every Pet is a Person," which is never what's intended. `skos:broader` carries no such entailment: `cat:Pets skos:broader cat:Person` means only that Pets is a narrower *topic* within the Person-rooted branch of information a user tracks about themselves — a taxonomy of information *about* a person or organization, not a taxonomy of *kinds of* person. Some concepts in this scheme have "starter" content, found via `cat-templates.ttl`: each of its `pod:TemplatePod` individuals carries its own `pod:category` value naming the concept it's a template for — the *pod template* for that concept.
-
-When a new pod is created, the app looks for a `pod:TemplatePod` whose `pod:category` matches the concept being instantiated and clones it, if one exists, into that pod's DataBook — this is how a **pod template** becomes the starter content for a newly-created pod (see [Lazy Instantiation](app-behavior.md#lazy-instantiation) in app-behavior.md).
-
-As we've mentioned, the user is free to create pods not included in the pre-defined categories. These, by the way, need not be symmetric, and simply carry no `pod:category` value. The user is also free to rearrange their pods as they wish, adding new pods and moving others around. They can do this freely at any time; a pod carries no record of its own position, so nothing has to be updated when one moves.
-
-### Personal Categories
-
-`cat:Person` categories organize a person's mostly non-employment-related information:
-
-1. **People** (`cat:People`) — people in your social or professional life. Use this category for people not otherwise tied to a specific domain — a bookkeeper you know belongs under Finances (Advisory Firms), and your primary care physician belongs under Health & Wellness (Medical > Provider > Primary Care Physician), rather than here.
-    - **Immediate Family** (`cat:ImmediateFamily`) — your closest living relatives, which generally include parents, siblings, spouses/partners, and children.
-    - **Extended Family** (`cat:ExtendedFamily`) — relatives outside the immediate nuclear group, such as grandparents, aunts, uncles, cousins, nieces and nephews.
-    - **In-Laws / Step-Family** (`cat:InLawsStepFamily`) — relatives gained through marriage or legal guardianship, including a spouse's parents and siblings, or children from a previous relationship.
-    - **Others** (`cat:Others`) — people you know socially or professionally who are not part of your family — acquaintances, friends, neighbors, or other connections.
-1. **Groups** (`cat:Groups`) — a catch-all for clubs, charities, faith groups, and other groups that are not covered by a more specific category (e.g. `cat:SportsEntertainment`, `cat:Food`, etc.)
-1. **Health & Wellness** (`cat:HealthWellness`) — personal health and wellness information. Medical history, allergies, medications, vaccinations, prescriptions, eyeglasses, ethnicity, gender, age.
-    - **Medical** (`cat:Medical`) — medical (as opposed to dental or vision) care — diagnoses, treatments, providers, and insurance.
-        - **History** (`cat:MedicalHistory`) — past diagnoses, conditions, surgeries, and treatments.
-        - **Insurance** (`cat:MedicalInsurance`) — medical health insurance policies, providers, and coverage.
-        - **Provider** (`cat:MedicalProvider`) — medical providers and practices you see for care.
-            - **Primary Care Physician** (`cat:PrimaryCarePhysician`) — your primary care doctor, the physician you generally see first for checkups, referrals, and everyday health concerns, including name, contact information, and the name of the provider they are associated with.
-            - **Medical Appointment** (`cat:MedicalAppointment`) — a medical appointment and associated information required by the provider to arrange this appointment.
-    - **Dental** (`cat:Dental`) — dental care — diagnoses, treatments, providers, and insurance.
-        - **History** (`cat:DentalHistory`) — past dental treatments, procedures, and conditions.
-        - **Insurance** (`cat:DentalInsurance`) — dental insurance policies, providers, and coverage.
-        - **Provider** (`cat:DentalProvider`) — dental providers and practices you see for care.
-            - **Dentist** (`cat:Dentist`) — a dentist you see for care, including name, contact information, and the name of the provider they are associated with.
-            - **Dental Appointment** (`cat:DentalAppointment`) — a dental appointment and associated information required by the provider to arrange this appointment.
-    - **Vision** (`cat:Vision`) — vision and eye care — diagnoses, treatments, providers, and insurance.
-        - **History** (`cat:VisionHistory`) — past eye-care prescriptions, treatments, and conditions.
-        - **Insurance** (`cat:VisionInsurance`) — vision insurance policies, providers, and coverage.
-        - **Provider** (`cat:VisionProvider`) — vision care providers and practices you see for care.
-            - **Eye Doctor** (`cat:EyeDoctor`) — an eye doctor you see for care, including name, contact information, and the name of the provider they are associated with.
-            - **Vision Appointment** (`cat:VisionAppointment`) — a vision appointment and associated information required by the provider to arrange this appointment.
-    - **Fitness** (`cat:Fitness`) — general fitness and preventive physical health — exercise, gyms, trainers, and other non-clinical wellbeing information.
-        - **Provider** (`cat:FitnessProvider`) — fitness providers and practices you see for care, e.g. gyms, trainers, and coaches.
-            - **Personal Trainer** (`cat:PersonalTrainer`) — a personal trainer you see for care, including name, contact information, and the name of the provider they are associated with.
-    - **Nutrition** (`cat:Nutrition`) — nutritionists and dietitians.
-        - **History** (`cat:NutritionHistory`) — past nutritional consultations, diet plans, and dietary conditions.
-        - **Provider** (`cat:NutritionProvider`) — nutritionists and dietitians you see for care.
-    - **Mental Health** (`cat:MentalHealth`) — mental and behavioral health care.
-        - **History** (`cat:MentalHealthHistory`) — past diagnoses, treatments, and mental health conditions.
-        - **Insurance** (`cat:MentalHealthInsurance`) — mental health insurance policies, providers, and coverage.
-        - **Provider** (`cat:MentalHealthProvider`) — mental health providers and practices you see for care, e.g. therapists, counselors, and psychiatrists.
-            - **Therapist** (`cat:Therapist`) — a therapist you see for care, including name, contact information, and the name of the provider they are associated with.
-    - **Physical Therapy** (`cat:PhysicalTherapy`) — physical therapy and rehabilitative care.
-        - **History** (`cat:PhysicalTherapyHistory`) — past physical therapy treatments, injuries, and rehabilitation plans.
-        - **Provider** (`cat:PhysicalTherapyProvider`) — physical therapy providers and practices you see for care.
-1. **Personality** (`cat:Personality`) — self-assessments of personality, temperament, or social style — e.g. Myers-Briggs (MBTI) type, Big Five, DISC, Enneagram, or similar self-assessment instruments.
-1. **Finances** (`cat:Finances`) — information about personal finances, bookkeeping, budgets, payment cards, bank accounts, brokerage accounts, insurance policies, financial advisors, etc.
-    - **Bookkeeping** (`cat:Bookkeeping`) — budgeting, expense tracking, income, debts, IOUs, and savings goals.
-    - **Banking & Payments Firms** (`cat:BankingPayments`) — firms that help you store, access, and move your cash for daily living. These include Retail Banks & Credit Unions, which provide checking accounts, savings accounts, and debit cards. These also include Payment Processors like Visa, Mastercard, or PayPal that let you buy things online and in stores, and Remittance Firms like Western Union or Wise used to send money to family or friends, especially overseas.
-    - **Investment Firms** (`cat:Investing`) — firms that help you buy assets, so your money can grow over time for goals like buying a house or retiring. These include Brokerage Firms like Charles Schwab or Robinhood where you buy and sell stocks, bonds, and ETFs; Robo-Advisors, computer-run investing platforms like Betterment or Wealthfront that manage your portfolio for a low fee; and Mutual Fund companies like Vanguard or Fidelity that pool your money with other investors to buy a large bundle of stocks.
-    - **Lending & Credit Firms** (`cat:LendingCredit`) — firms that lend you money when you need to buy something expensive that you cannot pay for all at once. These include Mortgage Lenders, banks or specialized companies that give you loans specifically to buy a home; Consumer Finance Companies, that give out personal loans, auto loans, or student loans; and Credit Card Issuers, banks that give you a plastic card to borrow money on the spot for daily purchases.
-    - **Insurance Firms** (`cat:Insurance`) — firms that protect you and your family from financial ruin if something bad happens. These include Life & Health Insurance firms that cover medical bills or provide money to your family if you pass away, and Property & Casualty Insurance firms that insure your car, home, or apartment against accidents and theft.
-    - **Advisory Firms** (`cat:Advisory`) — firms and individuals who do not just hold your money, but tell you the best ways to use it. These include Financial Planners (Wealth Advisors), human experts who help you build a custom roadmap for taxes, retirement, and budgeting, and Estate Planners, specialized professionals who help you write wills and plan how to pass your money to your children. Also includes Accountants and Bookkeepers, who track your income and expenses and prepare your taxes.
-1. **Pets** (`cat:Pets`) — care instructions, veterinarians, medicines, food providers.
-    - **Medical** (`cat:PetsMedical`) — a pet's medical care — veterinarians, prescriptions, medications and dosing instructions, devices, diagnoses, and treatments.
-        - **Veterinarians** (`cat:PetsVeterinarians`) — veterinary practices and providers a pet sees for care.
-        - **Devices** (`cat:PetsDevices`) — medical devices and supplies used in a pet's care, e.g. syringes, nebulizers, and injection solutions.
-    - **Care & Feeding** (`cat:PetsCareAndFeeding`) — day-to-day instructions for someone else to take care of a pet — a pet's diet, food providers, feeding instructions and schedule, dietary restrictions, where they sleep, and other routine care.
-1. **Home** (`cat:Home`) — owning or renting a home, apartment, or other dwelling. Leases, deeds, utility accounts, real estate brokers.
-    - **Previous** (`cat:Previous`) — a previous home or residence, no longer current.
-1. **Work** (`cat:Work`) — professional roles. Employment history, resume/CV, job level, job function, industry.
-1. **Things** (`cat:Things`) — owned assets, property, vehicles, and other possessions.
-    - **Vehicles** (`cat:Vehicles`) — related to owning and maintaining a vehicle. Registration, title, maintenance and repair history. See `cat:VehiclesProvider` for the firms and shops that service a vehicle, and `cat:Insurance` for vehicle insurance.
-        - **Provider** (`cat:VehiclesProvider`) — firms and shops that keep a vehicle on the road — roadside assistance, dealerships, accessory vendors, and repair shops. See `cat:Insurance` for vehicle insurance.
-1. **Travel** (`cat:Travel`) — travel plans, trips, and related information. Loyalty programs, airlines, bus lines, trains.
-    - **Trips** (`cat:Trips`) — an individual trip being planned or taken — its own itinerary, dates, and destination-specific details, as distinct from `cat:Travel`'s broader loyalty-program/airline/general travel information.
-    - **Provider** (`cat:TravelProvider`) — travel providers you book with — airlines, hotels, rail and bus lines, car rental companies, cruise lines, and travel agencies, including the loyalty program accounts and preferences held with each.
-1. **Food** (`cat:Food`) — food preferences, dietary restrictions, favorite restaurants, recipes, shopping lists, and other food-related interests
-1. **Sports & Entertainment** (`cat:SportsEntertainment`) — sports events (watching or participating) and entertainment (movies, plays, jazz clubs). Favorite teams/groups, venues, streaming services, ticketing. See `cat:Information` for other interests.
-1. **Education** (`cat:Education`) — educational history and ongoing learning — schools, degrees, certifications, transcripts, and enrolled courses.
-1. **Legal** (`cat:Legal`) — legal matters, contracts, agreements, trusts, wills, and professional legal relationships. Includes durable power of attorney and healthcare proxy agreements.
-1. **Projects** (`cat:Projects`) — involvement in a specific project or initiative.
-1. **Events** (`cat:Events`) — participation in or relationship to a specific event or gathering. This is the catch-all category. Sporting events, concerts, etc. would be in `cat:SportsEntertainment`. Events put on by clubs, faith groups, and other groups would be in `cat:Groups`.
-1. **Information** (`cat:Information`) — information about anything; articles, web links, documents, images. Includes topics that interest and inspire you (e.g. drawing, painting, dancing, religion, gaming, music). See `cat:SportsEntertainment` for sports and entertainment, and `cat:Groups` for formal memberships tied to a hobby or interest.
-1. **Government** (`cat:Government`) — government-issued credentials, tax records, and civic relationships.
-    - **Federal** (`cat:Federal`) — federal government topic (e.g. passport, federal tax records).
-        - **SSN** (`cat:SSN`) — social security number issued by the federal Social Security Administration.
-        - **Passport** (`cat:Passport`) — passport issued by the Department of State.
-    - **State** (`cat:State`) — state government topic (e.g. driver's license, state tax records).
-        - **Birth Certificate** (`cat:BirthCertificate`) — a birth certificate issued by a state agency that issues and holds these records.
-        - **Drivers License** (`cat:DriversLicense`) — a driver's license issued by a state agency that issues and holds these records.
-1. **Companies** (`cat:Companies`) — a catch-all for your relationships with companies and organizations that provide services and/or products to you that are not included in more specific categories such as `cat:Finances`, `cat:HealthWellness`, `cat:Home`, `cat:Food`, etc.
-
-### Organizational Categories
-
-`cat:Organization` categories organize a person's professional and organizational-role information:
-
-1. **Customers** (`cat:Customers`) — customer organizations. Rename to "Clients", etc.
-1. **Marketing** (`cat:Marketing`) — marketing activities, campaigns, and related organizations.
-    - **Prospects** (`cat:Prospects`) — customer prospects. Rename to "Client prospects", etc.
-1. **Partners** (`cat:Partners`) — firms that provide goods and services.
-1. **People (org)** (`cat:People(org)`) — people the organization interacts with in a working capacity.
-    - **Employees** (`cat:Employees`) — related to employees.
-    - **Consultants** (`cat:Consultants`) — engaged consultants.
-    - **Others (org)** (`cat:Others(org)`) — people associated with the organization who don't fit Employees, Consultants, or Colleagues.
-    - **Colleagues** (`cat:Colleagues`) — coworkers and peers within the organization not tracked as formal Employee records.
-    - **Advisors** (`cat:Advisors`) — individuals who advise the organization in a non-employee capacity.
-    - **Board of Directors** (`cat:BoardOfDirectors`) — the organization's board members.
-    - **Direct Reports** (`cat:DirectReports`) — employees who report directly to a specific manager or role within the organization.
-    - **Manager(s)** (`cat:Managers`) — the manager or managers a specific employee or role reports to within the organization.
-1. **KB** (`cat:KB`) — corporate knowledge bases.
-1. **Projects (org)** (`cat:Projects(org)`) — projects related to R&D, manufacturing, sales, marketing, operations, HR, etc.
-1. **Meetings** (`cat:Meetings`) — face-to-face or online meetings, whether internal or with clients/customers. See also Events (org) for external, travel-to or larger-scale gatherings.
-1. **Events (org)** (`cat:Events(org)`) — external events that people travel to, or larger-scale gatherings — conferences, webinars, town halls, and similar events. See also Meetings for ordinary internal or client/customer meetings.
-    - **Conferences** (`cat:Conferences`) — a conference or professional gathering.
-1. **Suppliers** (`cat:Suppliers`) — companies that supply goods or services to this organization.
-1. **Legal (org)** (`cat:Legal(org)`) — contracts and agreements.
-1. **Government (org)** (`cat:Government(org)`) — interactions with government organizations.
-1. **Finances (org)** (`cat:Finances(org)`) — corporate finance-related matters.
-    - **Banking & Payments (org)** (`cat:BankingPayments(org)`) — firms that help organizations store, access, and move their cash. These include Retail Banks & Credit Unions, which provide checking accounts, savings accounts, and debit cards. These also include Payment Processors like Visa, Mastercard, or PayPal.
-    - **Investing (org)** (`cat:Investing(org)`) — These include Investment firms, Private Equity firms, Venture Capitalists, Brokerage Firms like Charles Schwab and Mutual Fund companies like Vanguard or Fidelity.
-    - **Lending & Credit (org)** (`cat:LendingCredit(org)`) — banks or specialized companies that give loans for specific purposes and Credit Card Issuers that give employees a card for travel and related expenses.
-    - **Insurance (org)** (`cat:Insurance(org)`) — firms that protect organizations from risks.
-    - **Advisory (org)** (`cat:Advisory(org)`) — Financial Planners, outsourced CFO consultants, Accountants and Bookkeepers and Tax preparers.
-
-### Category Taxonomy File
-
-**`category.ttl`** — The Category taxonomy, defining a `skos:ConceptScheme` rather than an OWL class hierarchy:
-  - *Individuals*: `cat:CategoryScheme` (a `skos:ConceptScheme`), `cat:Person`/`cat:Organization` (its two `skos:hasTopConcept` top concepts), and every other category concept — each a plain `skos:Concept`, with a `skos:prefLabel` for its display name, a `skos:broader` value naming its parent concept, and `skos:inScheme cat:CategoryScheme`. There is no `cat:Category` class at all — a category concept's type is just `skos:Concept`, scoped to the app's own scheme via `skos:inScheme` rather than a dedicated class.
-  - No `cat:` property of its own — each `cat-templates.ttl` template pod instead carries its own `pod:category` value naming the concept it's a template for (see [Pod Ontology File](#pod-ontology-files) below).
-
-### Category Extensions
-
-A **category extension** (`category-ext/`) is a bundle an organization publishes so that other instances of the app can file and validate pods of a category the app's own taxonomy does not define. One self-contained file per publisher carries three things: the publisher's own `skos:ConceptScheme`, the `skos:Concept` individuals in it, and a `pod:TemplatePod` for each. The member shape those templates name sits beside it in `category-ext/shacl/`.
-
-#### Why an extension rather than a new category concept
-
-`cat:CategoryScheme` is this app's curated taxonomy of the *kinds* of thing a person tracks — Groups, Medical, Vehicles. A single named organization is not one of those kinds; it is an instance of one. Adding it there would grow the shipped taxonomy by one concept per organization anyone ever joins, and would oblige `cat-templates.ttl` to grow with it (integrity.md's TTL-6 requires a template per concept).
-
-Neither file changes to accommodate an extension. Two useful consequences follow: `images/category-ontology/category.png` (PNG-5) stays correct as extensions are added, and TTL-7's invariant — every template in `cat-templates.ttl` carries `pod:memberShape pshapes:ContactInfoShape`, with no exception — stays **true**, because an extension's template is not in that file. Variation arrives only with an extension.
-
-#### How an extension links to the taxonomy
-
-With `skos:broadMatch`, never `skos:broader`. SKOS reserves `skos:broader` for hierarchy *within* one concept scheme and provides the `skos:mappingRelation` family — of which `skos:broadMatch` is one — for links *between* schemes. An extension concept is by definition in another scheme, so `skos:broadMatch` is the correct predicate and `skos:broader` would be a misuse.
-
-That link is load-bearing, not decorative: a recipient whose app does not have the extension installed still needs somewhere to file an incoming pod, and the `broadMatch` target is that somewhere. `shacl/pod-shacl.ttl`'s `:PodShape` accordingly requires a `pod:category` value to be a `skos:Concept` in *some* `skos:ConceptScheme` rather than in `cat:CategoryScheme` specifically; integrity.md's **TTL-8** carries what SHACL cannot, requiring every extension concept to sit in its own file's scheme, carry exactly one `skos:broadMatch` to a `cat:` concept, never use `skos:broader` across schemes, and have a matching `pod:TemplatePod` in the same file.
-
-#### What a bundle contains
-
-One file per publisher, holding three things:
-
-- a `skos:ConceptScheme` of the publisher's own;
-- one or more `skos:Concept` individuals in it, each carrying exactly one `skos:broadMatch` into `cat:CategoryScheme`;
-- a `pod:TemplatePod` per concept, naming whichever `pod:memberShape` that publisher requires.
-
-Its shapes file sits beside it in `category-ext/shacl/`.
-
-That third item is the point of the mechanism. Every template in `cat-templates.ttl` names the same `pod:memberShape`, `pshapes:ContactInfoShape`, so a member graph is validated as a generic contact-info profile whatever its category. An extension's template may name a different shape — which is what makes `pod:memberShape` a genuine per-category hook rather than a constant.
-
-An extension is expected to mint **no vocabulary of its own**. The terms its shape constrains should already exist in `persona.ttl`, `other/`, or `persona-ext/`; what belongs to the publisher is the shape — which fields it requires, how many values it permits, and which values it recognizes. See [Where a New Term Goes](CLAUDE.md#where-a-new-term-goes), whose rule 5 is what usually leaves an extension with nothing to declare beyond its scheme, template, and shape.
-
-For a worked extension — a society's member directory form, its concept, template and shape, and the pod whose member graphs it validates — see [example.md](example.md#boston-hub-society).
 
 ## Pod Ontology
 
@@ -450,6 +283,173 @@ Pod DataBook instances are validated by `shacl/pod-shacl.ttl`: `category`/`owner
 The three graph shapes (see above) target `pod:MemberGraph`/`pod:FormGraph`, but that typing is itself only ever asserted from a graph's own `v4.member[]`/`v4.tool[].graph[]` entry, never as a literal `rdf:type` triple in the graph's own extracted Turtle body — and nothing in the entry marks its kind, since the list it sits in already does. The pod pass synthesizes it directly from the pod DataBook's frontmatter: a `v4.member` entry becomes `rdf:type pod:MemberGraph` plus `pod:claimant`/`pod:subject`, a graph under a `v4.tool` entry becomes `rdf:type pod:FormGraph` plus `pod:claimant` alone, each asserted on the graph's plain `id` (that same entry's own `id` value), not the `#graph`-suffixed `graph.named_graph` IRI — so all three shapes actually fire against real instance data; see [Validation](example.md#validation).
 
 **The template pass** — the per-template SHACL shapes referenced throughout this document — is driven entirely by each graph's own `pod:shape` value, processed one pod at a time: for every graph in a pod that carries a `pod:shape` value, `helpers/validate.py` validates that graph against the shape the template already names directly (since `pod:shape`'s range is `sh:NodeShape`), targeting whichever individual(s) the shape's own logic selects — by `rdf:type`, for a narrow document/account class (e.g. `idoc:Passport`, asserted on a reified document individual, not necessarily the tool's own `pod:formTopic`), or by carrying real content rather than just the bare `rdf:type` triple the self-containment convention re-asserts, for the one broad `p:Person`-targeting shape (`ContactInfoShape`) — never simply the graph's declared `pod:subject` or its tool's `pod:formTopic` itself, since either can legitimately name a party the shape isn't about (e.g. an `s:Service` member whose own ContactInfo-conformant content sits on a different individual in the same graph). A graph with no `pod:shape` value is skipped by that pass. See [Validation](example.md#validation) for the full mechanism and commands.
+
+## Pod Categories
+
+To help the user organize their information, the app comes with a pre-defined tree structure of categories. Although the user is free to organize their pods however they like, we think many users will choose to create their own tree of pods based on the pattern of the tree of category concepts. Pods that are created based on a pre-defined category have a `pod:category` property whose value is that category.
+
+The tree below is the taxonomy the app ships with. An organization can add a category of its own without it being added here, by publishing a **category extension** — its own SKOS concept scheme, linked into this tree by `skos:broadMatch`. See [Category Extensions](#category-extensions).
+
+<p align="center"><img src="images/category-ontology/category.png" alt="Category hierarchy"></p>
+
+These categories vary in scope from broad groupings of information to narrower ones. In the social domain, for example, a category might be about "People", or more narrowly about "Immediate Family", and ultimately about just one family member. All pre-defined categories are *symmetric*. For example, "Extended Family" is symmetric because if Alice is a member of Bob's extended family, the reverse is also always true.
+
+The category tree is modeled as a `skos:ConceptScheme` (`cat:CategoryScheme`), not an OWL class hierarchy — each category is a plain `skos:Concept` individual, connected to its parent via `skos:broader`, rooted at two top concepts, `cat:Person` and `cat:Organization` (`skos:hasTopConcept`). This is a deliberate choice: an OWL class hierarchy would carry real subsumption semantics — `cat:Pets rdfs:subClassOf cat:Person` would mean "every Pet is a Person," which is never what's intended. `skos:broader` carries no such entailment: `cat:Pets skos:broader cat:Person` means only that Pets is a narrower *topic* within the Person-rooted branch of information a user tracks about themselves — a taxonomy of information *about* a person or organization, not a taxonomy of *kinds of* person. Some concepts in this scheme have "starter" content, found via `cat-templates.ttl`: each of its `pod:TemplatePod` individuals carries its own `pod:category` value naming the concept it's a template for — the *pod template* for that concept.
+
+When a new pod is created, the app looks for a `pod:TemplatePod` whose `pod:category` matches the concept being instantiated and clones it, if one exists, into that pod's DataBook — this is how a **pod template** becomes the starter content for a newly-created pod (see [Lazy Instantiation](app-behavior.md#lazy-instantiation) in app-behavior.md).
+
+As we've mentioned, the user is free to create pods not included in the pre-defined categories. These, by the way, need not be symmetric, and simply carry no `pod:category` value. The user is also free to rearrange their pods as they wish, adding new pods and moving others around. They can do this freely at any time; a pod carries no record of its own position, so nothing has to be updated when one moves.
+
+### Personal Categories
+
+`cat:Person` categories organize a person's mostly non-employment-related information:
+
+1. **People** (`cat:People`) — people in your social or professional life. Use this category for people not otherwise tied to a specific domain — a bookkeeper you know belongs under Finances (Advisory Firms), and your primary care physician belongs under Health & Wellness (Medical > Provider > Primary Care Physician), rather than here.
+    - **Immediate Family** (`cat:ImmediateFamily`) — your closest living relatives, which generally include parents, siblings, spouses/partners, and children.
+    - **Extended Family** (`cat:ExtendedFamily`) — relatives outside the immediate nuclear group, such as grandparents, aunts, uncles, cousins, nieces and nephews.
+    - **In-Laws / Step-Family** (`cat:InLawsStepFamily`) — relatives gained through marriage or legal guardianship, including a spouse's parents and siblings, or children from a previous relationship.
+    - **Others** (`cat:Others`) — people you know socially or professionally who are not part of your family — acquaintances, friends, neighbors, or other connections.
+1. **Groups** (`cat:Groups`) — a catch-all for clubs, charities, faith groups, and other groups that are not covered by a more specific category (e.g. `cat:SportsEntertainment`, `cat:Food`, etc.)
+1. **Health & Wellness** (`cat:HealthWellness`) — personal health and wellness information. Medical history, allergies, medications, vaccinations, prescriptions, eyeglasses, ethnicity, gender, age.
+    - **Medical** (`cat:Medical`) — medical (as opposed to dental or vision) care — diagnoses, treatments, providers, and insurance.
+        - **History** (`cat:MedicalHistory`) — past diagnoses, conditions, surgeries, and treatments.
+        - **Insurance** (`cat:MedicalInsurance`) — medical health insurance policies, providers, and coverage.
+        - **Provider** (`cat:MedicalProvider`) — medical providers and practices you see for care.
+            - **Primary Care Physician** (`cat:PrimaryCarePhysician`) — your primary care doctor, the physician you generally see first for checkups, referrals, and everyday health concerns, including name, contact information, and the name of the provider they are associated with.
+            - **Medical Appointment** (`cat:MedicalAppointment`) — a medical appointment and associated information required by the provider to arrange this appointment.
+    - **Dental** (`cat:Dental`) — dental care — diagnoses, treatments, providers, and insurance.
+        - **History** (`cat:DentalHistory`) — past dental treatments, procedures, and conditions.
+        - **Insurance** (`cat:DentalInsurance`) — dental insurance policies, providers, and coverage.
+        - **Provider** (`cat:DentalProvider`) — dental providers and practices you see for care.
+            - **Dentist** (`cat:Dentist`) — a dentist you see for care, including name, contact information, and the name of the provider they are associated with.
+            - **Dental Appointment** (`cat:DentalAppointment`) — a dental appointment and associated information required by the provider to arrange this appointment.
+    - **Vision** (`cat:Vision`) — vision and eye care — diagnoses, treatments, providers, and insurance.
+        - **History** (`cat:VisionHistory`) — past eye-care prescriptions, treatments, and conditions.
+        - **Insurance** (`cat:VisionInsurance`) — vision insurance policies, providers, and coverage.
+        - **Provider** (`cat:VisionProvider`) — vision care providers and practices you see for care.
+            - **Eye Doctor** (`cat:EyeDoctor`) — an eye doctor you see for care, including name, contact information, and the name of the provider they are associated with.
+            - **Vision Appointment** (`cat:VisionAppointment`) — a vision appointment and associated information required by the provider to arrange this appointment.
+    - **Fitness** (`cat:Fitness`) — general fitness and preventive physical health — exercise, gyms, trainers, and other non-clinical wellbeing information.
+        - **Provider** (`cat:FitnessProvider`) — fitness providers and practices you see for care, e.g. gyms, trainers, and coaches.
+            - **Personal Trainer** (`cat:PersonalTrainer`) — a personal trainer you see for care, including name, contact information, and the name of the provider they are associated with.
+    - **Nutrition** (`cat:Nutrition`) — nutritionists and dietitians.
+        - **History** (`cat:NutritionHistory`) — past nutritional consultations, diet plans, and dietary conditions.
+        - **Provider** (`cat:NutritionProvider`) — nutritionists and dietitians you see for care.
+    - **Mental Health** (`cat:MentalHealth`) — mental and behavioral health care.
+        - **History** (`cat:MentalHealthHistory`) — past diagnoses, treatments, and mental health conditions.
+        - **Insurance** (`cat:MentalHealthInsurance`) — mental health insurance policies, providers, and coverage.
+        - **Provider** (`cat:MentalHealthProvider`) — mental health providers and practices you see for care, e.g. therapists, counselors, and psychiatrists.
+            - **Therapist** (`cat:Therapist`) — a therapist you see for care, including name, contact information, and the name of the provider they are associated with.
+    - **Physical Therapy** (`cat:PhysicalTherapy`) — physical therapy and rehabilitative care.
+        - **History** (`cat:PhysicalTherapyHistory`) — past physical therapy treatments, injuries, and rehabilitation plans.
+        - **Provider** (`cat:PhysicalTherapyProvider`) — physical therapy providers and practices you see for care.
+1. **Personality** (`cat:Personality`) — self-assessments of personality, temperament, or social style — e.g. Myers-Briggs (MBTI) type, Big Five, DISC, Enneagram, or similar self-assessment instruments.
+1. **Finances** (`cat:Finances`) — information about personal finances, bookkeeping, budgets, payment cards, bank accounts, brokerage accounts, insurance policies, financial advisors, etc.
+    - **Bookkeeping** (`cat:Bookkeeping`) — budgeting, expense tracking, income, debts, IOUs, and savings goals.
+    - **Banking & Payments Firms** (`cat:BankingPayments`) — firms that help you store, access, and move your cash for daily living. These include Retail Banks & Credit Unions, which provide checking accounts, savings accounts, and debit cards. These also include Payment Processors like Visa, Mastercard, or PayPal that let you buy things online and in stores, and Remittance Firms like Western Union or Wise used to send money to family or friends, especially overseas.
+    - **Investment Firms** (`cat:Investing`) — firms that help you buy assets, so your money can grow over time for goals like buying a house or retiring. These include Brokerage Firms like Charles Schwab or Robinhood where you buy and sell stocks, bonds, and ETFs; Robo-Advisors, computer-run investing platforms like Betterment or Wealthfront that manage your portfolio for a low fee; and Mutual Fund companies like Vanguard or Fidelity that pool your money with other investors to buy a large bundle of stocks.
+    - **Lending & Credit Firms** (`cat:LendingCredit`) — firms that lend you money when you need to buy something expensive that you cannot pay for all at once. These include Mortgage Lenders, banks or specialized companies that give you loans specifically to buy a home; Consumer Finance Companies, that give out personal loans, auto loans, or student loans; and Credit Card Issuers, banks that give you a plastic card to borrow money on the spot for daily purchases.
+    - **Insurance Firms** (`cat:Insurance`) — firms that protect you and your family from financial ruin if something bad happens. These include Life & Health Insurance firms that cover medical bills or provide money to your family if you pass away, and Property & Casualty Insurance firms that insure your car, home, or apartment against accidents and theft.
+    - **Advisory Firms** (`cat:Advisory`) — firms and individuals who do not just hold your money, but tell you the best ways to use it. These include Financial Planners (Wealth Advisors), human experts who help you build a custom roadmap for taxes, retirement, and budgeting, and Estate Planners, specialized professionals who help you write wills and plan how to pass your money to your children. Also includes Accountants and Bookkeepers, who track your income and expenses and prepare your taxes.
+1. **Pets** (`cat:Pets`) — care instructions, veterinarians, medicines, food providers.
+    - **Medical** (`cat:PetsMedical`) — a pet's medical care — veterinarians, prescriptions, medications and dosing instructions, devices, diagnoses, and treatments.
+        - **Veterinarians** (`cat:PetsVeterinarians`) — veterinary practices and providers a pet sees for care.
+        - **Devices** (`cat:PetsDevices`) — medical devices and supplies used in a pet's care, e.g. syringes, nebulizers, and injection solutions.
+    - **Care & Feeding** (`cat:PetsCareAndFeeding`) — day-to-day instructions for someone else to take care of a pet — a pet's diet, food providers, feeding instructions and schedule, dietary restrictions, where they sleep, and other routine care.
+1. **Home** (`cat:Home`) — owning or renting a home, apartment, or other dwelling. Leases, deeds, utility accounts, real estate brokers.
+    - **Previous** (`cat:Previous`) — a previous home or residence, no longer current.
+1. **Work** (`cat:Work`) — professional roles. Employment history, resume/CV, job level, job function, industry.
+1. **Things** (`cat:Things`) — owned assets, property, vehicles, and other possessions.
+    - **Vehicles** (`cat:Vehicles`) — related to owning and maintaining a vehicle. Registration, title, maintenance and repair history. See `cat:VehiclesProvider` for the firms and shops that service a vehicle, and `cat:Insurance` for vehicle insurance.
+        - **Provider** (`cat:VehiclesProvider`) — firms and shops that keep a vehicle on the road — roadside assistance, dealerships, accessory vendors, and repair shops. See `cat:Insurance` for vehicle insurance.
+1. **Travel** (`cat:Travel`) — travel plans, trips, and related information. Loyalty programs, airlines, bus lines, trains.
+    - **Trips** (`cat:Trips`) — an individual trip being planned or taken — its own itinerary, dates, and destination-specific details, as distinct from `cat:Travel`'s broader loyalty-program/airline/general travel information.
+    - **Provider** (`cat:TravelProvider`) — travel providers you book with — airlines, hotels, rail and bus lines, car rental companies, cruise lines, and travel agencies, including the loyalty program accounts and preferences held with each.
+1. **Food** (`cat:Food`) — food preferences, dietary restrictions, favorite restaurants, recipes, shopping lists, and other food-related interests
+1. **Sports & Entertainment** (`cat:SportsEntertainment`) — sports events (watching or participating) and entertainment (movies, plays, jazz clubs). Favorite teams/groups, venues, streaming services, ticketing. See `cat:Information` for other interests.
+1. **Education** (`cat:Education`) — educational history and ongoing learning — schools, degrees, certifications, transcripts, and enrolled courses.
+1. **Legal** (`cat:Legal`) — legal matters, contracts, agreements, trusts, wills, and professional legal relationships. Includes durable power of attorney and healthcare proxy agreements.
+1. **Projects** (`cat:Projects`) — involvement in a specific project or initiative.
+1. **Events** (`cat:Events`) — participation in or relationship to a specific event or gathering. This is the catch-all category. Sporting events, concerts, etc. would be in `cat:SportsEntertainment`. Events put on by clubs, faith groups, and other groups would be in `cat:Groups`.
+1. **Information** (`cat:Information`) — information about anything; articles, web links, documents, images. Includes topics that interest and inspire you (e.g. drawing, painting, dancing, religion, gaming, music). See `cat:SportsEntertainment` for sports and entertainment, and `cat:Groups` for formal memberships tied to a hobby or interest.
+1. **Government** (`cat:Government`) — government-issued credentials, tax records, and civic relationships.
+    - **Federal** (`cat:Federal`) — federal government topic (e.g. passport, federal tax records).
+        - **SSN** (`cat:SSN`) — social security number issued by the federal Social Security Administration.
+        - **Passport** (`cat:Passport`) — passport issued by the Department of State.
+    - **State** (`cat:State`) — state government topic (e.g. driver's license, state tax records).
+        - **Birth Certificate** (`cat:BirthCertificate`) — a birth certificate issued by a state agency that issues and holds these records.
+        - **Drivers License** (`cat:DriversLicense`) — a driver's license issued by a state agency that issues and holds these records.
+1. **Companies** (`cat:Companies`) — a catch-all for your relationships with companies and organizations that provide services and/or products to you that are not included in more specific categories such as `cat:Finances`, `cat:HealthWellness`, `cat:Home`, `cat:Food`, etc.
+
+### Organizational Categories
+
+`cat:Organization` categories organize a person's professional and organizational-role information:
+
+1. **Customers** (`cat:Customers`) — customer organizations. Rename to "Clients", etc.
+1. **Marketing** (`cat:Marketing`) — marketing activities, campaigns, and related organizations.
+    - **Prospects** (`cat:Prospects`) — customer prospects. Rename to "Client prospects", etc.
+1. **Partners** (`cat:Partners`) — firms that provide goods and services.
+1. **People (org)** (`cat:People(org)`) — people the organization interacts with in a working capacity.
+    - **Employees** (`cat:Employees`) — related to employees.
+    - **Consultants** (`cat:Consultants`) — engaged consultants.
+    - **Others (org)** (`cat:Others(org)`) — people associated with the organization who don't fit Employees, Consultants, or Colleagues.
+    - **Colleagues** (`cat:Colleagues`) — coworkers and peers within the organization not tracked as formal Employee records.
+    - **Advisors** (`cat:Advisors`) — individuals who advise the organization in a non-employee capacity.
+    - **Board of Directors** (`cat:BoardOfDirectors`) — the organization's board members.
+    - **Direct Reports** (`cat:DirectReports`) — employees who report directly to a specific manager or role within the organization.
+    - **Manager(s)** (`cat:Managers`) — the manager or managers a specific employee or role reports to within the organization.
+1. **KB** (`cat:KB`) — corporate knowledge bases.
+1. **Projects (org)** (`cat:Projects(org)`) — projects related to R&D, manufacturing, sales, marketing, operations, HR, etc.
+1. **Meetings** (`cat:Meetings`) — face-to-face or online meetings, whether internal or with clients/customers. See also Events (org) for external, travel-to or larger-scale gatherings.
+1. **Events (org)** (`cat:Events(org)`) — external events that people travel to, or larger-scale gatherings — conferences, webinars, town halls, and similar events. See also Meetings for ordinary internal or client/customer meetings.
+    - **Conferences** (`cat:Conferences`) — a conference or professional gathering.
+1. **Suppliers** (`cat:Suppliers`) — companies that supply goods or services to this organization.
+1. **Legal (org)** (`cat:Legal(org)`) — contracts and agreements.
+1. **Government (org)** (`cat:Government(org)`) — interactions with government organizations.
+1. **Finances (org)** (`cat:Finances(org)`) — corporate finance-related matters.
+    - **Banking & Payments (org)** (`cat:BankingPayments(org)`) — firms that help organizations store, access, and move their cash. These include Retail Banks & Credit Unions, which provide checking accounts, savings accounts, and debit cards. These also include Payment Processors like Visa, Mastercard, or PayPal.
+    - **Investing (org)** (`cat:Investing(org)`) — These include Investment firms, Private Equity firms, Venture Capitalists, Brokerage Firms like Charles Schwab and Mutual Fund companies like Vanguard or Fidelity.
+    - **Lending & Credit (org)** (`cat:LendingCredit(org)`) — banks or specialized companies that give loans for specific purposes and Credit Card Issuers that give employees a card for travel and related expenses.
+    - **Insurance (org)** (`cat:Insurance(org)`) — firms that protect organizations from risks.
+    - **Advisory (org)** (`cat:Advisory(org)`) — Financial Planners, outsourced CFO consultants, Accountants and Bookkeepers and Tax preparers.
+
+### Pod Categories File
+
+**`category.ttl`** — The pod categories, defining a `skos:ConceptScheme` rather than an OWL class hierarchy:
+  - *Individuals*: `cat:CategoryScheme` (a `skos:ConceptScheme`), `cat:Person`/`cat:Organization` (its two `skos:hasTopConcept` top concepts), and every other category concept — each a plain `skos:Concept`, with a `skos:prefLabel` for its display name, a `skos:broader` value naming its parent concept, and `skos:inScheme cat:CategoryScheme`. There is no `cat:Category` class at all — a category concept's type is just `skos:Concept`, scoped to the app's own scheme via `skos:inScheme` rather than a dedicated class.
+  - No `cat:` property of its own — each `cat-templates.ttl` template pod instead carries its own `pod:category` value naming the concept it's a template for (see [Pod Ontology File](#pod-ontology-files) above).
+
+### Category Extensions
+
+A **category extension** (`category-ext/`) is a bundle an organization publishes so that other instances of the app can file and validate pods of a category the app's own taxonomy does not define. One self-contained file per publisher carries three things: the publisher's own `skos:ConceptScheme`, the `skos:Concept` individuals in it, and a `pod:TemplatePod` for each. The member shape those templates name sits beside it in `category-ext/shacl/`.
+
+#### Why an extension rather than a new category concept
+
+`cat:CategoryScheme` is this app's curated taxonomy of the *kinds* of thing a person tracks — Groups, Medical, Vehicles. A single named organization is not one of those kinds; it is an instance of one. Adding it there would grow the shipped taxonomy by one concept per organization anyone ever joins, and would oblige `cat-templates.ttl` to grow with it (integrity.md's TTL-6 requires a template per concept).
+
+Neither file changes to accommodate an extension. Two useful consequences follow: `images/category-ontology/category.png` (PNG-5) stays correct as extensions are added, and TTL-7's invariant — every template in `cat-templates.ttl` carries `pod:memberShape pshapes:ContactInfoShape`, with no exception — stays **true**, because an extension's template is not in that file. Variation arrives only with an extension.
+
+#### How an extension links to the taxonomy
+
+With `skos:broadMatch`, never `skos:broader`. SKOS reserves `skos:broader` for hierarchy *within* one concept scheme and provides the `skos:mappingRelation` family — of which `skos:broadMatch` is one — for links *between* schemes. An extension concept is by definition in another scheme, so `skos:broadMatch` is the correct predicate and `skos:broader` would be a misuse.
+
+That link is load-bearing, not decorative: a recipient whose app does not have the extension installed still needs somewhere to file an incoming pod, and the `broadMatch` target is that somewhere. `shacl/pod-shacl.ttl`'s `:PodShape` accordingly requires a `pod:category` value to be a `skos:Concept` in *some* `skos:ConceptScheme` rather than in `cat:CategoryScheme` specifically; integrity.md's **TTL-8** carries what SHACL cannot, requiring every extension concept to sit in its own file's scheme, carry exactly one `skos:broadMatch` to a `cat:` concept, never use `skos:broader` across schemes, and have a matching `pod:TemplatePod` in the same file.
+
+#### What a bundle contains
+
+One file per publisher, holding three things:
+
+- a `skos:ConceptScheme` of the publisher's own;
+- one or more `skos:Concept` individuals in it, each carrying exactly one `skos:broadMatch` into `cat:CategoryScheme`;
+- a `pod:TemplatePod` per concept, naming whichever `pod:memberShape` that publisher requires.
+
+Its shapes file sits beside it in `category-ext/shacl/`.
+
+That third item is the point of the mechanism. Every template in `cat-templates.ttl` names the same `pod:memberShape`, `pshapes:ContactInfoShape`, so a member graph is validated as a generic contact-info profile whatever its category. An extension's template may name a different shape — which is what makes `pod:memberShape` a genuine per-category hook rather than a constant.
+
+An extension is expected to mint **no vocabulary of its own**. The terms its shape constrains should already exist in `persona.ttl`, `other/`, or `persona-ext/`; what belongs to the publisher is the shape — which fields it requires, how many values it permits, and which values it recognizes. See [Where a New Term Goes](CLAUDE.md#where-a-new-term-goes), whose rule 5 is what usually leaves an extension with nothing to declare beyond its scheme, template, and shape.
+
+For a worked extension — a society's member directory form, its concept, template and shape, and the pod whose member graphs it validates — see [example.md](example.md#boston-hub-society).
 
 ## Persona Ontology
 
