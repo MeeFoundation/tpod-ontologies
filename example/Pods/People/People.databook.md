@@ -5,14 +5,14 @@ type: pod-databook
 version: 1.1.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "People" (pod:category: cat:People). It is a
+  Pod DataBook for folder "People" (pod:category: podcat:People). It is a
   one-member pod with one member entry about :Self — a purely
   organizational category node with no relationship of its own beyond
   Alice's required membership, though that member entry now carries a
   minimal ContactInfo-style claim (organization name,
-  email), per cat:People's own pod:TemplatePod.
+  email), per podcat:People's own pod:TemplatePod.
 v4:
-  category: "cat:People"
+  category: "podcat:People"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -29,7 +29,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "People" pod is a purely organizational category node (`pod:category: cat:People`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, plus a minimal organization name and email, so `:Self` satisfies the `ContactInfoShape` `cat:People`'s own `pod:TemplatePod` expects of its member content (`pod:memberShape`) — no longer deliberately empty now that this requirement applies.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "People" pod is a purely organizational category node (`pod:category: podcat:People`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, plus a minimal organization name and email, so `:Self` satisfies the `ContactInfoShape` `podcat:People`'s own `pod:TemplatePod` expects of its member content (`pod:memberShape`) — no longer deliberately empty now that this requirement applies.
 
 #### Graph
 

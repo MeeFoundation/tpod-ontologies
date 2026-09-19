@@ -5,9 +5,9 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Sophia Walker" (pod:category: cat:ImmediateFamily). It is a two-member pod — Alice (:Self) and her husband Dave — that also carries a form tool about :Sophia_Walker, Alice's daughter. Sophia has no instance of the app, so she is the pod's subject rather than one of its members: Alice added the tool manually and chose the Contact Info template (pshapes:ContactInfoShape) for it, even though cat:ImmediateFamily's own template pod declares no tool.
+  Pod DataBook for folder "Sophia Walker" (pod:category: podcat:ImmediateFamily). It is a two-member pod — Alice (:Self) and her husband Dave — that also carries a form tool about :Sophia_Walker, Alice's daughter. Sophia has no instance of the app, so she is the pod's subject rather than one of its members: Alice added the tool manually and chose the Contact Info template (pshapes:ContactInfoShape) for it, even though podcat:ImmediateFamily's own template pod declares no tool.
 v4:
-  category: "cat:ImmediateFamily"
+  category: "podcat:ImmediateFamily"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -64,7 +64,7 @@ This graph captures Dave's self-claimed family persona as transmitted from Dave'
 
 #### Overview
 
-This graph captures Alice's Contact Info record of her daughter Sophia Walker. Sophia has no instance of the app, so she cannot join this pod as a member: Alice added this graph manually, in a form tool she added herself, and chose the Contact Info template (`pshapes:ContactInfoShape`) for it, which is what gives an otherwise ordinary `cat:ImmediateFamily` pod a tool of its own. Sophia is therefore the pod's derived subject rather than one of its two members. Alice is the claimant.
+This graph captures Alice's Contact Info record of her daughter Sophia Walker. Sophia has no instance of the app, so she cannot join this pod as a member: Alice added this graph manually, in a form tool she added herself, and chose the Contact Info template (`pshapes:ContactInfoShape`) for it, which is what gives an otherwise ordinary `podcat:ImmediateFamily` pod a tool of its own. Sophia is therefore the pod's derived subject rather than one of its two members. Alice is the claimant.
 
 #### Graph
 

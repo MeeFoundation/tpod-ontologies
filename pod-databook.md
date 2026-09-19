@@ -166,19 +166,19 @@ kebab-cased (e.g. `Employees` → `employees`, `ImmediateFamily` → `immediate-
 kebab-casing is acronym-aware: a hyphen is inserted only at a lowercase→uppercase boundary or an
 uppercase-run→lowercase boundary, so consecutive capitals stay together). If the matched category
 concept's own local name carries a literal `(org)` disambiguator (used only to distinguish it from a
-same-named Person-side sibling concept, e.g. `cat:BankingPayments` vs. `cat:BankingPayments(org)`),
+same-named Person-side sibling concept, e.g. `podcat:BankingPayments` vs. `podcat:BankingPayments(org)`),
 that suffix is dropped before kebab-casing — `<catType>` only ever needs to disambiguate a
 *recurring folder name* by role (e.g. were the same person to appear both as a leaf under
 `Employees` and as one under `ImmediateFamily`, both Person-side), never the Person/Organization
 split itself, which is already carried by the folder's own tree position and by `pod:category`'s
 actual asserted value, never by the filename. So a bank pod whose `pod:category` is
-`cat:BankingPayments` (Person-side, since it's the person's own relationship with the bank, not
+`podcat:BankingPayments` (Person-side, since it's the person's own relationship with the bank, not
 company business filed under `Work`) is named `<local>(banking-payments).databook.md` with no `-org`
 marker, and the same bare `banking-payments` `<catType>` would apply identically if a pod's
-`pod:category` were instead the org-side `cat:BankingPayments(org)`, since nothing in the filename
+`pod:category` were instead the org-side `podcat:BankingPayments(org)`, since nothing in the filename
 needs to tell the two apart.
 
-A pod-databook's `<catType>` parenthetical is purely a filename-level disambiguator — `cat:catType`
+A pod-databook's `<catType>` parenthetical is purely a filename-level disambiguator — `podcat:catType`
 does not exist in RDF at all, so nothing in RDF records it, and nothing reverse-matches the filename
 to derive it. The one RDF-level echo of a folder's classification is `pod:category`, read directly
 from the pod-databook's own explicit `v4.category` field (see [The `v4` Block](#the-v4-block)), not
@@ -200,7 +200,7 @@ of view, it just happens to never come from kebab-casing a `skos:prefLabel`.
 **Compression rule**: if `<local>`, normalized the same acronym-aware way `<catType>` already is, is
 identical to the kebab-cased `<catType>`, the parenthetical is dropped entirely, since it's pure
 redundancy — `<local>.databook.md` — rather than `<local>(<local>).databook.md`. For example
-`cat:Work`'s folder is named `Work`, and its own `catType` (`Work`) also kebab-cases to `work` — the
+`podcat:Work`'s folder is named `Work`, and its own `catType` (`Work`) also kebab-cases to `work` — the
 same string — so its file is `Work.databook.md`, not `Work(work).databook.md`. This applies on a
 normalized-equal match, not raw string identity (since `<local>` itself is never kebab-cased):
 folder `Health & Wellness`'s catType `HealthWellness` both normalize to `health-wellness`, so it
@@ -209,7 +209,7 @@ parenthetical since normalized `Acme` (`acme`) ≠ `organization`. Most of a tre
 compresses this way, since these folders' own name simply *is* their category.
 `Banking & Payments Firms(banking-payments).databook.md` is a further example of the
 non-compressing case: normalized `Banking & Payments Firms` (`banking-payments-firms`) ≠
-`banking-payments`, since the folder's own name matches `cat:BankingPayments`'s full
+`banking-payments`, since the folder's own name matches `podcat:BankingPayments`'s full
 `skos:prefLabel` ("Banking & Payments Firms") rather than a shortened form.
 
 Folder naming is standardized as the category's own display label (the OS folder name is used
@@ -318,7 +318,7 @@ into RDF.
 
 A prose summary of the pod, written as a folded block scalar (`description: >`). Not used by any
 tooling and not synthesized into RDF. Throughout the example tree it follows one house style: it
-opens `Pod DataBook for folder "<title>" (pod:category: cat:<Concept>)`, optionally noting where
+opens `Pod DataBook for folder "<title>" (pod:category: podcat:<Concept>)`, optionally noting where
 the pod is nested or whose category it reuses, then characterizes the pod's own shape — how many
 members it has, and what its tool is about if it carries one.
 
@@ -329,13 +329,13 @@ scalar-valued keys map one-for-one onto properties defined in `pod.ttl`:
 
 | YAML field | Ontology property | Cardinality | Meaning |
 |------------|-------------------|-------------|---------|
-| `v4.category` | `pod:category` | 0..1 | The category concept this pod was originally instantiated as — a `skos:Concept` individual in `cat:CategoryScheme` (e.g. `"cat:Others"`) or in a [category extension](README.md#category-extensions)'s own scheme (e.g. `"bhscat:BostonHubSociety"`); absent otherwise. Fixed at creation, not re-derived from the folder's current name. A hint for a recipient's app when this pod is shared with another member |
+| `v4.category` | `pod:category` | 0..1 | The category concept this pod was originally instantiated as — a `skos:Concept` individual in `podcat:PodCategoryScheme` (e.g. `"podcat:Others"`) or in a [category extension](README.md#pod-category-extensions)'s own scheme (e.g. `"bhscat:BostonHubSociety"`); absent otherwise. Fixed at creation, not re-derived from the folder's current name. A hint for a recipient's app when this pod is shared with another member |
 | `v4.creator` | `pod:creator` | 1 | Who created this pod's content — a `p:Person` |
 | `v4.owner` | `pod:owner` | 1+ (required, no upper bound) | Which of the pod's members hold the owner role — always includes `v4.creator`'s own value; a `p:Person`, never an `s:Service` |
 | `v4.userTag` | `pod:userTag` | 0..N | A free-text tag the user minted (e.g. a pet's name, to gather every pod about that pet). Shared pod content |
 | `v4.serviceTag` | `pod:serviceTag` | 0..N | A tag written by this member's own service module for its own bookkeeping. Each entry is a mapping of three sub-keys — `namespace`, `key`, `value` (`pod:tagNamespace`/`pod:tagKey`/`pod:tagValue`), e.g. `namespace: "foundation.mee.applecontacts"`, `key: "group"`, `value: "Christmas List"` — not a single string. Never displayed and never findable by the user — reachable only by the writing module, within its own namespace — and **local to this member's copy** — the one piece of pod content that does not propagate on a share |
 
-Values are written as quoted CURIEs (`"cat:Pets"`) or bare local names (`":Self"`); both are
+Values are written as quoted CURIEs (`"podcat:Pets"`) or bare local names (`":Self"`); both are
 resolved to full IRIs by `helpers/databook_graphs.py`. **Any key whose cardinality allows more than
 one value may be written either as a YAML list or, when it holds a single value, as a bare scalar** —
 `owner: ":Self"` and a one-item list are equivalent, and the same latitude applies to `member`
@@ -538,10 +538,10 @@ type: pod-databook
 version: 1.0.0
 created: 2026-01-31
 description: >
-  Pod DataBook for folder "Folder Name" (pod:category: cat:Concept). One-member pod with
+  Pod DataBook for folder "Folder Name" (pod:category: podcat:Concept). One-member pod with
   one member entry about :Self and one tool graph about :Topic.
 v4:
-  category: "cat:Concept"
+  category: "podcat:Concept"
   creator: ":Self"
   owner: ":Self"
   userTag:

@@ -5,11 +5,11 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Boston" (pod:category: cat:Home). It is a one-member pod with one
+  Pod DataBook for folder "Boston" (pod:category: podcat:Home). It is a one-member pod with one
   member entry about :Self and one tool graph about :Self (the pod's subject), typed
   residences:Residence, carrying Alice's previous Boston address.
 v4:
-  category: "cat:Home"
+  category: "podcat:Home"
   creator: ":Self"
   owner: ":Self"
   member:

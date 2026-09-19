@@ -35,7 +35,7 @@ Each pod gets two passes:
    `pshapes:` shapes are split across two files — done via the SHAPE_TO_FILE
    table below. A graph with no `shape:` value is skipped outright.
 
-The two passes use different base merges. cat-templates.ttl is in the
+The two passes use different base merges. pod-category-templates.ttl is in the
 template pass's base but deliberately out of the pod pass's, so pod-shacl
 can't fire on the 102 ctpl:*TemplatePod individuals, which are generic
 class-level content bound to no real person.
@@ -110,7 +110,7 @@ SHAPE_NS = {
     "shacl/organization-shacl.ttl":       "http://mee.foundation/ontologies/organization/shapes#",
     "other/shacl/education-shacl.ttl":    "http://mee.foundation/ontologies/education/shapes#",
     "persona-ext/shacl/directory-profile-shacl.ttl": "http://mee.foundation/ontologies/directory-profile/shapes#",
-    "category-ext/shacl/boston-hub-society-shacl.ttl": "http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes#",
+    "pod-category-ext/shacl/boston-hub-society-shacl.ttl": "http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes#",
 }
 
 # --- template CURIE prefix -> candidate shapes files ------------------------
@@ -131,7 +131,7 @@ PREFIX_TO_FILES = {
     "oshapes": ["shacl/organization-shacl.ttl"],
     "educationshapes": ["other/shacl/education-shacl.ttl"],
     "dpshapes": ["persona-ext/shacl/directory-profile-shacl.ttl"],
-    "bhsshapes": ["category-ext/shacl/boston-hub-society-shacl.ttl"],
+    "bhsshapes": ["pod-category-ext/shacl/boston-hub-society-shacl.ttl"],
 }
 
 # --- shape local name -> shapes file -----------------------------------------
@@ -162,7 +162,7 @@ SHAPE_TO_FILE = {
     "OrganizationShape":             "shacl/organization-shacl.ttl",
     "EducationRecordShape":          "other/shacl/education-shacl.ttl",
     "DirectoryProfileShape":         "persona-ext/shacl/directory-profile-shacl.ttl",
-    "MemberShape":                   "category-ext/shacl/boston-hub-society-shacl.ttl",
+    "MemberShape":                   "pod-category-ext/shacl/boston-hub-society-shacl.ttl",
 }
 
 
@@ -195,27 +195,27 @@ BASE_ONTOLOGY_FILES = [
     "project_files/wikidata-vehicle-makes-subset.ttl",
     "project_files/wikidata-vehicle-models-subset.ttl",
     "project_files/prov-upper.ttl",
-    "persona.ttl", "pod.ttl", "category.ttl",
+    "persona.ttl", "pod.ttl", "pod-categories.ttl",
     "other/pets.ttl", "other/vehicles.ttl", "other/identity-documents.ttl",
     "other/medical-appointments.ttl", "other/service-accounts.ttl",
     "other/banking.ttl", "other/residences.ttl", "other/itineraries.ttl",
     "other/education.ttl",
     "persona-ext/directory-profile.ttl",
     "organization.ttl", "service.ttl",
-] + sorted(glob.glob("category-ext/*.ttl"))
+] + sorted(glob.glob("pod-category-ext/*.ttl"))
 
-# The template pass additionally merges cat-templates.ttl; the pod pass
+# The template pass additionally merges pod-category-templates.ttl; the pod pass
 # deliberately does not, so pod-shacl's :PodShape can't fire on the 102
 # ctpl:*TemplatePod individuals — generic class-level content bound to no
 # real person, and not what a pod-databook's own validation is about.
-# Category extensions (category-ext/) are bundles: each file carries a
+# Category extensions (pod-category-ext/) are bundles: each file carries a
 # publisher's own skos:ConceptScheme *and* its pod:TemplatePod individuals.
 # The scheme half has to reach the pod pass, so that a pod:category value
 # naming an extension concept resolves against pod-shacl's sh:class
 # skos:Concept / skos:ConceptScheme checks; the template half is harmless
 # there, being a single well-formed pod:TemplatePod rather than
-# cat-templates.ttl's 106.
-TEMPLATE_PASS_ONTOLOGY_FILES = BASE_ONTOLOGY_FILES + ["cat-templates.ttl"]
+# pod-category-templates.ttl's 106.
+TEMPLATE_PASS_ONTOLOGY_FILES = BASE_ONTOLOGY_FILES + ["pod-category-templates.ttl"]
 
 # The four general shapes files the pod pass runs, all at once. The
 # per-template *-shacl.ttl files are deliberately absent: they target

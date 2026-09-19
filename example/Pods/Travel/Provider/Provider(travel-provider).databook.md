@@ -5,15 +5,15 @@ type: pod-databook
 version: 1.1.0
 created: 2026-09-11
 description: >
-  Pod DataBook for folder "Provider" (pod:category: cat:TravelProvider). It is a
+  Pod DataBook for folder "Provider" (pod:category: podcat:TravelProvider). It is a
   one-member pod with one member entry about :Self — a minimal stub, since
   "Provider" is a purely organizational category node with no content or
   relationship of its own beyond Alice's required membership. It also carries the
-  tool graph cat:TravelProvider's own TemplatePod requires,
+  tool graph podcat:TravelProvider's own TemplatePod requires,
   deliberately empty, since its real content lives in its own leaf pod (Hilton)
   instead.
 v4:
-  category: "cat:TravelProvider"
+  category: "podcat:TravelProvider"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -36,7 +36,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own tree of pods always has `:Self` as that member (see YAML-6), regardless of what the pod's subject is. The "Provider" pod is a purely organizational category node (`pod:category: cat:TravelProvider`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TravelProviderTemplatePod` sets as `pod:memberShape`.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own tree of pods always has `:Self` as that member (see YAML-6), regardless of what the pod's subject is. The "Provider" pod is a purely organizational category node (`pod:category: podcat:TravelProvider`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TravelProviderTemplatePod` sets as `pod:memberShape`.
 
 #### Graph
 
@@ -63,7 +63,7 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 #### Overview
 
-This graph is the pod's required tool graph — required since `cat:TravelProvider`'s own `TemplatePod` declares a form tool, even though "Provider" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pod, Hilton, instead). Deliberately empty — no triples at all — and so carries no `template:` value either, the same as every other scaffold pod's empty tool graph. Alice is both the claimant and the subject.
+This graph is the pod's required tool graph — required since `podcat:TravelProvider`'s own `TemplatePod` declares a form tool, even though "Provider" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pod, Hilton, instead). Deliberately empty — no triples at all — and so carries no `template:` value either, the same as every other scaffold pod's empty tool graph. Alice is both the claimant and the subject.
 
 #### Graph
 

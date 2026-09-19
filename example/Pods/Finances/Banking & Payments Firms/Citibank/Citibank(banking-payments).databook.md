@@ -5,7 +5,7 @@ type: pod-databook
 version: 2.1.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Citibank" (pod:category: cat:BankingPayments). It is a two-member
+  Pod DataBook for folder "Citibank" (pod:category: podcat:BankingPayments). It is a two-member
   pod (member entries about :Citibank_Service and :Self) with two tool graphs about :Self — one
   Alice's own self-asserted service-account username/password, the other Citibank's own claimed
   record (debit card, checking account, online service account). An o:Organization is not
@@ -13,7 +13,7 @@ description: >
   it provides; both that member graph and the tool graph are claimed by :Citibank itself, the
   party really making those claims.
 v4:
-  category: "cat:BankingPayments"
+  category: "podcat:BankingPayments"
   creator: ":Self"
   owner: ":Self"
   member:

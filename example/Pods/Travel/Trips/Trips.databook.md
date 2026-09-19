@@ -5,13 +5,13 @@ type: pod-databook
 version: 1.1.0
 created: 2026-08-30
 description: >
-  Pod DataBook for folder "Trips" (pod:category: cat:Trips), nested under "Travel". It is a
+  Pod DataBook for folder "Trips" (pod:category: podcat:Trips), nested under "Travel". It is a
   one-member pod with one member entry about :Self — a minimal stub, since "Trips" is a purely
   organizational category node with no content or relationship of its own beyond Alice's required
-  membership. Nested inside it is the "Kyoto Trip 2027" pod for a specific trip. also carries an empty tool graph, since cat:Trips's own
+  membership. Nested inside it is the "Kyoto Trip 2027" pod for a specific trip. also carries an empty tool graph, since podcat:Trips's own
   TemplatePod declares a form tool — the real content lives in this category's own leaf pod (Kyoto Trip 2027) instead.
 v4:
-  category: "cat:Trips"
+  category: "podcat:Trips"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -34,7 +34,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is. The "Trips" pod is a purely organizational category node (`pod:category: cat:Trips`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TripsTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is. The "Trips" pod is a purely organizational category node (`pod:category: podcat:Trips`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TripsTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
 
 #### Graph
 
@@ -61,7 +61,7 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 #### Overview
 
-This graph is the pod's required tool graph — required since `cat:Trips`'s own `TemplatePod` declares a form tool, even though "Trips" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pod, Kyoto Trip 2027, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
+This graph is the pod's required tool graph — required since `podcat:Trips`'s own `TemplatePod` declares a form tool, even though "Trips" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pod, Kyoto Trip 2027, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
 
 #### Graph
 

@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.2.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Alice Walker" (pod:category: cat:Employees, reusing its parent "Employees" pod's own origin, mirroring how e.g. "Ginger" reuses its parent "Pets" folder's own category rather than a separately-minted narrower one). It is a one-member pod with one member entry about :Self.
+  Pod DataBook for folder "Alice Walker" (pod:category: podcat:Employees, reusing its parent "Employees" pod's own origin, mirroring how e.g. "Ginger" reuses its parent "Pets" folder's own category rather than a separately-minted narrower one). It is a one-member pod with one member entry about :Self.
 v4:
-  category: "cat:Employees"
+  category: "podcat:Employees"
   creator: ":Self"
   owner: ":Self"
   member:

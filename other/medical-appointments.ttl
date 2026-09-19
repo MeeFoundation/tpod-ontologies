@@ -8,9 +8,9 @@
 @base <http://mee.foundation/ontologies/medical-appointments> .
 
 <http://mee.foundation/ontologies/medical-appointments> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/medical-appointments/1.4.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 1.4.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/medical-appointments/1.5.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 1.5.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
     rdfs:label "Medical Appointments Ontology"@en ;
     rdfs:comment """A small other/ peer ontology (see other/pets.ttl's own rdfs:comment for the
                     general pattern) for a domain a person merely *has* — a coordinated medical
@@ -47,8 +47,8 @@ medicalappointments:MedicalAppointmentRecord rdf:type owl:Class ;
                     sync between the coordinating members' own instances of the app. Asserted
                     via rdf:type directly on the graph file's own record
                     individual, validated by the SHACL shape :MedicalAppointmentRecordShape in
-                    other/shacl/medical-appointments-shacl.ttl, linked from cat:MedicalAppointment's own
-                    class-level pod (cat-templates.ttl) via pod:formShape — IRI
+                    other/shacl/medical-appointments-shacl.ttl, linked from podcat:MedicalAppointment's own
+                    class-level pod (pod-category-templates.ttl) via pod:formShape — IRI
                     http://mee.foundation/ontologies/medical-appointments/shapes/medical-appointment — for
                     validation. Named "Record" rather than "Document" since this class
                     is explicitly not an identitydocuments:IdentityDocument, matching its

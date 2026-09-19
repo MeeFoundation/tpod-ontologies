@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.3.0
 created: 2026-08-03
 description: >
-  Pod DataBook for folder "Fred Flintstone" (pod:category: cat:Others). It is a two-member pod with two members about :Fred_Flintstone and :Self.
+  Pod DataBook for folder "Fred Flintstone" (pod:category: podcat:Others). It is a two-member pod with two members about :Fred_Flintstone and :Self.
 v4:
-  category: "cat:Others"
+  category: "podcat:Others"
   creator: ":Self"
   owner: ":Self"
   serviceTag:

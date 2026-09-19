@@ -1,43 +1,43 @@
-@prefix cat: <http://mee.foundation/ontologies/category#> .
+@prefix podcat: <http://mee.foundation/ontologies/pod-categories#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
-@base <http://mee.foundation/ontologies/category> .
+@base <http://mee.foundation/ontologies/pod-categories> .
 
-<http://mee.foundation/ontologies/category> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/category/2.9.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    rdfs:label "Category Taxonomy"@en ;
-    rdfs:comment """Category Taxonomy for the V4 App."""@en .
+<http://mee.foundation/ontologies/pod-categories> rdf:type owl:Ontology ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod-categories/2.10.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    rdfs:label "Pod Categories"@en ;
+    rdfs:comment """Pod Categories for the V4 App."""@en .
 
 
 #################################################################
 #    Category Scheme
 #################################################################
 
-cat:CategoryScheme rdf:type skos:ConceptScheme ;
+podcat:PodCategoryScheme rdf:type skos:ConceptScheme ;
     rdfs:label "Category Scheme"@en ;
-    rdfs:comment """The SKOS concept scheme holding every category of information a user tracks about a person or organization. Every cat: concept in this file carries skos:inScheme cat:CategoryScheme — this is what identifies a concept as one of this app's own category concepts; there is no dedicated OWL class for that purpose any more (skos:Concept is the sole rdf:type every concept carries). Rooted at two top concepts, cat:Person and cat:Organization (skos:hasTopConcept), with every other concept reachable from one of the two by following skos:broader (asserted child → parent, at most one step at a time). skos:broader is a topical/thesaurus relation, not OWL subsumption: cat:Pets skos:broader cat:Person does not mean a pet is a kind of person, only that Pets is a narrower topic within the Person-rooted branch of information a user tracks about themselves — the same is true of every other skos:broader edge in this scheme. pod:category (pod.ttl) is the sole RDF-level record of which concept in this scheme, if any, a given pod's content matches — it records classification, not tree position (see pod.ttl/README.md for a pod's actual tree position, which is per-member state in that member's own store rather than anything recorded here)."""@en ;
-    skos:hasTopConcept cat:Person, cat:Organization .
+    rdfs:comment """The SKOS concept scheme holding every category of information a user tracks about a person or organization. Every podcat: concept in this file carries skos:inScheme podcat:PodCategoryScheme — this is what identifies a concept as one of this app's own category concepts; there is no dedicated OWL class for that purpose any more (skos:Concept is the sole rdf:type every concept carries). Rooted at two top concepts, podcat:Person and podcat:Organization (skos:hasTopConcept), with every other concept reachable from one of the two by following skos:broader (asserted child → parent, at most one step at a time). skos:broader is a topical/thesaurus relation, not OWL subsumption: podcat:Pets skos:broader podcat:Person does not mean a pet is a kind of person, only that Pets is a narrower topic within the Person-rooted branch of information a user tracks about themselves — the same is true of every other skos:broader edge in this scheme. pod:category (pod.ttl) is the sole RDF-level record of which concept in this scheme, if any, a given pod's content matches — it records classification, not tree position (see pod.ttl/README.md for a pod's actual tree position, which is per-member state in that member's own store rather than anything recorded here)."""@en ;
+    skos:hasTopConcept podcat:Person, podcat:Organization .
 
 
 #################################################################
 #    Category concepts: Personal and Organizational roots
 #################################################################
 
-cat:Person rdf:type skos:Concept ;
+podcat:Person rdf:type skos:Concept ;
     skos:prefLabel "Person"@en ;
-    skos:inScheme cat:CategoryScheme ;
-    skos:topConceptOf cat:CategoryScheme ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    skos:topConceptOf podcat:PodCategoryScheme ;
     rdfs:comment "Root topic for all built-in categories of information about a person — people or person-centric topics (e.g. People, Work, Government)."@en .
 
-cat:Organization rdf:type skos:Concept ;
+podcat:Organization rdf:type skos:Concept ;
     skos:prefLabel "Organization"@en ;
-    skos:inScheme cat:CategoryScheme ;
-    skos:topConceptOf cat:CategoryScheme ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    skos:topConceptOf podcat:PodCategoryScheme ;
     rdfs:comment "Root topic for all built-in categories of information about an organization — organizations and organization-centric topics (e.g. Companies, BankingPayments(org))."@en .
 
 #################################################################
@@ -45,704 +45,704 @@ cat:Organization rdf:type skos:Concept ;
 #################################################################
 
 #################################################################
-#    cat:Groups and narrower concepts
+#    podcat:Groups and narrower concepts
 #################################################################
 
 
-cat:Groups rdf:type skos:Concept ;
+podcat:Groups rdf:type skos:Concept ;
     skos:prefLabel "Groups"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "A catch-all for clubs, charities, faith groups, and other groups that are not covered by a more specific category (e.g. cat:SportsEntertainment, cat:Food, etc.)."@en .
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "A catch-all for clubs, charities, faith groups, and other groups that are not covered by a more specific category (e.g. podcat:SportsEntertainment, podcat:Food, etc.)."@en .
 
 
 #################################################################
-#    cat:People and narrower concepts
+#    podcat:People and narrower concepts
 #################################################################
 
-cat:People rdf:type skos:Concept ;
+podcat:People rdf:type skos:Concept ;
     skos:prefLabel "People"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "People in your social or professional life. Use this category for people not otherwise tied to a specific domain — a bookkeeper you know belongs under Finances (Advisory Firms), and your primary care physician belongs under Health & Wellness (Medical > Provider > Primary Care Physician), rather than here."@en .
 
-cat:ImmediateFamily rdf:type skos:Concept ;
+podcat:ImmediateFamily rdf:type skos:Concept ;
     skos:prefLabel "Immediate Family"@en ;
-    skos:broader cat:People ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Your closest living relatives, which generally include parents, siblings, spouses/partners, and children."@en .
 
-cat:ExtendedFamily rdf:type skos:Concept ;
+podcat:ExtendedFamily rdf:type skos:Concept ;
     skos:prefLabel "Extended Family"@en ;
-    skos:broader cat:People ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Relatives outside the immediate nuclear group, such as grandparents, aunts, uncles, cousins, nieces and nephews."@en .
 
-cat:InLawsStepFamily rdf:type skos:Concept ;
+podcat:InLawsStepFamily rdf:type skos:Concept ;
     skos:prefLabel "In-Laws / Step-Family"@en ;
-    skos:broader cat:People ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Relatives gained through marriage or legal guardianship, including a spouse's parents and siblings, or children from a previous relationship."@en .
 
-cat:Others rdf:type skos:Concept ;
+podcat:Others rdf:type skos:Concept ;
     skos:prefLabel "Others"@en ;
-    skos:broader cat:People ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "People you know socially or professionally who are not part of your family — acquaintances, friends, neighbors, or other connections."@en .
 
 #################################################################
-#    cat:Work and narrower concepts
+#    podcat:Work and narrower concepts
 #################################################################
 
-cat:Work rdf:type skos:Concept ;
+podcat:Work rdf:type skos:Concept ;
     skos:prefLabel "Work"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Professional roles. Employment history, resume/CV, job level, job function, industry."@en .
 
 
 #################################################################
-#    cat:Companies
+#    podcat:Companies
 #################################################################
 
-cat:Companies rdf:type skos:Concept ;
+podcat:Companies rdf:type skos:Concept ;
     skos:prefLabel "Companies"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "A catch-all for your relationships with companies and organizations that provide services and/or products to you that are not included in more specific categories such as cat:Finances, cat:HealthWellness, cat:Home, cat:Food, etc."@en .
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "A catch-all for your relationships with companies and organizations that provide services and/or products to you that are not included in more specific categories such as podcat:Finances, podcat:HealthWellness, podcat:Home, podcat:Food, etc."@en .
 
 
 #################################################################
-#    cat:Finances
+#    podcat:Finances
 #################################################################
 
-cat:Finances rdf:type skos:Concept ;
+podcat:Finances rdf:type skos:Concept ;
     skos:prefLabel "Finances"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Information about personal finances, bookkeeping, budgets, payment cards, bank accounts, brokerage accounts, insurance policies, financial advisors, etc."@en .
 
-cat:Bookkeeping rdf:type skos:Concept ;
+podcat:Bookkeeping rdf:type skos:Concept ;
     skos:prefLabel "Bookkeeping"@en ;
-    skos:broader cat:Finances ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Budgeting, expense tracking, income, debts, IOUs, and savings goals."@en .
 
-cat:BankingPayments rdf:type skos:Concept ;
+podcat:BankingPayments rdf:type skos:Concept ;
     skos:prefLabel "Banking & Payments Firms"@en ;
-    skos:broader cat:Finances ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that help you store, access, and move your cash for daily living. These include Retail Banks & Credit Unions, which provide checking accounts, savings accounts, and debit cards. These also include Payment Processors like Visa, Mastercard, or PayPal that let you buy things online and in stores, and Remittance Firms like Western Union or Wise used to send money to family or friends, especially overseas."@en .
 
-cat:Investing rdf:type skos:Concept ;
+podcat:Investing rdf:type skos:Concept ;
     skos:prefLabel "Investment Firms"@en ;
-    skos:broader cat:Finances ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that help you buy assets, so your money can grow over time for goals like buying a house or retiring. These include Brokerage Firms like Charles Schwab or Robinhood where you buy and sell stocks, bonds, and ETFs; Robo-Advisors, computer-run investing platforms like Betterment or Wealthfront that manage your portfolio for a low fee; and Mutual Fund companies like Vanguard or Fidelity that pool your money with other investors to buy a large bundle of stocks."@en .
 
-cat:LendingCredit rdf:type skos:Concept ;
+podcat:LendingCredit rdf:type skos:Concept ;
     skos:prefLabel "Lending & Credit Firms"@en ;
-    skos:broader cat:Finances ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that lend you money when you need to buy something expensive that you cannot pay for all at once. These include Mortgage Lenders, banks or specialized companies that give you loans specifically to buy a home; Consumer Finance Companies, that give out personal loans, auto loans, or student loans; and Credit Card Issuers, banks that give you a plastic card to borrow money on the spot for daily purchases."@en .
 
-cat:Insurance rdf:type skos:Concept ;
+podcat:Insurance rdf:type skos:Concept ;
     skos:prefLabel "Insurance Firms"@en ;
-    skos:broader cat:Finances ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that protect you and your family from financial ruin if something bad happens. These include Life & Health Insurance firms that cover medical bills or provide money to your family if you pass away, and Property & Casualty Insurance firms that insure your car, home, or apartment against accidents and theft."@en .
 
-cat:Advisory rdf:type skos:Concept ;
+podcat:Advisory rdf:type skos:Concept ;
     skos:prefLabel "Advisory Firms"@en ;
-    skos:broader cat:Finances ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms and individuals who do not just hold your money, but tell you the best ways to use it. These include Financial Planners (Wealth Advisors), human experts who help you build a custom roadmap for taxes, retirement, and budgeting, and Estate Planners, specialized professionals who help you write wills and plan how to pass your money to your children. Also includes Accountants and Bookkeepers, who track your income and expenses and prepare your taxes."@en .
 
 #################################################################
-#    cat:HealthWellness
+#    podcat:HealthWellness
 #################################################################
 
-cat:HealthWellness rdf:type skos:Concept ;
+podcat:HealthWellness rdf:type skos:Concept ;
     skos:prefLabel "Health & Wellness"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Personal health and wellness information. Medical history, allergies, medications, vaccinations, prescriptions, eyeglasses, ethnicity, gender, age."@en .
 
-cat:Medical rdf:type skos:Concept ;
+podcat:Medical rdf:type skos:Concept ;
     skos:prefLabel "Medical"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Medical (as opposed to dental or vision) care — diagnoses, treatments, providers, and insurance."@en .
 
-cat:MedicalHistory rdf:type skos:Concept ;
+podcat:MedicalHistory rdf:type skos:Concept ;
     skos:prefLabel "History"@en ;
-    skos:broader cat:Medical ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Medical ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Past diagnoses, conditions, surgeries, and treatments."@en .
 
-cat:MedicalInsurance rdf:type skos:Concept ;
+podcat:MedicalInsurance rdf:type skos:Concept ;
     skos:prefLabel "Insurance"@en ;
-    skos:broader cat:Medical ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Medical ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Medical health insurance policies, providers, and coverage."@en .
 
-cat:MedicalProvider rdf:type skos:Concept ;
+podcat:MedicalProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Medical ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Medical ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Medical providers and practices you see for care."@en .
 
-cat:PrimaryCarePhysician rdf:type skos:Concept ;
+podcat:PrimaryCarePhysician rdf:type skos:Concept ;
     skos:prefLabel "Primary Care Physician"@en ;
-    skos:broader cat:MedicalProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:MedicalProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Your primary care doctor, the physician you generally see first for checkups, referrals, and everyday health concerns, including name, contact information, and the name of the provider they are associated with."@en .
 
-cat:MedicalAppointment rdf:type skos:Concept ;
+podcat:MedicalAppointment rdf:type skos:Concept ;
     skos:prefLabel "Medical Appointment"@en ;
-    skos:broader cat:MedicalProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:MedicalProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A medical appointment and associated information required by the provider to arrange this appointment."@en .
 
-cat:Dental rdf:type skos:Concept ;
+podcat:Dental rdf:type skos:Concept ;
     skos:prefLabel "Dental"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Dental care — diagnoses, treatments, providers, and insurance."@en .
 
-cat:DentalHistory rdf:type skos:Concept ;
+podcat:DentalHistory rdf:type skos:Concept ;
     skos:prefLabel "History"@en ;
-    skos:broader cat:Dental ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Dental ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Past dental treatments, procedures, and conditions."@en .
 
-cat:DentalInsurance rdf:type skos:Concept ;
+podcat:DentalInsurance rdf:type skos:Concept ;
     skos:prefLabel "Insurance"@en ;
-    skos:broader cat:Dental ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Dental ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Dental insurance policies, providers, and coverage."@en .
 
-cat:DentalProvider rdf:type skos:Concept ;
+podcat:DentalProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Dental ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Dental ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Dental providers and practices you see for care."@en .
 
-cat:Dentist rdf:type skos:Concept ;
+podcat:Dentist rdf:type skos:Concept ;
     skos:prefLabel "Dentist"@en ;
-    skos:broader cat:DentalProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:DentalProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A dentist you see for care, including name, contact information, and the name of the provider they are associated with."@en .
 
-cat:DentalAppointment rdf:type skos:Concept ;
+podcat:DentalAppointment rdf:type skos:Concept ;
     skos:prefLabel "Dental Appointment"@en ;
-    skos:broader cat:DentalProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:DentalProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A dental appointment and associated information required by the provider to arrange this appointment."@en .
 
-cat:Vision rdf:type skos:Concept ;
+podcat:Vision rdf:type skos:Concept ;
     skos:prefLabel "Vision"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Vision and eye care — diagnoses, treatments, providers, and insurance."@en .
 
-cat:VisionHistory rdf:type skos:Concept ;
+podcat:VisionHistory rdf:type skos:Concept ;
     skos:prefLabel "History"@en ;
-    skos:broader cat:Vision ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Vision ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Past eye-care prescriptions, treatments, and conditions."@en .
 
-cat:VisionInsurance rdf:type skos:Concept ;
+podcat:VisionInsurance rdf:type skos:Concept ;
     skos:prefLabel "Insurance"@en ;
-    skos:broader cat:Vision ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Vision ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Vision insurance policies, providers, and coverage."@en .
 
-cat:VisionProvider rdf:type skos:Concept ;
+podcat:VisionProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Vision ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Vision ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Vision care providers and practices you see for care."@en .
 
-cat:EyeDoctor rdf:type skos:Concept ;
+podcat:EyeDoctor rdf:type skos:Concept ;
     skos:prefLabel "Eye Doctor"@en ;
-    skos:broader cat:VisionProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:VisionProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "An eye doctor you see for care, including name, contact information, and the name of the provider they are associated with."@en .
 
-cat:VisionAppointment rdf:type skos:Concept ;
+podcat:VisionAppointment rdf:type skos:Concept ;
     skos:prefLabel "Vision Appointment"@en ;
-    skos:broader cat:VisionProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:VisionProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A vision appointment and associated information required by the provider to arrange this appointment."@en .
 
-cat:Fitness rdf:type skos:Concept ;
+podcat:Fitness rdf:type skos:Concept ;
     skos:prefLabel "Fitness"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "General fitness and preventive physical health — exercise, gyms, trainers, and other non-clinical wellbeing information."@en .
 
-cat:FitnessProvider rdf:type skos:Concept ;
+podcat:FitnessProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Fitness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Fitness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Fitness providers and practices you see for care, e.g. gyms, trainers, and coaches."@en .
 
-cat:PersonalTrainer rdf:type skos:Concept ;
+podcat:PersonalTrainer rdf:type skos:Concept ;
     skos:prefLabel "Personal Trainer"@en ;
-    skos:broader cat:FitnessProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:FitnessProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A personal trainer you see for care, including name, contact information, and the name of the provider they are associated with."@en .
 
-cat:Nutrition rdf:type skos:Concept ;
+podcat:Nutrition rdf:type skos:Concept ;
     skos:prefLabel "Nutrition"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Nutritionists and dietitians."@en .
 
-cat:NutritionHistory rdf:type skos:Concept ;
+podcat:NutritionHistory rdf:type skos:Concept ;
     skos:prefLabel "History"@en ;
-    skos:broader cat:Nutrition ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Nutrition ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Past nutritional consultations, diet plans, and dietary conditions."@en .
 
-cat:NutritionProvider rdf:type skos:Concept ;
+podcat:NutritionProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Nutrition ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Nutrition ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Nutritionists and dietitians you see for care."@en .
 
-cat:MentalHealth rdf:type skos:Concept ;
+podcat:MentalHealth rdf:type skos:Concept ;
     skos:prefLabel "Mental Health"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Mental and behavioral health care."@en .
 
-cat:MentalHealthHistory rdf:type skos:Concept ;
+podcat:MentalHealthHistory rdf:type skos:Concept ;
     skos:prefLabel "History"@en ;
-    skos:broader cat:MentalHealth ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:MentalHealth ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Past diagnoses, treatments, and mental health conditions."@en .
 
-cat:MentalHealthInsurance rdf:type skos:Concept ;
+podcat:MentalHealthInsurance rdf:type skos:Concept ;
     skos:prefLabel "Insurance"@en ;
-    skos:broader cat:MentalHealth ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:MentalHealth ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Mental health insurance policies, providers, and coverage."@en .
 
-cat:MentalHealthProvider rdf:type skos:Concept ;
+podcat:MentalHealthProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:MentalHealth ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:MentalHealth ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Mental health providers and practices you see for care, e.g. therapists, counselors, and psychiatrists."@en .
 
-cat:Therapist rdf:type skos:Concept ;
+podcat:Therapist rdf:type skos:Concept ;
     skos:prefLabel "Therapist"@en ;
-    skos:broader cat:MentalHealthProvider ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:MentalHealthProvider ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A therapist you see for care, including name, contact information, and the name of the provider they are associated with."@en .
 
-cat:PhysicalTherapy rdf:type skos:Concept ;
+podcat:PhysicalTherapy rdf:type skos:Concept ;
     skos:prefLabel "Physical Therapy"@en ;
-    skos:broader cat:HealthWellness ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:HealthWellness ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Physical therapy and rehabilitative care."@en .
 
-cat:PhysicalTherapyHistory rdf:type skos:Concept ;
+podcat:PhysicalTherapyHistory rdf:type skos:Concept ;
     skos:prefLabel "History"@en ;
-    skos:broader cat:PhysicalTherapy ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:PhysicalTherapy ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Past physical therapy treatments, injuries, and rehabilitation plans."@en .
 
-cat:PhysicalTherapyProvider rdf:type skos:Concept ;
+podcat:PhysicalTherapyProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:PhysicalTherapy ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:PhysicalTherapy ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Physical therapy providers and practices you see for care."@en .
 
 #################################################################
-#    cat:Personality
+#    podcat:Personality
 #################################################################
 
-cat:Personality rdf:type skos:Concept ;
+podcat:Personality rdf:type skos:Concept ;
     skos:prefLabel "Personality"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Self-assessments of personality, temperament, or social style — e.g. Myers-Briggs (MBTI) type, Big Five, DISC, Enneagram, or similar self-assessment instruments."@en .
 
 #################################################################
-#    cat:Events and narrower concepts
+#    podcat:Events and narrower concepts
 #################################################################
 
-cat:Events rdf:type skos:Concept ;
+podcat:Events rdf:type skos:Concept ;
     skos:prefLabel "Events"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "Participation in or relationship to a specific event or gathering. This is the catch-all category. Sporting events, concerts, etc. would be in cat:SportsEntertainment. Events put on by clubs, faith groups, and other groups would be in cat:Groups."@en .
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "Participation in or relationship to a specific event or gathering. This is the catch-all category. Sporting events, concerts, etc. would be in podcat:SportsEntertainment. Events put on by clubs, faith groups, and other groups would be in podcat:Groups."@en .
 
 
 #################################################################
-#    cat:Government topics and narrower concepts
+#    podcat:Government topics and narrower concepts
 #################################################################
 
-cat:Government rdf:type skos:Concept ;
+podcat:Government rdf:type skos:Concept ;
     skos:prefLabel "Government"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Government-issued credentials, tax records, and civic relationships."@en .
 
-cat:Federal rdf:type skos:Concept ;
+podcat:Federal rdf:type skos:Concept ;
     skos:prefLabel "Federal"@en ;
-    skos:broader cat:Government ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Government ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Federal government topic (e.g. passport, federal tax records)."@en .
 
-cat:SSN rdf:type skos:Concept ;
+podcat:SSN rdf:type skos:Concept ;
     skos:prefLabel "SSN"@en ;
-    skos:broader cat:Federal ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Federal ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Social security number issued by the federal Social Security Administration."@en .
 
-cat:Passport rdf:type skos:Concept ;
+podcat:Passport rdf:type skos:Concept ;
     skos:prefLabel "Passport"@en ;
-    skos:broader cat:Federal ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Federal ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Passport issued by the Department of State."@en .
 
-cat:State rdf:type skos:Concept ;
+podcat:State rdf:type skos:Concept ;
     skos:prefLabel "State"@en ;
-    skos:broader cat:Government ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Government ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "State government topic (e.g. driver's license, state tax records)."@en .
 
-cat:BirthCertificate rdf:type skos:Concept ;
+podcat:BirthCertificate rdf:type skos:Concept ;
     skos:prefLabel "Birth Certificate"@en ;
-    skos:broader cat:State ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:State ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A birth certificate issued by a state agency that issues and holds these records."@en .
 
-cat:DriversLicense rdf:type skos:Concept ;
+podcat:DriversLicense rdf:type skos:Concept ;
     skos:prefLabel "Drivers License"@en ;
-    skos:broader cat:State ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:State ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A driver's license issued by a state agency that issues and holds these records."@en .
 
 #################################################################
-#    cat:Information and narrower concepts
+#    podcat:Information and narrower concepts
 #################################################################
 
-cat:Information rdf:type skos:Concept ;
+podcat:Information rdf:type skos:Concept ;
     skos:prefLabel "Information"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "Information about anything; articles, web links, documents, images. Includes topics that interest and inspire you (e.g. drawing, painting, dancing, religion, gaming, music). See cat:SportsEntertainment for sports and entertainment, and cat:Groups for formal memberships tied to a hobby or interest."@en .
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "Information about anything; articles, web links, documents, images. Includes topics that interest and inspire you (e.g. drawing, painting, dancing, religion, gaming, music). See podcat:SportsEntertainment for sports and entertainment, and podcat:Groups for formal memberships tied to a hobby or interest."@en .
 
 #################################################################
-#    cat:Things and narrower concepts
+#    podcat:Things and narrower concepts
 #################################################################
 
-cat:Things rdf:type skos:Concept ;
+podcat:Things rdf:type skos:Concept ;
     skos:prefLabel "Things"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Owned assets, property, vehicles, and other possessions."@en .
 
-cat:Vehicles rdf:type skos:Concept ;
+podcat:Vehicles rdf:type skos:Concept ;
     skos:prefLabel "Vehicles"@en ;
-    skos:broader cat:Things ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "Related to owning and maintaining a vehicle. Registration, title, maintenance and repair history. See cat:VehiclesProvider for the firms and shops that service a vehicle, and cat:Insurance for vehicle insurance."@en .
+    skos:broader podcat:Things ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "Related to owning and maintaining a vehicle. Registration, title, maintenance and repair history. See podcat:VehiclesProvider for the firms and shops that service a vehicle, and podcat:Insurance for vehicle insurance."@en .
 
-cat:VehiclesProvider rdf:type skos:Concept ;
+podcat:VehiclesProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Vehicles ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "Firms and shops that keep a vehicle on the road — roadside assistance, dealerships, accessory vendors, and repair shops. See cat:Insurance for vehicle insurance."@en .
+    skos:broader podcat:Vehicles ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "Firms and shops that keep a vehicle on the road — roadside assistance, dealerships, accessory vendors, and repair shops. See podcat:Insurance for vehicle insurance."@en .
 
-cat:Pets rdf:type skos:Concept ;
+podcat:Pets rdf:type skos:Concept ;
     skos:prefLabel "Pets"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Care instructions, veterinarians, medicines, food providers."@en .
 
-cat:PetsMedical rdf:type skos:Concept ;
+podcat:PetsMedical rdf:type skos:Concept ;
     skos:prefLabel "Medical"@en ;
-    skos:broader cat:Pets ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Pets ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A pet's medical care — veterinarians, prescriptions, medications and dosing instructions, devices, diagnoses, and treatments."@en .
 
-cat:PetsVeterinarians rdf:type skos:Concept ;
+podcat:PetsVeterinarians rdf:type skos:Concept ;
     skos:prefLabel "Veterinarians"@en ;
-    skos:broader cat:PetsMedical ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:PetsMedical ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Veterinary practices and providers a pet sees for care."@en .
 
-cat:PetsDevices rdf:type skos:Concept ;
+podcat:PetsDevices rdf:type skos:Concept ;
     skos:prefLabel "Devices"@en ;
-    skos:broader cat:PetsMedical ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:PetsMedical ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Medical devices and supplies used in a pet's care, e.g. syringes, nebulizers, and injection solutions."@en .
 
-cat:PetsCareAndFeeding rdf:type skos:Concept ;
+podcat:PetsCareAndFeeding rdf:type skos:Concept ;
     skos:prefLabel "Care & Feeding"@en ;
-    skos:broader cat:Pets ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Pets ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Day-to-day instructions for someone else to take care of a pet — a pet's diet, food providers, feeding instructions and schedule, dietary restrictions, where they sleep, and other routine care."@en .
 
-cat:Home rdf:type skos:Concept ;
+podcat:Home rdf:type skos:Concept ;
     skos:prefLabel "Home"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Owning or renting a home, apartment, or other dwelling. Leases, deeds, utility accounts, real estate brokers."@en .
 
-cat:Previous rdf:type skos:Concept ;
+podcat:Previous rdf:type skos:Concept ;
     skos:prefLabel "Previous"@en ;
-    skos:broader cat:Home ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Home ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A previous home or residence, no longer current."@en .
 
 #################################################################
-#    cat:Projects and narrower concepts
+#    podcat:Projects and narrower concepts
 #################################################################
 
-cat:Projects rdf:type skos:Concept ;
+podcat:Projects rdf:type skos:Concept ;
     skos:prefLabel "Projects"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Involvement in a specific project or initiative."@en .
 
 #################################################################
-#    cat:Legal
+#    podcat:Legal
 #################################################################
 
-cat:Legal rdf:type skos:Concept ;
+podcat:Legal rdf:type skos:Concept ;
     skos:prefLabel "Legal"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Legal matters, contracts, agreements, trusts, wills, and professional legal relationships. Includes durable power of attorney and healthcare proxy agreements."@en .
 
 #################################################################
-#    cat:Travel
+#    podcat:Travel
 #################################################################
 
-cat:Travel rdf:type skos:Concept ;
+podcat:Travel rdf:type skos:Concept ;
     skos:prefLabel "Travel"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Travel plans, trips, and related information. Loyalty programs, airlines, bus lines, trains."@en .
 
 #################################################################
-#    cat:Trips
+#    podcat:Trips
 #################################################################
 
-cat:Trips rdf:type skos:Concept ;
+podcat:Trips rdf:type skos:Concept ;
     skos:prefLabel "Trips"@en ;
-    skos:broader cat:Travel ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "An individual trip being planned or taken — its own itinerary, dates, and destination-specific details, as distinct from cat:Travel's broader loyalty-program/airline/general travel information."@en .
+    skos:broader podcat:Travel ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "An individual trip being planned or taken — its own itinerary, dates, and destination-specific details, as distinct from podcat:Travel's broader loyalty-program/airline/general travel information."@en .
 
 #################################################################
-#    cat:TravelProvider
+#    podcat:TravelProvider
 #################################################################
 
-cat:TravelProvider rdf:type skos:Concept ;
+podcat:TravelProvider rdf:type skos:Concept ;
     skos:prefLabel "Provider"@en ;
-    skos:broader cat:Travel ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Travel ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Travel providers you book with — airlines, hotels, rail and bus lines, car rental companies, cruise lines, and travel agencies, including the loyalty program accounts and preferences held with each."@en .
 
 #################################################################
-#    cat:Food
+#    podcat:Food
 #################################################################
 
-cat:Food rdf:type skos:Concept ;
+podcat:Food rdf:type skos:Concept ;
     skos:prefLabel "Food"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Food preferences, dietary restrictions, favorite restaurants, recipes, shopping lists, and other food-related interests."@en .
 
 #################################################################
-#    cat:Education
+#    podcat:Education
 #################################################################
 
-cat:Education rdf:type skos:Concept ;
+podcat:Education rdf:type skos:Concept ;
     skos:prefLabel "Education"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Educational history and ongoing learning — schools, degrees, certifications, transcripts, and enrolled courses."@en .
 
 #################################################################
-#    cat:SportsEntertainment
+#    podcat:SportsEntertainment
 #################################################################
 
-cat:SportsEntertainment rdf:type skos:Concept ;
+podcat:SportsEntertainment rdf:type skos:Concept ;
     skos:prefLabel "Sports & Entertainment"@en ;
-    skos:broader cat:Person ;
-    skos:inScheme cat:CategoryScheme ;
-    rdfs:comment "Sports events (watching or participating) and entertainment (movies, plays, jazz clubs). Favorite teams/groups, venues, streaming services, ticketing. See cat:Information for other interests."@en .
+    skos:broader podcat:Person ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "Sports events (watching or participating) and entertainment (movies, plays, jazz clubs). Favorite teams/groups, venues, streaming services, ticketing. See podcat:Information for other interests."@en .
 
 #################################################################
 #    Organizational concepts
 #################################################################
 
-cat:Customers rdf:type skos:Concept ;
+podcat:Customers rdf:type skos:Concept ;
     skos:prefLabel "Customers"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Customer organizations. Rename to 'Clients', etc."@en .
 
-cat:Marketing rdf:type skos:Concept ;
+podcat:Marketing rdf:type skos:Concept ;
     skos:prefLabel "Marketing"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Marketing activities, campaigns, and related organizations."@en .
 
-cat:Prospects rdf:type skos:Concept ;
+podcat:Prospects rdf:type skos:Concept ;
     skos:prefLabel "Prospects"@en ;
-    skos:broader cat:Marketing ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Marketing ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Customer prospects. Rename to 'Client prospects', etc."@en .
 
-cat:Partners rdf:type skos:Concept ;
+podcat:Partners rdf:type skos:Concept ;
     skos:prefLabel "Partners"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that provide goods and services."@en .
 
-cat:People\(org\) rdf:type skos:Concept ;
+podcat:People\(org\) rdf:type skos:Concept ;
     skos:prefLabel "People (org)"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "People the organization interacts with in a working capacity."@en .
 
-cat:Employees rdf:type skos:Concept ;
+podcat:Employees rdf:type skos:Concept ;
     skos:prefLabel "Employees"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Related to employees."@en .
 
-cat:Consultants rdf:type skos:Concept ;
+podcat:Consultants rdf:type skos:Concept ;
     skos:prefLabel "Consultants"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Engaged consultants."@en .
 
-cat:Others\(org\) rdf:type skos:Concept ;
+podcat:Others\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Others (org)"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "People associated with the organization who don't fit Employees, Consultants, or Colleagues."@en .
 
-cat:Colleagues rdf:type skos:Concept ;
+podcat:Colleagues rdf:type skos:Concept ;
     skos:prefLabel "Colleagues"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Coworkers and peers within the organization not tracked as formal Employee records."@en .
 
-cat:Advisors rdf:type skos:Concept ;
+podcat:Advisors rdf:type skos:Concept ;
     skos:prefLabel "Advisors"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Individuals who advise the organization in a non-employee capacity."@en .
 
-cat:BoardOfDirectors rdf:type skos:Concept ;
+podcat:BoardOfDirectors rdf:type skos:Concept ;
     skos:prefLabel "Board of Directors"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "The organization's board members."@en .
 
-cat:DirectReports rdf:type skos:Concept ;
+podcat:DirectReports rdf:type skos:Concept ;
     skos:prefLabel "Direct Reports"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Employees who report directly to a specific manager or role within the organization."@en .
 
-cat:Managers rdf:type skos:Concept ;
+podcat:Managers rdf:type skos:Concept ;
     skos:prefLabel "Manager(s)"@en ;
-    skos:broader cat:People\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:People\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "The manager or managers a specific employee or role reports to within the organization."@en .
 
-cat:KB rdf:type skos:Concept ;
+podcat:KB rdf:type skos:Concept ;
     skos:prefLabel "KB"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Corporate knowledge bases."@en .
 
-cat:Projects\(org\) rdf:type skos:Concept ;
+podcat:Projects\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Projects (org)"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Projects related to R&D, manufacturing, sales, marketing, operations, HR, etc."@en .
 
-cat:Meetings rdf:type skos:Concept ;
+podcat:Meetings rdf:type skos:Concept ;
     skos:prefLabel "Meetings"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Face-to-face or online meetings, whether internal or with clients/customers. See also Events (org) for external, travel-to or larger-scale gatherings."@en .
 
-cat:Events\(org\) rdf:type skos:Concept ;
+podcat:Events\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Events (org)"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "External events that people travel to, or larger-scale gatherings — conferences, webinars, town halls, and similar events. See also Meetings for ordinary internal or client/customer meetings."@en .
 
-cat:Conferences rdf:type skos:Concept ;
+podcat:Conferences rdf:type skos:Concept ;
     skos:prefLabel "Conferences"@en ;
-    skos:broader cat:Events\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Events\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A conference or professional gathering."@en .
 
-cat:Suppliers rdf:type skos:Concept ;
+podcat:Suppliers rdf:type skos:Concept ;
     skos:prefLabel "Suppliers"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Companies that supply goods or services to this organization."@en .
 
-cat:Legal\(org\) rdf:type skos:Concept ;
+podcat:Legal\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Legal (org)"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Contracts and agreements."@en .
 
-cat:Government\(org\) rdf:type skos:Concept ;
+podcat:Government\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Government (org)"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Interactions with government organizations."@en .
 
-cat:Finances\(org\) rdf:type skos:Concept ;
+podcat:Finances\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Finances (org)"@en ;
-    skos:broader cat:Organization ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Organization ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Corporate finance-related matters."@en .
 
-cat:BankingPayments\(org\) rdf:type skos:Concept ;
+podcat:BankingPayments\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Banking & Payments (org)"@en ;
-    skos:broader cat:Finances\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that help organizations store, access, and move their cash. These include Retail Banks & Credit Unions, which provide checking accounts, savings accounts, and debit cards. These also include Payment Processors like Visa, Mastercard, or PayPal."@en .
 
-cat:Investing\(org\) rdf:type skos:Concept ;
+podcat:Investing\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Investing (org)"@en ;
-    skos:broader cat:Finances\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "These include Investment firms, Private Equity firms, Venture Capitalists, Brokerage Firms like Charles Schwab and Mutual Fund companies like Vanguard or Fidelity."@en .
 
-cat:LendingCredit\(org\) rdf:type skos:Concept ;
+podcat:LendingCredit\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Lending & Credit (org)"@en ;
-    skos:broader cat:Finances\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Banks or specialized companies that give loans for specific purposes and Credit Card Issuers that give employees a card for travel and related expenses."@en .
 
-cat:Insurance\(org\) rdf:type skos:Concept ;
+podcat:Insurance\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Insurance (org)"@en ;
-    skos:broader cat:Finances\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Firms that protect organizations from risks."@en .
 
-cat:Advisory\(org\) rdf:type skos:Concept ;
+podcat:Advisory\(org\) rdf:type skos:Concept ;
     skos:prefLabel "Advisory (org)"@en ;
-    skos:broader cat:Finances\(org\) ;
-    skos:inScheme cat:CategoryScheme ;
+    skos:broader podcat:Finances\(org\) ;
+    skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "Financial Planners, outsourced CFO consultants, Accountants and Bookkeepers and Tax preparers."@en .

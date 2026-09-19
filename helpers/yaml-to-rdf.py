@@ -12,9 +12,9 @@ instance data. This script closes that gap by mapping each `v4.` field to
 its corresponding ontology property, matching the mapping tables
 documented in pod-databook.md's "The `v4` Block" section.
 
-There is no category-side synthesis here at all — category.ttl 1.31.0
-deleted cat:Folder and its subclasses cat:CategoryDefined/cat:UserDefined
-outright, along with cat:child/cat:pod/cat:category/cat:catType/cat:label.
+There is no category-side synthesis here at all — pod-categories.ttl 1.31.0
+deleted podcat:Folder and its subclasses podcat:CategoryDefined/podcat:UserDefined
+outright, along with podcat:child/podcat:pod/podcat:category/podcat:catType/podcat:label.
 A pod's tree position is not modelled at all: at runtime it is per-member
 state in that member's own store, and in this repo's scaffolding it is simply
 which folder the pod-databook physically lives in, with no RDF individual

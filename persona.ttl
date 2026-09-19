@@ -16,12 +16,12 @@
 @base <http://mee.foundation/ontologies/persona> .
 
 <http://mee.foundation/ontologies/persona> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/persona/4.24.0> ;
+    owl:versionIRI <http://mee.foundation/ontologies/persona/4.25.0> ;
     owl:imports <https://w3id.org/cco-domains/domains/PersonOntology> ;
     owl:imports <https://w3id.org/cco-domains/domains/AddressOntology> ;
     owl:imports <https://w3id.org/cco-domains/domains/StagingOntology> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 4.24.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 4.25.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
     rdfs:label "Persona Ontology"@en ;
     rdfs:comment """Persona Ontology for the V4 App.
 
@@ -533,7 +533,7 @@ p:specialty rdf:type owl:DatatypeProperty ;
                     other/medical-appointments.ttl alongside
                     medicalappointments:MedicalAppointmentRecord's own claim properties, whose
                     domain is that record individual rather than a Person. Backs
-                    cat:PrimaryCarePhysician's own pod:formShape,
+                    podcat:PrimaryCarePhysician's own pod:formShape,
                     pshapes:PrimaryCarePhysicianShape (shacl/persona-shacl.ttl)."""@en .
 
 

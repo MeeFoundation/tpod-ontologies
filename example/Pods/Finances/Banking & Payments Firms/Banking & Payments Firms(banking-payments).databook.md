@@ -5,15 +5,15 @@ type: pod-databook
 version: 1.3.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Banking & Payments Firms" (pod:category: cat:BankingPayments). It is a
+  Pod DataBook for folder "Banking & Payments Firms" (pod:category: podcat:BankingPayments). It is a
   one-member pod with one member entry about :Self — a minimal stub,
   since "Banking & Payments Firms" is a purely organizational category node with no
   content or relationship of its own beyond Alice's required membership.
-  Also carries an empty tool graph, since cat:BankingPayments's own TemplatePod
+  Also carries an empty tool graph, since podcat:BankingPayments's own TemplatePod
   declares a form tool — the real content
   lives in this category's own leaf pod (Citibank) instead.
 v4:
-  category: "cat:BankingPayments"
+  category: "podcat:BankingPayments"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -36,7 +36,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "Banking & Payments Firms" pod is a purely organizational category node (`pod:category: cat:BankingPayments`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:BankingPaymentsTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "Banking & Payments Firms" pod is a purely organizational category node (`pod:category: podcat:BankingPayments`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:BankingPaymentsTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
 
 #### Graph
 
@@ -63,7 +63,7 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 #### Overview
 
-This graph is the pod's required tool graph — required since `cat:BankingPayments`'s own `TemplatePod` declares a form tool, even though "Banking & Payments Firms" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pod, Citibank, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
+This graph is the pod's required tool graph — required since `podcat:BankingPayments`'s own `TemplatePod` declares a form tool, even though "Banking & Payments Firms" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pod, Citibank, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
 
 #### Graph
 

@@ -12,9 +12,9 @@
     owl:imports <http://mee.foundation/ontologies/dron-upper-subset> ,
                 <http://mee.foundation/ontologies/ncbitaxon-subset> ,
                 <http://mee.foundation/ontologies/vbo-subset> ;
-    owl:versionIRI <http://mee.foundation/ontologies/pets/1.12.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 1.12.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/pets/1.13.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 1.13.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
     persona:usesDrOnClass <http://purl.obolibrary.org/obo/DRON_00000074> ,  # drug product
                     <http://purl.obolibrary.org/obo/DRON_00000028> ,  # active ingredient (role)
                     <http://purl.obolibrary.org/obo/DRON_00000022> ,  # drug tablet
@@ -68,7 +68,7 @@ pets:Pet rdf:type owl:Class ;
                     pets:hasBodyWeight/pets:sex/pets:isSpayedOrNeutered are properties of the pet individual
                     directly (a pet has no persona:Person individual of its own). Validated by the SHACL
                     shape :PetShape in
-                    other/shacl/pets-shacl.ttl, linked from cat:Pets's template pod (cat-templates.ttl) via
+                    other/shacl/pets-shacl.ttl, linked from podcat:Pets's template pod (pod-category-templates.ttl) via
                     pod:formShape."""@en .
 
 pets:hasSpecies rdf:type owl:ObjectProperty ;
@@ -174,7 +174,7 @@ pets:PetMedicationRecord rdf:type owl:Class ;
                     its own — it is identified only via the pod's/graph's own subject metadata, or, for a
                     pet with its own identity graph, via pets:Pet). Asserted via rdf:type directly on the
                     graph file's own individual, validated by the SHACL shape :PetMedicationRecordShape in
-                    other/shacl/pets-shacl.ttl, linked from cat:PetsMedical's template pod (cat-templates.ttl)
+                    other/shacl/pets-shacl.ttl, linked from podcat:PetsMedical's template pod (pod-category-templates.ttl)
                     via pod:formShape. Named "Record" rather than "Document" since this class is not a
                     identitydocuments:IdentityDocument, matching medicalappointments:MedicalAppointmentRecord's identical naming
                     reasoning."""@en .

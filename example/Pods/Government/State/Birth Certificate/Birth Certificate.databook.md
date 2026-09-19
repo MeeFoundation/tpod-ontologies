@@ -5,12 +5,12 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Birth Certificate" (pod:category: cat:BirthCertificate). It is a
+  Pod DataBook for folder "Birth Certificate" (pod:category: podcat:BirthCertificate). It is a
   one-member pod with one member entry about :Self and one tool graph about :Self (the pod's
   subject), typed identitydocuments:BirthCertificate, carrying Alice's Texas birth certificate
   identity data.
 v4:
-  category: "cat:BirthCertificate"
+  category: "podcat:BirthCertificate"
   creator: ":Self"
   owner: ":Self"
   member:

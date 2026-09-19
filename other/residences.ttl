@@ -9,17 +9,17 @@
 @base <http://mee.foundation/ontologies/residences> .
 
 <http://mee.foundation/ontologies/residences> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/residences/1.4.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 1.4.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/residences/1.5.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 1.5.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
     rdfs:label "Residences Ontology"@en ;
     rdfs:comment """A small other/ peer ontology (see other/pets.ttl's own rdfs:comment for the
                     general pattern) for a domain a person merely *has* — a place they have lived,
                     current or past — rather than *is*, kept out of persona.ttl the same way
                     pet/vehicle/identity-document domain-modeling already are. persona.ttl carries no
                     thin hasX-link property of its own pointing at residences:Residence — a residence
-                    is always the sole pod:formTopic of its own Home-category pod (see cat:Home's
-                    template pod, cat-templates.ttl), so no explicit Person-level link is needed
+                    is always the sole pod:formTopic of its own Home-category pod (see podcat:Home's
+                    template pod, pod-category-templates.ttl), so no explicit Person-level link is needed
                     beyond the existing has-participant/AddressDesignation machinery it multi-types
                     alongside.
 
@@ -46,5 +46,5 @@ residences:Residence rdf:type owl:Class ;
                     existing property pattern directly, with no domain change to any of them.
                     Asserted via rdf:type directly on the graph file's own individual, validated by
                     the SHACL shape :ResidenceShape in other/shacl/residences-shacl.ttl, linked from
-                    cat:Home's own class-level pod (cat-templates.ttl) via pod:formShape.
+                    podcat:Home's own class-level pod (pod-category-templates.ttl) via pod:formShape.
                     Not an identitydocuments:IdentityDocument."""@en .

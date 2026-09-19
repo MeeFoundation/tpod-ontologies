@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.1.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Things" (pod:category: cat:Things). It is a one-member pod with one member entry about :Self.
+  Pod DataBook for folder "Things" (pod:category: podcat:Things). It is a one-member pod with one member entry about :Self.
 v4:
-  category: "cat:Things"
+  category: "podcat:Things"
   creator: ":Self"
   owner: ":Self"
   member:

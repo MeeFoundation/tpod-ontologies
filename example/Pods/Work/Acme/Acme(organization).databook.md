@@ -5,12 +5,12 @@ type: pod-databook
 version: 1.2.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Acme" (pod:category: cat:Organization). It is a
+  Pod DataBook for folder "Acme" (pod:category: podcat:Organization). It is a
   one-member pod with one member entry about :Self, plus one form tool about
   :Acme itself — Alice's employer's own o:Organization profile, since
-  cat:Organization's own TemplatePod declares that tool.
+  podcat:Organization's own TemplatePod declares that tool.
 v4:
-  category: "cat:Organization"
+  category: "podcat:Organization"
   creator: ":Self"
   owner: ":Self"
   member:

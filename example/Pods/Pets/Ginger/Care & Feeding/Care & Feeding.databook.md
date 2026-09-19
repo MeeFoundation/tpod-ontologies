@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.1.0
 created: 2026-08-29
 description: >
-  Pod DataBook for folder "Care & Feeding" (pod:category: cat:PetsCareAndFeeding). It is a two-member pod, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the pod's subject) — the day-to-day instructions for looking after Ginger, alongside her Medical pod's sibling record of her medical care.
+  Pod DataBook for folder "Care & Feeding" (pod:category: podcat:PetsCareAndFeeding). It is a two-member pod, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the pod's subject) — the day-to-day instructions for looking after Ginger, alongside her Medical pod's sibling record of her medical care.
 v4:
-  category: "cat:PetsCareAndFeeding"
+  category: "podcat:PetsCareAndFeeding"
   creator: ":Self"
   owner: ":Self"
   userTag:
@@ -88,7 +88,7 @@ This pod was created by Alice and later shared with Paula, making the pod a two-
 
 #### Overview
 
-This graph captures Alice's day-to-day care and feeding instructions for her cat Ginger — what to feed her and when, and where she sleeps — so that Paula (or anyone else looking after Ginger) knows how to care for her. Alice is the claimant; Ginger is the pod's `subject` but, since she has no `p:Person` individual of her own, her graph is held by the pod's form tool rather than being one of the required `member` entries (graphs 58 and 59, above, fill those slots instead). No formal template governs this content (unlike her sibling Medical pod's `pets:PetMedicationRecord`, or her own basic identifying claim in graph 37, now governed by `pets:Pet`) — no `pod:TemplatePod` points its `pod:category` at `cat:PetsCareAndFeeding` — so it is asserted directly as a plain comment.
+This graph captures Alice's day-to-day care and feeding instructions for her cat Ginger — what to feed her and when, and where she sleeps — so that Paula (or anyone else looking after Ginger) knows how to care for her. Alice is the claimant; Ginger is the pod's `subject` but, since she has no `p:Person` individual of her own, her graph is held by the pod's form tool rather than being one of the required `member` entries (graphs 58 and 59, above, fill those slots instead). No formal template governs this content (unlike her sibling Medical pod's `pets:PetMedicationRecord`, or her own basic identifying claim in graph 37, now governed by `pets:Pet`) — no `pod:TemplatePod` points its `pod:category` at `podcat:PetsCareAndFeeding` — so it is asserted directly as a plain comment.
 
 #### Graph
 

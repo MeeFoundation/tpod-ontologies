@@ -5,12 +5,12 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Google" (pod:category: cat:Companies). It is a one-member pod with one
+  Pod DataBook for folder "Google" (pod:category: podcat:Companies). It is a one-member pod with one
   member entry about :Self and one graph about :Alice_Google_Account (the pod's subject), typed
   serviceaccounts:ServiceAccount and cco:ent00000033 (Online Service Account), carrying the service name,
   account username, and password for Alice's Google account.
 v4:
-  category: "cat:Companies"
+  category: "podcat:Companies"
   creator: ":Self"
   owner: ":Self"
   member:

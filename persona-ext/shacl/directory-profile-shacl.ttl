@@ -10,8 +10,8 @@
 
 <http://mee.foundation/ontologies/directory-profile/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/directory-profile> ;
-    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/shapes/1.0.0> ;
-    dc:date "2026-09-14"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/shapes/1.1.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
     rdfs:label "Directory Profile SHACL Shapes"@en ;
     rdfs:comment """SHACL shapes for persona-ext/directory-profile.ttl, the ontology they validate.
 
@@ -20,7 +20,7 @@
                     required, and directoryprofile:industry is left unenumerated — which fields an
                     organization demands, and which industry values it permits, is that
                     organization's business and belongs in its own shape (see
-                    category-ext/shacl/boston-hub-society-shacl.ttl).
+                    pod-category-ext/shacl/boston-hub-society-shacl.ttl).
 
                     Targets persona:Person, since every property in this ontology has that domain.
                     It is therefore subject to helpers/validate.py's substantive-person retargeting,

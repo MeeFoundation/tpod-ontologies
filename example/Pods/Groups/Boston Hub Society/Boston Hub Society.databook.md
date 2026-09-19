@@ -10,8 +10,8 @@ description: >
   graph about :BHS itself — the society's own organizational profile. An o:Organization is not
   member-capable, so the society participates through :BHS_Service, the service:ServiceProvider it
   provides; both of its graphs are still claimed by :BHS itself, the party really making those
-  claims. Its category is the first category extension (category-ext/boston-hub-society.ttl): a
-  concept in the society's own skos:ConceptScheme, skos:broadMatch'd to cat:Groups, whose template
+  claims. Its category is the first category extension (pod-category-ext/boston-hub-society.ttl): a
+  concept in the society's own skos:ConceptScheme, skos:broadMatch'd to podcat:Groups, whose template
   pod names bhsshapes:MemberShape as its pod:memberShape — so each member graph here is validated
   against the society's own two-page directory form rather than against pshapes:ContactInfoShape.
 v4:

@@ -5,9 +5,9 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Medical Appointment" (pod:category: cat:MedicalAppointment). It is a two-member pod with two members about :Dave and :Self and one tool graph about :Sophia_Walker, Alice and Dave's daughter.
+  Pod DataBook for folder "Medical Appointment" (pod:category: podcat:MedicalAppointment). It is a two-member pod with two members about :Dave and :Self and one tool graph about :Sophia_Walker, Alice and Dave's daughter.
 v4:
-  category: "cat:MedicalAppointment"
+  category: "podcat:MedicalAppointment"
   creator: ":Self"
   owner: ":Self"
   member:

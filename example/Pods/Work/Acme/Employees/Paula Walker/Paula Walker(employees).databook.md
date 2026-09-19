@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.3.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Paula Walker" (pod:category: cat:Employees, reusing its parent "Employees" pod's own origin, mirroring how e.g. "Ginger" reuses its parent "Pets" folder's own category rather than a separately-minted narrower one). It is a two-member pod with member entries about :Self and :Paula_Walker.
+  Pod DataBook for folder "Paula Walker" (pod:category: podcat:Employees, reusing its parent "Employees" pod's own origin, mirroring how e.g. "Ginger" reuses its parent "Pets" folder's own category rather than a separately-minted narrower one). It is a two-member pod with member entries about :Self and :Paula_Walker.
 v4:
-  category: "cat:Employees"
+  category: "podcat:Employees"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -28,7 +28,7 @@ v4:
 
 #### Overview
 
-This graph captures Alice's record of her colleague Paula Walker in their shared Acme employment graph — one of the pod's two required `member` entries, satisfying `ContactInfoShape`'s required GivenName alongside her existing `rdfs:label` (this pod's category declares no tool, so its content belongs in the member graph; `cat:Employee` has since been deleted entirely, and this pod now reuses `cat:Employees` directly). Alice is the claimant.
+This graph captures Alice's record of her colleague Paula Walker in their shared Acme employment graph — one of the pod's two required `member` entries, satisfying `ContactInfoShape`'s required GivenName alongside her existing `rdfs:label` (this pod's category declares no tool, so its content belongs in the member graph; `podcat:Employee` has since been deleted entirely, and this pod now reuses `podcat:Employees` directly). Alice is the claimant.
 
 #### Graph
 

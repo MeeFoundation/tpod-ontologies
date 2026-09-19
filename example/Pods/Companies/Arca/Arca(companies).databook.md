@@ -5,7 +5,7 @@ type: pod-databook
 version: 1.1.0
 created: 2026-09-10
 description: >
-  Pod DataBook for folder "Arca" (pod:category: cat:Companies), nested under "Companies". Alice's
+  Pod DataBook for folder "Arca" (pod:category: podcat:Companies), nested under "Companies". Alice's
   pod backup provider. A two-member pod demonstrating service:ArcaBackup as a real pod member:
   :Arca_Backup, the backup service Arca provides, joins alongside Alice, each with its own member
   entry (graph-95, graph-96). Unlike :Citibank_Service and :BHS_Service, which are
@@ -14,7 +14,7 @@ description: >
   pod itself. The account Alice holds with Arca is the topic of the pod's tool (graph-97), the same
   sa:ServiceAccount pattern the Google and ATT pods already use.
 v4:
-  category: "cat:Companies"
+  category: "podcat:Companies"
   creator: ":Self"
   owner: ":Self"
   member:

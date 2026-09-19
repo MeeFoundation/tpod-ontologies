@@ -5,12 +5,12 @@ type: pod-databook
 version: 1.0.0
 created: 2026-08-30
 description: >
-  Pod DataBook for folder "Travel" (pod:category: cat:Travel). It is a one-member pod with one
+  Pod DataBook for folder "Travel" (pod:category: podcat:Travel). It is a one-member pod with one
   member entry about :Self — a minimal stub, since "Travel" is a purely organizational category
   node with no content or relationship of its own beyond Alice's required membership. Nested inside
   it is the "Kyoto Trip 2027" pod for a specific trip.
 v4:
-  category: "cat:Travel"
+  category: "podcat:Travel"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -27,7 +27,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is. The "Travel" pod is a purely organizational category node (`pod:category: cat:Travel`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TravelTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is. The "Travel" pod is a purely organizational category node (`pod:category: podcat:Travel`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:TravelTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
 
 #### Graph
 

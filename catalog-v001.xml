@@ -12,10 +12,10 @@
          uri="pod.ttl"/>
     <uri id="pod-shacl" name="http://mee.foundation/ontologies/pod/shapes"
          uri="shacl/pod-shacl.ttl"/>
-    <uri id="category"             name="http://mee.foundation/ontologies/category"
-         uri="category.ttl"/>
-    <uri id="cat-templates"        name="http://mee.foundation/ontologies/pod-templates"
-         uri="cat-templates.ttl"/>
+    <uri id="pod-categories"       name="http://mee.foundation/ontologies/pod-categories"
+         uri="pod-categories.ttl"/>
+    <uri id="pod-category-templates"        name="http://mee.foundation/ontologies/pod-templates"
+         uri="pod-category-templates.ttl"/>
     <!-- ── Other ontologies (peer domain ontologies for what a person merely *has*) ── -->
     <uri id="pets"                     name="http://mee.foundation/ontologies/pets"
          uri="other/pets.ttl"/>
@@ -61,12 +61,12 @@
     <uri id="directory-profile-shacl"     name="http://mee.foundation/ontologies/directory-profile/shapes"
          uri="persona-ext/shacl/directory-profile-shacl.ttl"/>
 
-    <!-- Category extensions (category-ext/): a publisher's own skos:ConceptScheme,
+    <!-- Category extensions (pod-category-ext/): a publisher's own skos:ConceptScheme,
          its pod:TemplatePod individuals, and the member shape they name -->
-    <uri id="bhs-category-ext"            name="http://mee.foundation/ontologies/category-ext/boston-hub-society"
-         uri="category-ext/boston-hub-society.ttl"/>
-    <uri id="bhs-category-ext-shacl"      name="http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes"
-         uri="category-ext/shacl/boston-hub-society-shacl.ttl"/>
+    <uri id="bhs-pod-category-ext"            name="http://mee.foundation/ontologies/pod-category-ext/boston-hub-society"
+         uri="pod-category-ext/boston-hub-society.ttl"/>
+    <uri id="bhs-pod-category-ext-shacl"      name="http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes"
+         uri="pod-category-ext/shacl/boston-hub-society-shacl.ttl"/>
     <!-- First non-CCO/non-mee.foundation external ontology this project vendors -->
     <uri id="dron-upper-subset"        name="http://mee.foundation/ontologies/dron-upper-subset"
          uri="project_files/dron-upper.ttl"/>

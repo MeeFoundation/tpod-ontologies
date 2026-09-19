@@ -5,11 +5,11 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Passport" (pod:category: cat:Passport). It is a one-member pod with
+  Pod DataBook for folder "Passport" (pod:category: podcat:Passport). It is a one-member pod with
   one member entry about :Self and one tool graph about :Self (the pod's subject), typed
   identitydocuments:Passport, carrying Alice's US passport identity data.
 v4:
-  category: "cat:Passport"
+  category: "podcat:Passport"
   creator: ":Self"
   owner: ":Self"
   member:

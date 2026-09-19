@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.3.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Health & Wellness" (pod:category: cat:HealthWellness). It is a one-member pod with one member entry about :Self and one graph about :Sophia_Walker (the pod's subject).
+  Pod DataBook for folder "Health & Wellness" (pod:category: podcat:HealthWellness). It is a one-member pod with one member entry about :Self and one graph about :Sophia_Walker (the pod's subject).
 v4:
-  category: "cat:HealthWellness"
+  category: "podcat:HealthWellness"
   creator: ":Self"
   owner: ":Self"
   member:

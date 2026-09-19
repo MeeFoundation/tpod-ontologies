@@ -5,12 +5,12 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Drivers License" (pod:category: cat:DriversLicense). It is a
+  Pod DataBook for folder "Drivers License" (pod:category: podcat:DriversLicense). It is a
   one-member pod with one member entry about :Self and one tool graph about :Self (the pod's
   subject), typed identitydocuments:DriversLicense, carrying Alice's California driver's license
   identity data.
 v4:
-  category: "cat:DriversLicense"
+  category: "podcat:DriversLicense"
   creator: ":Self"
   owner: ":Self"
   member:

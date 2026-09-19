@@ -5,11 +5,11 @@ type: pod-databook
 version: 2.0.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "SSN" (pod:category: cat:SSN). It is a one-member pod with one
+  Pod DataBook for folder "SSN" (pod:category: podcat:SSN). It is a one-member pod with one
   member entry about :Self and one tool graph about :Self (the pod's subject), carrying
   Alice's Social Security number.
 v4:
-  category: "cat:SSN"
+  category: "podcat:SSN"
   creator: ":Self"
   owner: ":Self"
   member:

@@ -22,7 +22,7 @@ What this script owns, and what it deliberately does not:
     so never appear here.
   * Owns the SHAPE column (the CURIE) and the DECLARED BY column (every
     category whose pod:TemplatePod names that shape as a pod:formShape, in
-    cat-templates.ttl or in a category-ext/ bundle).
+    pod-category-templates.ttl or in a pod-category-ext/ bundle).
   * Does NOT own the display name or the description. Those are the app's own
     UI wording, not derivable from a shape's local name, so a surviving row
     keeps the text already in the file and a newly-added row is emitted with a
@@ -84,11 +84,11 @@ TODO = "{TODO: describe this form — run `python3 helpers/form-types.py --repor
 # --- the ontology side -------------------------------------------------------
 
 def template_files():
-    """cat-templates.ttl plus every category extension bundle — an extension
+    """pod-category-templates.ttl plus every category extension bundle — an extension
     carries its own pod:TemplatePod individuals alongside its concept scheme
     (integrity.md's TTL-8)."""
-    return [os.path.join(REPO, "cat-templates.ttl")] + sorted(
-        glob.glob(os.path.join(REPO, "category-ext", "*.ttl"))
+    return [os.path.join(REPO, "pod-category-templates.ttl")] + sorted(
+        glob.glob(os.path.join(REPO, "pod-category-ext", "*.ttl"))
     )
 
 

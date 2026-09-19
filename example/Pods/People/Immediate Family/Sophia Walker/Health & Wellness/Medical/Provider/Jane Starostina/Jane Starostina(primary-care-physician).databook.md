@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.4.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Jane Starostina" (pod:category: cat:PrimaryCarePhysician). It is a one-member pod with one member entry about :Self and one graph about :Jane_Starostina (the pod's subject).
+  Pod DataBook for folder "Jane Starostina" (pod:category: podcat:PrimaryCarePhysician). It is a one-member pod with one member entry about :Self and one graph about :Jane_Starostina (the pod's subject).
 v4:
-  category: "cat:PrimaryCarePhysician"
+  category: "podcat:PrimaryCarePhysician"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -60,7 +60,7 @@ This graph captures Alice's own bare identity claim (just her given name) — th
 
 #### Overview
 
-This graph captures Alice's record of Dr. Jane Starostina, who is the primary care physician for Alice's daughter, Sophia Walker, including her medical specialty (Endocrinology), via `persona:specialty` — the `pod:formShape` of the tool `cat:PrimaryCarePhysician` declares (`:PrimaryCarePhysicianShape`). Alice keeps this information so she and her husband Dave can coordinate Sophia's medical appointments. Alice is the claimant; Jane is the pod's `subject` but, since this pod now has a real member entry (graph 34, above) about Alice herself, Jane's graph is held by the pod's form tool rather than being one of the required `member` entries.
+This graph captures Alice's record of Dr. Jane Starostina, who is the primary care physician for Alice's daughter, Sophia Walker, including her medical specialty (Endocrinology), via `persona:specialty` — the `pod:formShape` of the tool `podcat:PrimaryCarePhysician` declares (`:PrimaryCarePhysicianShape`). Alice keeps this information so she and her husband Dave can coordinate Sophia's medical appointments. Alice is the claimant; Jane is the pod's `subject` but, since this pod now has a real member entry (graph 34, above) about Alice herself, Jane's graph is held by the pod's form tool rather than being one of the required `member` entries.
 
 #### Graph
 

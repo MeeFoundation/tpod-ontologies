@@ -5,9 +5,9 @@ type: pod-databook
 version: 2.2.0
 created: 2026-08-21
 description: >
-  Pod DataBook for folder "Medical" (pod:category: cat:PetsMedical). It is a two-member pod, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the pod's subject).
+  Pod DataBook for folder "Medical" (pod:category: podcat:PetsMedical). It is a two-member pod, shared by Alice with Paula, with two members (about :Self and :Paula_Walker) and one graph about :Ginger, Alice's cat (the pod's subject).
 v4:
-  category: "cat:PetsMedical"
+  category: "podcat:PetsMedical"
   creator: ":Self"
   owner: ":Self"
   userTag:

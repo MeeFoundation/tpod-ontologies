@@ -5,12 +5,12 @@ type: pod-databook
 version: 1.0.0
 created: 2026-09-03
 description: >
-  Pod DataBook for folder "Previous" (pod:category: cat:Previous). It is a
+  Pod DataBook for folder "Previous" (pod:category: podcat:Previous). It is a
   one-member pod with one member entry about :Self — a minimal stub,
   since "Previous" is a purely organizational category node with no
   content or relationship of its own beyond Alice's required membership.
 v4:
-  category: "cat:Previous"
+  category: "podcat:Previous"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -27,7 +27,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "Previous" pod is a purely organizational category node (`pod:category: cat:Previous`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:PreviousTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "Previous" pod is a purely organizational category node (`pod:category: podcat:Previous`) with no relationship or subject of its own beyond Alice's required membership, so this stub carries no further claims. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:PreviousTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
 
 #### Graph
 

@@ -12,9 +12,9 @@
 <http://mee.foundation/ontologies/vehicles> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/wikidata-vehicle-makes-subset> ,
                 <http://mee.foundation/ontologies/wikidata-vehicle-models-subset> ;
-    owl:versionIRI <http://mee.foundation/ontologies/vehicles/1.9.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 1.9.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/vehicles/1.10.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 1.10.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
     rdfs:label "Vehicles Ontology"@en ;
     rdfs:comment """The second of this project's other/ peer ontologies (after other/pets.ttl) — small,
                     mostly-vendored ontologies for domains a person merely *has* (a pet, a vehicle) rather
@@ -61,7 +61,7 @@ vehicles:VehicleType rdf:type owl:Class ;
                     pets:hasSpecies/pets:hasBreed (other/pets.ttl) already use — rather than a separate
                     individual or a plain string, so no instances of vehicles:VehicleType or its subclasses
                     are ever asserted. (pod:category, pod.ttl, once used this same style too, but no
-                    longer — category.ttl's tree is now a SKOS concept scheme, so pod:category's value is
+                    longer — pod-categories.ttl's tree is now a SKOS concept scheme, so pod:category's value is
                     a genuine skos:Concept individual, not a punned class.)"""@en .
 
 vehicles:Car rdf:type owl:Class ;
@@ -104,8 +104,8 @@ vehicles:Vehicle rdf:type owl:Class ;
                     pattern as identitydocuments:Passport and pets:Pet: the properties below are properties of
                     the vehicle individual directly (a vehicle has no persona:Person individual of its own).
                     Validated by the SHACL shape :VehicleShape in other/shacl/vehicles-shacl.ttl, whose own CURIE —
-                    not this class — is what the graph's pod:shape value names; linked from cat:Vehicles's template pod
-                    (cat-templates.ttl) via pod:formShape."""@en .
+                    not this class — is what the graph's pod:shape value names; linked from podcat:Vehicles's template pod
+                    (pod-category-templates.ttl) via pod:formShape."""@en .
 
 vehicles:hasMake rdf:type owl:ObjectProperty ;
     rdfs:domain vehicles:Vehicle ;

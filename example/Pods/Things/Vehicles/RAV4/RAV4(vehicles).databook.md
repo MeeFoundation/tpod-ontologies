@@ -5,14 +5,14 @@ type: pod-databook
 version: 1.0.0
 created: 2026-08-29
 description: >
-  Pod DataBook for folder "RAV4" (pod:category: cat:Vehicles). A user-defined instance folder for
+  Pod DataBook for folder "RAV4" (pod:category: podcat:Vehicles). A user-defined instance folder for
   Alice's car, nested under the generic Vehicles category — mirroring how "Ginger" reuses its parent
   "Pets" folder's own origin class rather than being Custom. It is a one-member pod with one member
   entry about :Self and one graph about :Alice_RAV4 (the pod's subject), typed vehicles:Vehicle and
   carrying its vehicle type, make, model, model year, VIN, color, body type, fuel type, drive wheel
   configuration, odometer reading, and engine specification.
 v4:
-  category: "cat:Vehicles"
+  category: "podcat:Vehicles"
   creator: ":Self"
   owner: ":Self"
   member:

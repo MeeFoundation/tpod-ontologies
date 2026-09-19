@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.5.0
 created: 2026-08-22
 description: >
-  Pod DataBook for folder "Ginger" (pod:category: cat:Pets). A user-defined instance folder for Alice's specific cat, Ginger, nested under the generic Pets category — mirroring how e.g. "Bob Johnson" reuses its parent "Others" folder's own origin class rather than being Custom. It is a one-member pod with one member entry about :Self and one graph about :Ginger (the pod's subject), typed pets:Pet and carrying her name, species, breed, birth date, current body weight, sex, and spay/neuter status.
+  Pod DataBook for folder "Ginger" (pod:category: podcat:Pets). A user-defined instance folder for Alice's specific cat, Ginger, nested under the generic Pets category — mirroring how e.g. "Bob Johnson" reuses its parent "Others" folder's own origin class rather than being Custom. It is a one-member pod with one member entry about :Self and one graph about :Ginger (the pod's subject), typed pets:Pet and carrying her name, species, breed, birth date, current body weight, sex, and spay/neuter status.
 v4:
-  category: "cat:Pets"
+  category: "podcat:Pets"
   creator: ":Self"
   owner: ":Self"
   userTag:

@@ -5,9 +5,9 @@ type: pod-databook
 version: 1.3.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Bob Johnson" (pod:category: cat:Others). It is a two-member pod with four members (two about :Bob_Johnson and two about :Self).
+  Pod DataBook for folder "Bob Johnson" (pod:category: podcat:Others). It is a two-member pod with four members (two about :Bob_Johnson and two about :Self).
 v4:
-  category: "cat:Others"
+  category: "podcat:Others"
   creator: ":Self"
   owner: ":Self"
   serviceTag:

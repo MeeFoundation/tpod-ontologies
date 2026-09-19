@@ -8,9 +8,9 @@
 @base <http://mee.foundation/ontologies/identity-documents> .
 
 <http://mee.foundation/ontologies/identity-documents> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/identity-documents/1.6.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
-    owl:versionInfo "Version 1.6.0 - vocabulary CURIEs moved to the pod: prefix of the Pod Ontology"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/identity-documents/1.7.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionInfo "Version 1.7.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
     rdfs:label "Identity Documents Ontology"@en ;
     rdfs:comment """The third of this project's other/ peer ontologies (after other/pets.ttl and
                     other/vehicles.ttl) — government-issued identity document classes for what a
@@ -47,11 +47,11 @@ identitydocuments:BirthCertificate rdf:type owl:Class ;
     rdfs:comment """Label for a graph whose purpose is to carry a person's legal
                     birth certificate name record. Asserted via rdf:type directly on the graph
                     file's own document individual, validated by the SHACL shape :BirthCertificateShape
-                    in other/shacl/identity-documents-shacl.ttl, linked from cat:BirthCertificate's own
-                    class-level pod (cat-templates.ttl) via pod:formShape — IRI
+                    in other/shacl/identity-documents-shacl.ttl, linked from podcat:BirthCertificate's own
+                    class-level pod (pod-category-templates.ttl) via pod:formShape — IRI
                     http://mee.foundation/ontologies/identity-documents/shapes/birthcertificate — for
-                    validation. Shares a local name with the unrelated cat:BirthCertificate concept
-                    (category.ttl), which classifies a pod rather than describing a document — the
+                    validation. Shares a local name with the unrelated podcat:BirthCertificate concept
+                    (pod-categories.ttl), which classifies a pod rather than describing a document — the
                     two are told apart by namespace alone."""@en .
 
 
@@ -67,13 +67,13 @@ identitydocuments:DriversLicense rdf:type owl:Class ;
                     driver's license number, and expiration date. Residential address is optional.
                     Asserted via rdf:type directly on the graph file's own document individual,
                     validated by the SHACL shape :DriversLicenseShape in other/shacl/identity-documents-shacl.ttl,
-                    linked from cat:DriversLicense's own class-level pod (cat-templates.ttl) via
+                    linked from podcat:DriversLicense's own class-level pod (pod-category-templates.ttl) via
                     pod:formShape — IRI
                     http://mee.foundation/ontologies/identity-documents/shapes/driverslicense — for validation.
                     Note: p:PhysicalDriversLicense (in persona.ttl) models the physical card
                     object carried in a wallet; this class models the identity data the
-                    license claims. Shares a local name with the unrelated cat:DriversLicense
-                    concept (category.ttl), which classifies a pod rather than describing a
+                    license claims. Shares a local name with the unrelated podcat:DriversLicense
+                    concept (pod-categories.ttl), which classifies a pod rather than describing a
                     document — the two are told apart by namespace alone."""@en .
 
 
@@ -89,11 +89,11 @@ identitydocuments:Passport rdf:type owl:Class ;
                     number, issue date, expiration date, issuing country, place of birth, and
                     gender marker. Photo is optional. Asserted via rdf:type directly on
                     the graph file's own document individual, validated by the SHACL shape :PassportShape
-                    in other/shacl/identity-documents-shacl.ttl, linked from cat:Passport's own
-                    class-level pod (cat-templates.ttl) via pod:formShape — IRI
+                    in other/shacl/identity-documents-shacl.ttl, linked from podcat:Passport's own
+                    class-level pod (pod-category-templates.ttl) via pod:formShape — IRI
                     http://mee.foundation/ontologies/identity-documents/shapes/passport — for
-                    validation. Shares a local name with the unrelated cat:Passport concept
-                    (category.ttl), which classifies a pod rather than describing a document — the
+                    validation. Shares a local name with the unrelated podcat:Passport concept
+                    (pod-categories.ttl), which classifies a pod rather than describing a document — the
                     two are told apart by namespace alone."""@en .
 
 

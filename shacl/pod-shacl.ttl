@@ -8,13 +8,13 @@
 @prefix p: <http://mee.foundation/ontologies/persona#> .
 @prefix o: <http://mee.foundation/ontologies/organization#> .
 @prefix service: <http://mee.foundation/ontologies/service#> .
-@prefix cat: <http://mee.foundation/ontologies/category#> .
+@prefix podcat: <http://mee.foundation/ontologies/pod-categories#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <http://mee.foundation/ontologies/pod/shapes> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/pod/shapes/9.3.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod/shapes/9.4.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
     rdfs:label "Pod Ontology SHACL Validation Shapes"@en ;
     rdfs:comment "SHACL validation shapes for pod:Pod DataBook instances (the content facet of a pod) the pod:Tool nodes a pod carries, and the graph DataBook instances a pod links to — pod:MemberGraph via pod:member, pod:FormGraph via a tool's own pod:formGraph — in the Pod Ontology."@en .
 
@@ -46,7 +46,7 @@
     # filename, which carries the literal "(custom)" disambiguator;
     # SHACL can't see filenames, so that absence/filename pairing is
     # checked in integrity.md's PNG-9, not here. Now
-    # constrained via sh:class skos:Concept — category.ttl's tree is a
+    # constrained via sh:class skos:Concept — pod-categories.ttl's tree is a
     # SKOS concept scheme, not an OWL class hierarchy, so a legal value
     # really is rdf:type skos:Concept, no class-value punning involved
     # (contrast vehicles:hasVehicleType, other/vehicles.ttl, which still
@@ -54,14 +54,14 @@
     # requires a legal value to belong to some concept scheme — sh:class
     # skos:Concept alone would accept a free-floating SKOS concept from
     # anywhere. It deliberately does *not* pin that scheme to
-    # cat:CategoryScheme: a category extension (category-ext/) publishes
+    # podcat:PodCategoryScheme: a category extension (pod-category-ext/) publishes
     # its concepts in its own scheme and links them to the app's taxonomy
     # with skos:broadMatch, which is what SKOS provides for cross-scheme
     # mapping (skos:broader being reserved for hierarchy within one
-    # scheme). Requiring cat:CategoryScheme here would make every such
+    # scheme). Requiring podcat:PodCategoryScheme here would make every such
     # concept illegal as a pod:category value. What SHACL cannot check
     # is the other half — that an extension concept really does carry
-    # exactly one skos:broadMatch into a cat:CategoryScheme concept, so
+    # exactly one skos:broadMatch into a podcat:PodCategoryScheme concept, so
     # the recipient's app always knows where to file an incoming pod;
     # that is integrity.md's TTL-8, which needs to dereference across
     # two files at once.
@@ -73,7 +73,7 @@
             sh:path skos:inScheme ;
             sh:minCount 1 ;
             sh:class skos:ConceptScheme ;
-            sh:message "A pod:category value must be a concept in some skos:ConceptScheme — cat:CategoryScheme (category.ttl) for a core category, or an extension's own scheme (category-ext/), which must skos:broadMatch a core concept."@en
+            sh:message "A pod:category value must be a concept in some skos:ConceptScheme — podcat:PodCategoryScheme (pod-categories.ttl) for a core category, or an extension's own scheme (pod-category-ext/), which must skos:broadMatch a core concept."@en
         ] ;
         sh:message "A pod may have at most one pod:category value: the category concept its content is filed under, if any."@en
     ] ;
@@ -81,7 +81,7 @@
     # rdf:type — exactly one of pod:TemplatePod/pod:InstancePod, never
     # both and never neither, mirroring pod.ttl's owl:disjointWith
     # pod:TemplatePod pod:InstancePod. A reusable class-level template
-    # (cat-templates.ttl) is typed pod:TemplatePod only; every pod
+    # (pod-category-templates.ttl) is typed pod:TemplatePod only; every pod
     # in a user's own tree is typed pod:InstancePod only — there is no
     # legal bare tree-position-only pod with no member content in the
     # InstancePod branch (a category node with nothing substantive to
@@ -98,8 +98,8 @@
 #  TemplatePod
 #  pod:TemplatePod is the template facet of a pod — reusable content,
 #  identified by its own pod:category value naming the category concept
-#  (a skos:Concept in cat:CategoryScheme, category.ttl) it's a template
-#  for — a reverse lookup, since category.ttl carries no forward pointer.
+#  (a skos:Concept in podcat:PodCategoryScheme, pod-categories.ttl) it's a template
+#  for — a reverse lookup, since pod-categories.ttl carries no forward pointer.
 #################################################################
 
 :TemplatePodShape
@@ -154,7 +154,7 @@
 #  :MemberGraphShape below constrain those properties instead). There is likewise no
 #  pod-level shape to constrain — an InstancePod's validation shape is derived
 #  from its own pod:category value (reverse-lookup the pod:TemplatePod
-#  with the same pod:category, cat-templates.ttl) rather than stored on
+#  with the same pod:category, pod-category-templates.ttl) rather than stored on
 #  the InstancePod itself.
 #################################################################
 

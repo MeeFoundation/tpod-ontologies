@@ -1,4 +1,4 @@
-@prefix : <http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes#> .
+@prefix : <http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes#> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -10,13 +10,13 @@
 @prefix education: <http://mee.foundation/ontologies/education#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
-<http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes> rdf:type owl:Ontology ;
-    owl:imports <http://mee.foundation/ontologies/category-ext/boston-hub-society> ;
-    owl:versionIRI <http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes/1.1.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
+<http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes> rdf:type owl:Ontology ;
+    owl:imports <http://mee.foundation/ontologies/pod-category-ext/boston-hub-society> ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes/1.2.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
     rdfs:label "Boston Hub Society Member SHACL Shapes"@en ;
     rdfs:comment """The Boston Hub Society's own member shape — the second half of the category
-                    extension in category-ext/boston-hub-society.ttl, and the shape that template's
+                    extension in pod-category-ext/boston-hub-society.ttl, and the shape that template's
                     pod:memberShape names. It validates every pod:MemberGraph of a pod whose
                     pod:category is bhscat:BostonHubSociety, in place of pshapes:ContactInfoShape.
 

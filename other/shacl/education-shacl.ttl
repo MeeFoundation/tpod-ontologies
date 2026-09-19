@@ -9,8 +9,8 @@
 
 <http://mee.foundation/ontologies/education/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/education> ;
-    owl:versionIRI <http://mee.foundation/ontologies/education/shapes/1.1.0> ;
-    dc:date "2026-09-18"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/education/shapes/1.2.0> ;
+    dc:date "2026-09-19"^^xsd:date ;
     rdfs:label "Education Template SHACL Shapes"@en ;
     rdfs:comment """SHACL shapes for validating graph files carrying pod:shape
                     educationshapes:EducationRecordShape. Paired with other/education.ttl, the
@@ -21,7 +21,7 @@
                     nothing (education:schoolName), and freezes the education:educationLevel value
                     list. It deliberately requires nothing else. Which stages a person must supply,
                     and how many of each, is the asking organization's business and belongs in that
-                    organization's own shape — see category-ext/shacl/boston-hub-society-shacl.ttl,
+                    organization's own shape — see pod-category-ext/shacl/boston-hub-society-shacl.ttl,
                     which constrains a member to at most one 'high school' record and at most one
                     'college' record."""@en .
 

@@ -5,15 +5,15 @@ type: pod-databook
 version: 1.2.0
 created: 2026-07-10
 description: >
-  Pod DataBook for folder "Companies" (pod:category: cat:Companies). It is a
+  Pod DataBook for folder "Companies" (pod:category: podcat:Companies). It is a
   one-member pod with one member entry about :Self — a minimal stub,
   since "Companies" is a purely organizational category node with no
   content or relationship of its own beyond Alice's required membership.
-  Also carries an empty tool graph, since cat:Companies's own TemplatePod
+  Also carries an empty tool graph, since podcat:Companies's own TemplatePod
   declares a form tool — the real content
   lives in this category's own leaf pods (Google, ATT) instead.
 v4:
-  category: "cat:Companies"
+  category: "podcat:Companies"
   creator: ":Self"
   owner: ":Self"
   member:
@@ -36,7 +36,7 @@ v4:
 
 #### Overview
 
-This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "Companies" pod is a purely organizational category node (`pod:category: cat:Companies`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:CompaniesTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
+This graph is the pod's one required `member` entry — a pod with a single `member` entry in the user's own category-pod tree always has `:Self` as that member (see YAML-6), regardless of what the pod's `subject` is — here, Alice herself. The "Companies" pod is a purely organizational category node (`pod:category: podcat:Companies`) with no relationship or subject of its own beyond Alice's required membership. Alice is both the claimant and the subject. It carries her given name, satisfying the `ContactInfoShape` `ctpl:CompaniesTemplatePod` sets as `pod:memberShape` — no longer deliberately empty.
 
 #### Graph
 
@@ -63,7 +63,7 @@ This graph is the pod's one required `member` entry — a pod with a single `mem
 
 #### Overview
 
-This graph is the pod's required tool graph — required since `cat:Companies`'s own `TemplatePod` declares a form tool, even though "Companies" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pods, Google and ATT, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
+This graph is the pod's required tool graph — required since `podcat:Companies`'s own `TemplatePod` declares a form tool, even though "Companies" is a purely organizational scaffold pod with no tool content of its own (the real content lives in this category's own leaf pods, Google and ATT, instead). Deliberately empty — no triples at all. Alice is both the claimant and the subject.
 
 #### Graph
 

@@ -30,19 +30,19 @@ V4_NS = "http://www.example.org/v4#"
 POD = "http://mee.foundation/ontologies/pod#"
 
 PREFIXES = {
-    "cat": "http://mee.foundation/ontologies/category#",
+    "podcat": "http://mee.foundation/ontologies/pod-categories#",
     "pod": "http://mee.foundation/ontologies/pod#",
     "persona": "http://mee.foundation/ontologies/persona#",
     "pets": "http://mee.foundation/ontologies/pets#",
     "vehicles": "http://mee.foundation/ontologies/vehicles#",
-    # A category extension's own namespace (category-ext/). A v4.category
+    # A category extension's own namespace (pod-category-ext/). A v4.category
     # value may name a concept in an extension's scheme rather than in
-    # cat:CategoryScheme — see pod.ttl's pod:category comment. One entry
+    # podcat:PodCategoryScheme — see pod.ttl's pod:category comment. One entry
     # per published extension.
-    "bhscat": "http://mee.foundation/ontologies/category-ext/boston-hub-society#",
+    "bhscat": "http://mee.foundation/ontologies/pod-category-ext/boston-hub-society#",
     # Shape namespaces — a v4.member[]/v4.tool[].graph[].shape value is a
     # sh:NodeShape CURIE (pod:shape's range, pod.ttl), not a type label
-    # class name, so these must resolve too. Same base URIs cat-templates.ttl
+    # class name, so these must resolve too. Same base URIs pod-category-templates.ttl
     # and each extension's own @prefix block declare. An unlisted prefix does
     # not raise — resolve() falls through to the v4 example namespace — so a
     # missing row here is silent, and every shape prefix in use needs one.
@@ -58,7 +58,7 @@ PREFIXES = {
     "oshapes": "http://mee.foundation/ontologies/organization/shapes#",
     "educationshapes": "http://mee.foundation/ontologies/education/shapes#",
     "dpshapes": "http://mee.foundation/ontologies/directory-profile/shapes#",
-    "bhsshapes": "http://mee.foundation/ontologies/category-ext/boston-hub-society/shapes#",
+    "bhsshapes": "http://mee.foundation/ontologies/pod-category-ext/boston-hub-society/shapes#",
 }
 
 # The three sub-keys of one v4.serviceTag entry, mapped to the
@@ -326,7 +326,7 @@ def process_pod_databook(fm, triples):
 
     # No pod-level shape synthesis either: a pod:InstancePod's validation
     # shape is derivable from its own pod:category value via a reverse
-    # lookup on cat-templates.ttl rather than stored per-instance.
+    # lookup on pod-category-templates.ttl rather than stored per-instance.
 
 
 def process_embedded_graph(graph, triples, kind):

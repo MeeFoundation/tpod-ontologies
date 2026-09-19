@@ -5,7 +5,7 @@ type: pod-databook
 version: 1.2.0
 created: 2026-08-30
 description: >
-  Pod DataBook for folder "Kyoto Trip 2027" (pod:category: cat:Trips, reusing its parent "Trips"
+  Pod DataBook for folder "Kyoto Trip 2027" (pod:category: podcat:Trips, reusing its parent "Trips"
   pod's own origin), nested under "Travel" > "Trips". A user-defined instance folder for a
   specific trip Alice is planning with her spouse Dave. A three-member pod demonstrating
   service:ChatGPT as a real pod member: Alice's own AI travel agent joins alongside Alice and Dave,
@@ -17,7 +17,7 @@ description: >
   tool's topic may be claimed from more than one side (see the Medical Appointment pod's two
   "Med. Appt mt." squares in README.md's Representative Pods diagram).
 v4:
-  category: "cat:Trips"
+  category: "podcat:Trips"
   creator: ":Self"
   owner: ":Self"
   member:
