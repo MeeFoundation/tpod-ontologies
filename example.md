@@ -209,7 +209,7 @@ A summary of every narratively-illustrated pod under `example/Pods/`, grouped by
 
 ## Graphs
 
-The graphs in the table below are *about* Alice and claimed *by* Alice. The "Pod DataBook" link jumps straight to each graph's own `### Graph NN` section inside its owning pod-databook file under `example/Pods/`. See [pod-databook.md](pod-databook.md#body) for that body structure.
+The graphs in the table below are *about* Alice and claimed *by* Alice. The "Pod DataBook" link jumps straight to each graph's own `### Graph NN` section inside its owning pod-databook file under `example/Pods/`. See [pod-databook.md](pod-databook.md#body-structure) for that body structure.
 
 | #  | Pod DataBook                                                                          | Category | Key data                                                         | Diagram |
 |--- |:--------------------------------------------------------------------------------------|:-------------|:-----------------------------------------------------------------|:--------|

@@ -70,7 +70,7 @@ A pod has a **creator**, which is the identity of the user who created it. This 
 
 A pod can be **shared**. The creator of a pod can invite people, or services — one's own AI agent, a pod backup service, or the service of an organization compatible with The Mee Foundation's PDN protocols — to join the pod. If they accept the invitation, they gain access to the pod. Pods are dynamic, not static: any change made to a pod's contents by any member is visible to all members. Pods are self-contained and may be nested inside other pods by any app user. The organization of these nested structures is personal to the app user and not shared. The structures will be similar between users to the extent that they leverage the app's built-in tree of categories.
 
-Pods can be **linked**. Pods have globally unique identifiers (see [Pod Id](pod-databook.md#pod-id)). This allows the note of a "source" pod to include a link to a "target" pod. The user can follow a link in a source pod if they also have access to the target pod.
+Pods can be **linked**. Pods have globally unique identifiers (see [Pod Id](pod-databook.md#id)). This allows the note of a "source" pod to include a link to a "target" pod. The user can follow a link in a source pod if they also have access to the target pod.
 
 ### Diving Deeper
 
@@ -202,7 +202,7 @@ A pod that carries no tool can be given one at any time, the user picking both t
 
 Pods link to *graphs* (`pod:Graph`) — named graphs containing sets of claims about some resource; that resource need not be a person (see `pod:formTopic` under [Tools](#tools)).
 
-A graph is a container of structured information about another person, organization, or any other topic. This information is expressed as a named graph of triples — typically using the Persona and Organization ontologies when the graph is about a person or organization, though the ontology does not require this — and stored in a **[DataBook](https://github.com/w3c-cg/holon/tree/main/architectures/databook)** (`.databook.md`) file that describes one facet of what it is about — specifically, inside the pod DataBook that links it, since a graph has no file of its own (see [pod-databook.md](pod-databook.md#body)). These claims may have originated from other graphs about the same subject.
+A graph is a container of structured information about another person, organization, or any other topic. This information is expressed as a named graph of triples — typically using the Persona and Organization ontologies when the graph is about a person or organization, though the ontology does not require this — and stored in a **[DataBook](https://github.com/w3c-cg/holon/tree/main/architectures/databook)** (`.databook.md`) file that describes one facet of what it is about — specifically, inside the pod DataBook that links it, since a graph has no file of its own (see [pod-databook.md](pod-databook.md#body-structure)). These claims may have originated from other graphs about the same subject.
 
 <p align="center"><img src="images/pod-ontology/graph.png" alt="graph ontology"></p>
 

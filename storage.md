@@ -17,7 +17,7 @@ written to the filesystem, in any form, at any point. There is no folder represe
 file representing its note, and no directory holding its attachments.
 
 The store sits alongside the pod's membership store — the append-only event log whose first entry
-is the pod's founding event (see [Pod Id](pod-databook.md#pod-id) in pod-databook.md) — rather
+is the pod's founding event (see [Pod Id](pod-databook.md#id) in pod-databook.md) — rather
 than parallel to it. As before, no pod is ever stored by any cloud provider, or any third party of
 any kind, including The Mee Foundation; it is held on the user's own device(s), or, for an
 organization's own `s:ServiceProvider`, on Personal Data Network (PDN) nodes hosted by that

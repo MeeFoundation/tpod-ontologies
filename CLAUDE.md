@@ -55,7 +55,7 @@ Every core file — the ontologies, their SHACL shapes, the helper scripts, the 
 
 ## Example Files
 
-Every graph below is an embedded section (a `tpod.member`/`tpod.tool[].graph` entry + `### Graph NN` body) inside its owning pod-databook file under `example/Pods/` — there are no standalone graph files (see [pod-databook.md](pod-databook.md#body)). **This table is exhaustive**: every embedded graph in the example tree has a row, the `:Self` stub `member` entry on a purely organizational scaffold pod included. A graph that the 12 example diagrams do not draw (integrity.md's PNG-1g) is documented here and in example.md's Graphs section exactly like any other.
+Every graph below is an embedded section (a `tpod.member`/`tpod.tool[].graph` entry + `### Graph NN` body) inside its owning pod-databook file under `example/Pods/` — there are no standalone graph files (see [pod-databook.md](pod-databook.md#body-structure)). **This table is exhaustive**: every embedded graph in the example tree has a row, the `:Self` stub `member` entry on a purely organizational scaffold pod included. A graph that the 12 example diagrams do not draw (integrity.md's PNG-1g) is documented here and in example.md's Graphs section exactly like any other.
 
 | Graph — File | Purpose |
 |------|---------|
@@ -209,7 +209,7 @@ The `.databook.md` file format — development scaffolding that will not exist o
 
 A heading, check, or script comment that names a filename/tree-position convention after "Category" (e.g. the retired "Category/Pod DataBook Filename Convention" name) is stale leftover from when a separate `category-databook` file type existed (see the Pod/Category split note above) — fix it to name the pod-level concept it actually describes.
 
-**DataBook IRI convention**: see [Graph Ids and Named Graphs](pod-databook.md#graph-ids) in pod-databook.md.
+**DataBook IRI convention**: see [Graph Ids and Named Graphs](pod-databook.md#graph-ids-and-named-graphs) in pod-databook.md.
 
 **Peer name pattern** (not hierarchical): All name types (FullName, GivenName, FamilyName, AlternateName) connect directly to a `persona:Person` via `ont00001879` (designated by). They are siblings, not nested under a PersonName parent.
 
@@ -288,7 +288,7 @@ Two things to know about installing it. `.git/hooks/` holds a *copy*, not a link
 
 - Name the classes, properties, files and rules. Explain the design and the reasoning.
 - Do **not** name a specific example individual, pod, organization, or graph number (`:Alice_Walker`, the Citibank pod, `graph-14`, the Boston Hub Society) to carry the explanation. If the mechanism can only be explained by walking through one, the walk-through belongs in `example.md` behind a link.
-- A one-line pointer at the end of a section — "for a worked X, see [example.md](example.md#anchor)" — is the right amount, and is all of it that belongs in `README.md`.
+- A one-line pointer at the end of a section — "for a worked X, see `[example.md](example.md#anchor)`" — is the right amount, and is all of it that belongs in `README.md`.
 - The same holds for a newly published extension or peer ontology: `README.md` gets the mechanism and the term list, `example.md` gets the instance that exercises it.
 
 Pre-existing prose that describes a README-embedded *diagram* (e.g. the Representative Pods section, which names the boxes drawn in `images/representative-pods.png`) is the one standing exception — the diagram is in `README.md`, so its caption has to be too.
@@ -315,4 +315,10 @@ The `id` attribute is a human-readable label (no functional significance); keep 
 
 ## Gitignore Notes
 
-`/project_files` is gitignored. The `project_files/` directory exists locally but is not tracked — it contains source domain ontologies and reference documents.
+`.gitignore` covers `.claude/*` (with `!.claude/commands/` re-including the project's own slash
+commands), `.DS_Store`, `__pycache__/`, `*.pyc`, and `YAML-SYNTAX.md`.
+
+`project_files/` is **tracked**, not ignored — it holds the source domain ontologies and
+reference documents, including the hand-curated vendor subsets that carry their own
+`owl:versionInfo` and are bumped like any other file here. Its contents are excluded from the
+repo-wide sweeps and integrity checks by path, not by git.

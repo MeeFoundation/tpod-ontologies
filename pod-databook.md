@@ -183,7 +183,7 @@ does not exist in RDF at all, so nothing in RDF records it, and nothing reverse-
 to derive it. The one RDF-level echo of a folder's classification is `pod:category`, read directly
 from the pod-databook's own explicit `tpod.category` field (see [The `tpod` Block](#the-tpod-block)), not
 derived from the filename at all. Unlike the filename, a pod-databook's `id:` is deliberately *not*
-derived from the folder name either — see [`id`](#pod-id) below.
+derived from the folder name either — see [`id`](#id) below.
 
 **UserDefined folders — `<catType>` is the literal `custom`**: a pod may legally carry no
 `pod:category` at all — this is the UserDefined category, for a pod the user created without picking
@@ -366,7 +366,7 @@ a bare mapping rather than a one-item list. Sub-keys:
 
 | Sub-key | Required | Value |
 |---------|----------|-------|
-| `id` | yes | The graph's full IRI — see [Graph Ids and Named Graphs](#graph-ids) |
+| `id` | yes | The graph's full IRI — see [Graph Ids and Named Graphs](#graph-ids-and-named-graphs) |
 | `claimant` | yes | Who is making the claim — see [`claimant` Vocabulary](#claimant-vocabulary) |
 | `subject` | yes | The party whose member entry this graph is — see [`subject` / `formTopic` Vocabulary](#subject--formtopic-vocabulary) |
 | `shape` | no | The `sh:NodeShape` CURIE the graph's content conforms to (`pod:shape`), e.g. `"pshapes:ContactInfoShape"`. May itself be a list where one graph's content satisfies several shapes at once. A graph with no `shape:` is skipped by the template validation pass |
