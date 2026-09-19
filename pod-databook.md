@@ -609,7 +609,7 @@ No single tool checks the whole format. It is enforced in three places:
   YAML-5 (`title:` matches the folder's OS name), TTL-3/TTL-4 (a `shape:` value against the
   graph's own content, and against the pod's category's own template), and YAML-9
   (`v4.userTag`/`v4.serviceTag` well-formedness).
-- **`helpers/validate.py`** — synthesizes `c:` triples from the frontmatter and runs SHACL
+- **`helpers/validate.py`** — synthesizes `pod:` triples from the frontmatter and runs SHACL
   (`shacl/pod-shacl.ttl` and friends) against them, plus a per-graph template pass driven by each
   entry's `shape:` value. See [Validation](example.md#validation) in example.md for the commands.
 - **`helpers/databook_graphs.py`** — the parser, and the de facto machine-readable spec for which

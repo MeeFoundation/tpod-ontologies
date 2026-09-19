@@ -386,7 +386,7 @@ pod's instance data, so merging those in doesn't break the isolation.
 Each pod gets two passes.
 
 **1 — the pod pass.** The pod's whole content at once: every one of its embedded graphs' Turtle,
-plus the `c:` triples synthesized from its own `v4.*` frontmatter
+plus the `pod:` triples synthesized from its own `v4.*` frontmatter
 (`databook_graphs.process_pod_databook()`). This is validated against the four general shapes
 files — `shacl/pod-shacl.ttl` (the pod model itself: `pod:category` cardinality, the
 `pod:TemplatePod`/`pod:InstancePod` split, `pod:creator`/`pod:owner`/`pod:member`/`pod:tool`, and

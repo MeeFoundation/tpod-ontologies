@@ -16,7 +16,7 @@ Reconcile `category.ttl`'s `rdfs:comment` text for every leaf category under `ca
 
 1. Read `category.ttl` and extract every `cat:X rdfs:comment "..."@en` under the Personal and Organizational subclass sections.
 2. Read `README.md`'s Personal Categories and Organizational Categories bullet lists and extract each category's description text.
-3. For each class, compare the two ignoring pure formatting differences (README wraps class names in backticks with `cat:`/`c:` prefixes, uses bold for labels, and starts each description lowercase since it follows an em dash — none of that is a substantive difference). Flag as a real mismatch: added/removed clauses, different examples, different cross-references, different scope statements.
+3. For each class, compare the two ignoring pure formatting differences (README wraps class names in backticks with `cat:`/`pod:` prefixes, uses bold for labels, and starts each description lowercase since it follows an em dash — none of that is a substantive difference). Flag as a real mismatch: added/removed clauses, different examples, different cross-references, different scope statements.
 4. Where a mismatch is real, replace the `category.ttl` comment with text matching the README's content — reformatted as a standalone sentence (capitalized first letter, trailing period), in the same person/voice the surrounding `category.ttl` comments already use.
 5. If a category is missing from README entirely, or a `category.ttl` class has no bullet in either README section at all, don't guess a fix — report it instead (that's a coverage gap, not a wording sync, and is handled by the existing "README Coverage" rule in CLAUDE.md).
 
