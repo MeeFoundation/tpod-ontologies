@@ -74,7 +74,7 @@ Pods can be **linked**. Pods have globally unique identifiers (see [Pod Id](pod-
 
 ### Diving Deeper
 
-The Pod class splits into two disjoint kinds: `pod:TemplatePod`, a reusable, class-level *template* pod, and `pod:InstancePod`, an *actual* pod instantiated in a user's own tree. There is no further subclass: a pod that carries a tool holds one or more `pod:tool` values rather than a type of its own.
+The Pod class splits into two disjoint kinds: `pod:TemplatePod`, a reusable, class-level *template* pod, and `pod:InstancePod`, an *actual* pod instantiated in a user's own tree.
 
 A pod is an atomic unit of information that the app manages for the user. It is held entirely inside the app, and pods nest inside pods, forming the tree.
 
