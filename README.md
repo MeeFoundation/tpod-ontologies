@@ -1010,11 +1010,11 @@ Throughout this section, `education:` is both the file's real Turtle prefix and 
 
 The Directory Profile ontology (`persona-ext/directory-profile.ttl`) is the first **persona extension** — the sibling family to `other/`, for terms whose subject is the `p:Person` themselves but which are too narrow to earn a place in `persona.ttl`.
 
-The two families are told apart by one test, the **domain** of the properties in the file. An `other/` file's properties describe a record, document, or possession (`pets:hasSpecies` on a `pets:Pet`, `education:schoolName` on an `education:EducationRecord`). A `persona-ext/` file's properties have domain `p:Person` directly. `other/` never takes a `p:Person` property — that is what this folder exists to prevent.
+The two families are told apart by one test, the **subject** of the properties in the file. An `other/` file's properties describe a record, document, or possession — an *independent* continuant with an existence of its own (`pets:hasSpecies` on a `pets:Pet`, `education:schoolName` on an `education:EducationRecord`). A `persona-ext/` file's properties take the `p:Person` as their subject, in either of two ways: with domain `p:Person` directly, or with domain a *specifically dependent* continuant inhering in them — a BFO role or quality that could not exist without that person, and that the person reaches by `BFO_0000196` (bearer of). `other/` never takes a `p:Person` property — that is what this folder exists to prevent.
 
-What keeps these particular terms out of `persona.ttl` is breadth rather than subject: `persona.ttl` carries what any application recording a person needs, and — per `p:ContactInfo`'s own comment — what is "reused across every category's member graph". These fields are asked by membership directories and by nothing else.
+What keeps these particular terms out of `persona.ttl` is breadth rather than subject: `persona.ttl` carries what any application recording a person needs, and — per `p:ContactInfo`'s own comment — what is "reused across every category's member graph". These fields are asked by membership directories and the like.
 
-No individual organization's requirements appear in this file. Which of these fields a given organization requires, caps, or restricts to a fixed value list is a SHACL matter, carried by that organization's own shape — see [Category Extensions](#category-extensions). Any club, alumni association, or professional directory can reuse the whole file.
+No individual organization's requirements appear in this file. Which of these fields a given organization requires and caps is a SHACL matter, carried by that organization's own shape — see [Category Extensions](#category-extensions). A fixed value list follows whoever owns it: an organization's own arbitrary list belongs in that organization's shape, whereas a published national standard is nobody's to vary and is frozen once in this ontology's own shape instead. Any club, alumni association, or professional directory can reuse the whole file.
 
 Throughout this section, `dp:` is the doc alias; the file's own real Turtle prefix is the verbose `directoryprofile:` (`http://mee.foundation/ontologies/directory-profile#`), the same verbose-internal/short-alias split as `v:` and `idoc:`.
 
@@ -1024,7 +1024,7 @@ Throughout this section, `dp:` is the doc alias; the file's own real Turtle pref
 
 - `dp:DirectoryProfile` — label for a graph whose purpose is to carry a person's entry in a membership directory. Never asserted via `rdf:type` anywhere — a label only, exactly like `p:ContactInfo`, and for the same reason: the individual a directory profile describes is already a `p:Person`. An organization's member shape therefore targets `p:Person`, not this class.
 
-**Properties** (every one with domain `p:Person`):
+**Properties** (all with domain `p:Person`, bar `dp:jobFunction`):
 
 *Membership*
 
@@ -1035,6 +1035,7 @@ Throughout this section, `dp:` is the doc alias; the file's own real Turtle pref
 
 - `dp:industry` — the industry the person works in; repeat for several. Deliberately left unenumerated in the ontology, since every directory has its own list — the permitted values are fixed by the asking organization's shape.
 - `dp:industryOther` — the free-text industry given when none of an organization's listed industries fits. Separate from `dp:industry` precisely because that property's values are constrained to a list.
+- `dp:jobFunction` — the broad functional area of the person's work. Where `dp:industry` says what the employer does, this says what the person does inside it. Optional, at most one value, and constrained by SHACL to the 23 job families of the 2018 US Standard Occupational Classification, as O*NET publishes them: `Management`, `Business and Financial Operations`, `Computer and Mathematical`, `Architecture and Engineering`, `Life, Physical, and Social Science`, `Community and Social Service`, `Legal`, `Educational Instruction and Library`, `Arts, Design, Entertainment, Sports, and Media`, `Healthcare Practitioners and Technical`, `Healthcare Support`, `Protective Service`, `Food Preparation and Serving Related`, `Building and Grounds Cleaning and Maintenance`, `Personal Care and Service`, `Sales and Related`, `Office and Administrative Support`, `Farming, Fishing, and Forestry`, `Construction and Extraction`, `Installation, Maintenance, and Repair`, `Production`, `Transportation and Material Moving`, `Military Specific`. Unlike `dp:industry`, whose list each directory sets for itself, this one is a published national standard and so is frozen once in this ontology's own shape rather than in each asking organization's. There is no companion `Other` property either: the 23 families partition the entire civilian and military labor force, so a value outside them means the person was mis-classified, not that the list is short.
 - `dp:assistantName`, `dp:assistantEmail` — the person's work assistant, where a directory routes contact through one. `dp:assistantEmail` is a bare string rather than a CCO `EmailAddress` designator: it designates the assistant, not the member.
 - `dp:previousPositions` — previous work and life positions, including military service, with years.
 - `dp:directorships` — board directorships, past and present.
@@ -1056,14 +1057,29 @@ Throughout this section, `dp:` is the doc alias; the file's own real Turtle pref
 
 The free-text properties above are free text on purpose: **one text box on a form is one string property**. A directory asks "Recognitions" as a single written answer, so it is stored as one rather than acquiring a structure the question never had.
 
+#### The Occupation Role behind `dp:jobFunction`
+
+`dp:jobFunction` is the one property here that does not hang off the `p:Person`. Its domain is CCO's Occupation Role (`cco:ont00000984`) — a role that inheres in an agent in virtue of the responsibilities they are expected to fulfill within some act of employment — and the person reaches it by `BFO_0000196` (bearer of), the same relation `persona.ttl` already uses to reach a person's physical qualities:
+
+```turtle
+:Self <http://purl.obolibrary.org/obo/BFO_0000196> [  # bearer of → Occupation Role
+    rdf:type cco:ont00000984 ;
+    directoryprofile:jobFunction "Computer and Mathematical"
+] .
+```
+
+The indirection earns its keep twice over. A job function classifies an *employment*, not a person, so putting it on the role is what CCO's own vocabulary already says; and it leaves room for a second employment without either answer contradicting the other. It also keeps `dp:jobFunction` distinct from `p:JobTitle`, which names the post ("Software Engineer") rather than classifying it — the two are independent, and a person may carry either, both, or neither.
+
+A pair of constraints on `dpshapes:DirectoryProfileShape` enforces this. The first reaches the value along the sequence path `BFO_0000196` / `dp:jobFunction` from the person and holds it to the list; the second sets `sh:maxCount 0` on `dp:jobFunction` at the person, so a job function hung straight off a `p:Person` is refused rather than quietly ignored. The list is enforced on the sequence path rather than through a `sh:qualifiedValueShape` on `BFO_0000196`, because a qualified shape only *counts* conforming values — a job function outside the list would stop counting instead of failing, the same trap that keeps the Boston Hub Society's Middle Initial convention unenforced.
+
 ### Directory Profile Ontology Files
 
 - **`persona-ext/directory-profile.ttl`** — Defines the class and properties above. Carries no `owl:imports`; `p:Person` is referenced by name.
-- **`persona-ext/shacl/directory-profile-shacl.ttl`** — `:DirectoryProfileShape`, targeting `p:Person`. Datatypes and a single-value cap on every field a directory asks as one question; nothing required, and `dp:industry` left uncapped and unenumerated on purpose.
+- **`persona-ext/shacl/directory-profile-shacl.ttl`** — `:DirectoryProfileShape`, targeting `p:Person`. Datatypes and a single-value cap on every field a directory asks as one question; nothing required, and `dp:industry` left uncapped and unenumerated on purpose. `dp:jobFunction` is the one enumerated property, its 23 values being a national standard rather than any organization's list; it is constrained on a path from the same target, together with an `sh:maxCount 0` refusing it on the person directly.
 
 ### Directory Profile Ontology Validation
 
-`persona-ext/shacl/directory-profile-shacl.ttl` runs against individual graphs (the template pass). Because it targets `p:Person`, it is subject to the same substantive-person retargeting as `pshapes:ContactInfoShape`. See [Validation](example.md#validation).
+`persona-ext/shacl/directory-profile-shacl.ttl` runs against individual graphs (the template pass). Because `:DirectoryProfileShape` targets `p:Person`, it is subject to the same substantive-person retargeting as `pshapes:ContactInfoShape`. See [Validation](example.md#validation).
 
 ## Organization Ontology
 
@@ -1149,7 +1165,7 @@ The last column names the categories whose template declares that shape up front
 | **Contact Info** | `pshapes:ContactInfoShape` — [`shacl/contactinfo-shacl.ttl`](shacl/contactinfo-shacl.ttl) | A person's names, organization name and unit, job title, emails and phones, postal addresses, online services, anniversaries, personal info and photo. Given name required, at most one of each component. The dialog's default, and the same shape every template names as its `pod:memberShape` | `podcat:PrimaryCarePhysician` |
 | **Health & Wellness** | `pshapes:HealthWellnessShape` — [`shacl/persona-shacl.ttl`](shacl/persona-shacl.ttl) | A person's physical characteristics — height, eye color, hair color; all optional | `podcat:HealthWellness` |
 | **Primary Care Physician** | `pshapes:PrimaryCarePhysicianShape` — [`shacl/persona-shacl.ttl`](shacl/persona-shacl.ttl) | A physician's medical specialty; optional, and paired with Contact Info on the same form | `podcat:PrimaryCarePhysician` |
-| **Directory Profile** | `dpshapes:DirectoryProfileShape` — [`persona-ext/shacl/directory-profile-shacl.ttl`](persona-ext/shacl/directory-profile-shacl.ttl) | What a membership directory asks of a member — member since, sponsor, industry, previous positions, directorships, non-profit positions, recognitions, spouse or partner, family, hometown, dietary restrictions, personal goals, life experiences; nothing required | — |
+| **Directory Profile** | `dpshapes:DirectoryProfileShape` — [`persona-ext/shacl/directory-profile-shacl.ttl`](persona-ext/shacl/directory-profile-shacl.ttl) | What a membership directory asks of a member — member since, sponsor, industry, job function, previous positions, directorships, non-profit positions, recognitions, spouse or partner, family, hometown, dietary restrictions, personal goals, life experiences; nothing required | — |
 | **Education Record** | `educationshapes:EducationRecordShape` — [`other/shacl/education-shacl.ttl`](other/shacl/education-shacl.ttl) | One stage of a person's schooling — school name (required), education level, school city and state, year graduated, degree | — |
 | **Social Security Number** | `pshapes:SSNShape` — [`shacl/persona-shacl.ttl`](shacl/persona-shacl.ttl) | A US Social Security Number, in `NNN-NN-NNNN` form | `podcat:SSN` |
 | **Passport** | `idocshapes:PassportShape` — [`other/shacl/identity-documents-shacl.ttl`](other/shacl/identity-documents-shacl.ttl) | Name, date of birth, passport number and expiration date (all required); additional name, issue date, issuing country, place of birth, gender marker and photo | `podcat:Passport` |

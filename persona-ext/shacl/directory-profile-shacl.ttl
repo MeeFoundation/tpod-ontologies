@@ -10,8 +10,8 @@
 
 <http://mee.foundation/ontologies/directory-profile/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/directory-profile> ;
-    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/shapes/1.1.0> ;
-    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/shapes/1.2.0> ;
+    dc:date "2026-09-21"^^xsd:date ;
     rdfs:label "Directory Profile SHACL Shapes"@en ;
     rdfs:comment """SHACL shapes for persona-ext/directory-profile.ttl, the ontology they validate.
 
@@ -22,16 +22,27 @@
                     organization's business and belongs in its own shape (see
                     pod-category-ext/shacl/boston-hub-society-shacl.ttl).
 
-                    Targets persona:Person, since every property in this ontology has that domain.
-                    It is therefore subject to helpers/validate.py's substantive-person retargeting,
-                    the same as pshapes:ContactInfoShape."""@en .
+                    The one enumerated property is directoryprofile:jobFunction, whose 23 permitted
+                    values are the job families of the US Standard Occupational Classification. A
+                    national standard is nobody's to vary, so it is frozen here once rather than
+                    copied into each organization's shape — the opposite call from industry, and
+                    for the opposite reason.
+
+                    Targets persona:Person, the domain of every property in this ontology bar
+                    jobFunction, which is reached from the person through BFO_0000196 (bearer of)
+                    and so is constrained on a path from the same target rather than needing one of
+                    its own. The shape is therefore subject to helpers/validate.py's
+                    substantive-person retargeting, the same as pshapes:ContactInfoShape."""@en .
 
 
 #################################################################
 #  Directory Profile Shape
-#  Targets persona:Person — every directoryprofile: property's domain.
+#  Targets persona:Person — every directoryprofile: property's domain,
+#  jobFunction's aside, which is reached from the person by a path.
 #  Nothing required; every single-question field capped at one value.
-#  directoryprofile:industry is uncapped and unenumerated on purpose.
+#  directoryprofile:industry is uncapped and unenumerated on purpose;
+#  directoryprofile:jobFunction is the one property enumerated here,
+#  its list being a national standard rather than any organization's.
 #################################################################
 
 :DirectoryProfileShape
@@ -66,6 +77,54 @@
         sh:datatype xsd:string ;
         sh:maxCount 1 ;
         sh:message "A directory profile may have at most one industryOther."@en
+    ] ;
+
+    # ── Job function ─────────────────────────────────────────────────────────
+    # Reached from the person via BFO_0000196 (bearer of) → Occupation Role,
+    # the same relation persona-shacl's :HealthWellnessShape uses for a person's
+    # qualities. Expressed as a SHACL sequence path rather than as a
+    # sh:qualifiedValueShape over that relation: a qualified shape only *counts*
+    # conforming values, so a job function outside the list would go unreported
+    # instead of failing. The sh:maxCount 0 that follows is the other half of
+    # the pair, refusing a job function hung straight off the person.
+    #
+    # The 23 values are the job families of the 2018 US Standard Occupational
+    # Classification, as O*NET publishes them: a national standard, frozen here
+    # once rather than in each asking organization's own shape.
+    sh:property [
+        sh:path ( <http://purl.obolibrary.org/obo/BFO_0000196>  # bearer of
+                  directoryprofile:jobFunction ) ;
+        sh:datatype xsd:string ;
+        sh:maxCount 1 ;
+        sh:in ( "Management"
+                "Business and Financial Operations"
+                "Computer and Mathematical"
+                "Architecture and Engineering"
+                "Life, Physical, and Social Science"
+                "Community and Social Service"
+                "Legal"
+                "Educational Instruction and Library"
+                "Arts, Design, Entertainment, Sports, and Media"
+                "Healthcare Practitioners and Technical"
+                "Healthcare Support"
+                "Protective Service"
+                "Food Preparation and Serving Related"
+                "Building and Grounds Cleaning and Maintenance"
+                "Personal Care and Service"
+                "Sales and Related"
+                "Office and Administrative Support"
+                "Farming, Fishing, and Forestry"
+                "Construction and Extraction"
+                "Installation, Maintenance, and Repair"
+                "Production"
+                "Transportation and Material Moving"
+                "Military Specific" ) ;
+        sh:message "A person may have at most one job function, and it must be one of the 23 SOC/O*NET job families."@en
+    ] ;
+    sh:property [
+        sh:path directoryprofile:jobFunction ;
+        sh:maxCount 0 ;
+        sh:message "A job function must sit on a cco:ont00000984 (Occupation Role) the person bears via BFO_0000196 — never on the person directly."@en
     ] ;
     sh:property [
         sh:path directoryprofile:assistantName ;

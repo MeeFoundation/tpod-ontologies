@@ -139,9 +139,11 @@ This graph captures Bob Johnson's BHS profile as transmitted from Bob's own inst
 
 #### Overview
 
-This graph captures Alice Walker's BHS profile — the identity data she shares with the Boston Hub Society, entered on the society's two-page "Personal Page for BHS 2026 Directory" form. It is validated against `bhsshapes:MemberShape` rather than `pshapes:ContactInfoShape`, the Boston Hub Society being the first category to name a member shape of its own. Beyond the contact details any member graph carries, it records her directory answers — when she joined and who sponsored her, her industries, her schooling, her family, and the short written answers the directory prints under her name. Alice is the claimant.
+This graph captures Alice Walker's BHS profile — the identity data she shares with the Boston Hub Society, entered on the society's two-page "Personal Page for BHS 2026 Directory" form. It is validated against `bhsshapes:MemberShape` rather than `pshapes:ContactInfoShape`, the Boston Hub Society being the first category to name a member shape of its own. Beyond the contact details any member graph carries, it records her directory answers — when she joined and who sponsored her, her industries and job function, her schooling, her family, and the short written answers the directory prints under her name. Alice is the claimant.
 
 The vocabulary is entirely shared: names, birth date, employer, job title, address, phone, and email come from CCO and `persona.ttl`; the directory questions from `persona-ext/directory-profile.ttl`; the schooling rows from `other/education.ttl`. Nothing here is BHS-specific — what belongs to the society is only its shape, which requires a FamilyName (`ContactInfoShape` does not) and restricts `directoryprofile:industry` to its own 19-value list.
+
+Her job function is the one answer whose permitted values the society does not set. `dp:jobFunction` hangs off an Occupation Role (`cco:ont00000984`) that Alice bears via `BFO_0000196`, rather than off `:Self` directly, and its 23 values are the job families of the US Standard Occupational Classification — frozen once in `dpshapes:DirectoryProfileShape`, since a national standard is nobody's to vary. `bhsshapes:MemberShape` caps the answer at one and refuses it on the member directly, but leaves the list alone. Note that "Computer and Mathematical" classifies the same employment her `p:JobTitle` of "Software Engineer" names; the two are independent, and a member may carry either, both, or neither.
 
 #### Graph
 
@@ -239,6 +241,13 @@ The vocabulary is entirely shared: names, birth date, employer, job title, addre
     # ── Industry — constrained by MemberShape to the society's own 19 values ─
     directoryprofile:industry "Technology" ;
     directoryprofile:industry "Non-Profit" ;
+
+    # ── Job function — one of the 23 SOC/O*NET job families ──────────────────
+    <http://purl.obolibrary.org/obo/BFO_0000196> [  # bearer of → Occupation Role
+        rdf:type cco:ont00000984 ;  # Occupation Role
+        directoryprofile:jobFunction "Computer and Mathematical" ;
+        rdfs:comment "Job function: Computer and Mathematical (SOC major group 15-0000)"@en
+    ] ;
 
     # ── Schooling ("High School", "College") ─────────────────────────────────
     persona:hasEducation :Alice_HighSchool ;

@@ -135,6 +135,7 @@ LABELS = {
     "https://w3id.org/cco-domains/cco/ont00000026":         "HairColor",
     "https://w3id.org/cco-domains/cco/ont00001677":         "Inch",
     "https://w3id.org/cco-domains/cco/ent00000040":         "BlueEyeColor",
+    "https://w3id.org/cco-domains/cco/ont00000984":         "OccupationRole",
     # cco: ont properties
     "https://w3id.org/cco-domains/cco/ont00001780":         "hasMother",
     "https://w3id.org/cco-domains/cco/ont00001786":         "isMotherOf",

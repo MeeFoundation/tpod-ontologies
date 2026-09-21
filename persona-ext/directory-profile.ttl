@@ -8,38 +8,47 @@
 @base <http://mee.foundation/ontologies/directory-profile> .
 
 <http://mee.foundation/ontologies/directory-profile> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/1.2.0> ;
-    dc:date "2026-09-19"^^xsd:date ;
-    owl:versionInfo "Version 1.2.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/directory-profile/1.3.0> ;
+    dc:date "2026-09-21"^^xsd:date ;
+    owl:versionInfo "Version 1.3.0 - added jobFunction, on a CCO Occupation Role"@en ;
     rdfs:label "Directory Profile Ontology"@en ;
     rdfs:comment """The first persona-ext/ peer ontology: the fields a membership directory asks of
-                    its members — when they joined, who sponsored them, what industry they work in,
-                    their assistant, their spouse and family, where they grew up, their career
-                    history and recognitions, and the short free-text answers a directory prints
-                    under their name.
+                    its members — when they joined, who sponsored them, what industry they work in
+                    and what they do there, their assistant, their spouse and family, where they
+                    grew up, their career history and recognitions, and the short free-text answers
+                    a directory prints under their name.
 
                     persona-ext/ vs. other/ — the two families are told apart by one test, the
-                    domain of the properties in the file:
+                    subject of the properties in the file:
 
                       other/           the subject is a record, document, or possession the person
-                                       merely *has* (pets:Pet, idoc:Passport, education:EducationRecord).
+                                       merely *has* — an independent continuant with an existence
+                                       of its own (pets:Pet, idoc:Passport,
+                                       education:EducationRecord).
                       persona-ext/     the subject is the persona:Person themselves, but the terms
                                        are too narrow to earn a place in persona.ttl.
 
-                    Every property declared here has rdfs:domain persona:Person, which is precisely
-                    why it cannot live in other/. What keeps it out of persona.ttl is breadth:
-                    persona.ttl carries what any application recording a person needs, and — per
-                    persona:ContactInfo's own rdfs:comment — what is "reused across every category's
-                    member graph". These fields are asked by membership directories and by nothing
-                    else, so they are a shared extension rather than core.
+                    Almost every property declared here has rdfs:domain persona:Person. The one
+                    exception, directoryprofile:jobFunction, has domain cco:ont00000984 (Occupation
+                    Role) — still the person as subject, reached through a specifically dependent
+                    continuant that inheres in them and could not exist without them, which is a
+                    world away from the independent things other/ describes. What keeps all of it
+                    out of persona.ttl is breadth: persona.ttl carries what any application
+                    recording a person needs, and — per persona:ContactInfo's own rdfs:comment —
+                    what is "reused across every category's member graph". These fields are asked
+                    by membership directories and the like, so they are a shared extension rather
+                    than core.
 
                     No individual organization's requirements appear here. Which of these fields a
-                    given organization requires, caps, or restricts to a fixed value list is a SHACL
-                    matter, carried by that organization's own shape — see
+                    given organization requires and caps is a SHACL matter, carried by that
+                    organization's own shape — see
                     pod-category-ext/shacl/boston-hub-society-shacl.ttl, which requires none of them but
                     freezes directoryprofile:industry to the Boston Hub Society's own 19-value list.
-                    Nothing here is BHS-specific; any club, alumni association, or professional
-                    directory can reuse the whole file.
+                    A fixed value list follows whoever owns it: an organization's own arbitrary list
+                    belongs in that organization's shape, whereas a published national standard is
+                    nobody's to vary, so directoryprofile:jobFunction's list is frozen once in this
+                    file's own shape instead. Nothing here is BHS-specific; any club, alumni
+                    association, or professional directory can reuse the whole file.
 
                     Referenced by name with no owl:imports in either direction, the same pattern
                     persona.ttl's other/ links already use."""@en .
@@ -101,6 +110,34 @@ directoryprofile:industryOther rdf:type owl:DatatypeProperty ;
                     from directoryprofile:industry precisely because that property's values are
                     constrained to the organization's list."""@en ;
     rdfs:domain persona:Person ;
+    rdfs:range xsd:string .
+
+directoryprofile:jobFunction rdf:type owl:DatatypeProperty ;
+    rdfs:label "job function"@en ;
+    rdfs:comment """The broad functional area of the person's work — one of the 23 job families of
+                    the 2018 US Standard Occupational Classification, as O*NET publishes them.
+                    Where directoryprofile:industry says what the employer does, this says what the
+                    person does inside it. Unlike that property, whose values every directory sets
+                    for itself, this list is a published national standard, so it is frozen once in
+                    persona-ext/shacl/directory-profile-shacl.ttl rather than in each asking
+                    organization's shape. There is no companion "Other" property: the 23 families
+                    partition the entire civilian and military labor force, so a value outside them
+                    means the person was mis-classified, not that the list is short.
+
+                    Domain is cco:ont00000984 (Occupation Role, CCO AgentOntology) rather than
+                    persona:Person: a job function classifies the role a person bears in virtue of
+                    the responsibilities they are expected to fulfill within some act of employment,
+                    and CCO already has the class for exactly that. The person reaches it via
+                    BFO_0000196 (bearer of), the same relation persona.ttl already uses to reach a
+                    person's qualities. persona:JobTitle remains the *name* of the post ("Software
+                    Engineer"); this is the classification of it, and the two are independent — a
+                    person may carry either, both, or neither.
+
+                    Kept as a bare string rather than a reified cco:ont00000293 (Nominal
+                    Measurement Information Content Entity), which is what CCO would use if the
+                    classification act itself needed representing; nothing here asks who classified
+                    the role or when."""@en ;
+    rdfs:domain <https://w3id.org/cco-domains/cco/ont00000984> ;
     rdfs:range xsd:string .
 
 directoryprofile:assistantName rdf:type owl:DatatypeProperty ;
