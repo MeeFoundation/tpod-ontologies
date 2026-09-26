@@ -80,6 +80,8 @@ TOOL_TYPES = {
     "calendar": "Calendar",
     "canvas": "Canvas",
     "map": "Map",
+    "contacts": "Contacts",
+    "browser": "Browser",
 }
 
 
@@ -301,9 +303,10 @@ def process_pod_databook(fm, triples):
         process_embedded_graph(entry, triples, "member")
 
     # pod:tool — zero or more per pod, each a blank node for one object
-    # the pod carries: a form, a calendar, a drawing canvas or a map,
+    # the pod carries: a form, a calendar, a drawing canvas, a map, an
+    # address-book sync or a connection to a web browser,
     # each with its own data format. The node's rdf:type comes from the
-    # entry's own `type` key (form/calendar/canvas/map); pod:formTopic, what the tool's
+    # entry's own `type` key (form/calendar/canvas/map/contacts/browser); pod:formTopic, what the tool's
     # content is about, is carried once by the tool rather than repeated on
     # each graph beneath it, which is what makes its graphs unable to
     # disagree about what they are about.

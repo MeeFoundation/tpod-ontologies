@@ -270,7 +270,7 @@ A form type *is* a SHACL node shape. Picking one in the **Add Tool** dialog stam
 
 What each form type records, which shape backs it, and which categories declare one up front are properties of the ontologies rather than of the app, so the list itself lives in README.md's [Form Shapes](README.md#form-shapes) section. *Form shape* is that section's name for what this dialog calls a *form type*; they are one thing named from two sides.
 
-The other four tool kinds — `pod:Calendar`, `pod:Canvas`, `pod:Contacts` and `pod:Map` — have no content model yet, so they have no type list of their own: the dialog asks which template to follow only for a **Form**.
+The other five tool kinds — `pod:Calendar`, `pod:Canvas`, `pod:Contacts`, `pod:Map` and `pod:Browser` — have no content model yet, so they have no type list of their own: the dialog asks which template to follow only for a **Form**.
 
 ### Note Area
 
@@ -332,11 +332,11 @@ Two are documented below. Both are `s:AgentService`s, meaning each acts for exac
 | ChatGPT | `s:ChatGPT` | An LLM assistant that collaborates in the pod's chat, note, and tool graphs |
 | Arca Backup | `s:ArcaBackup` | Backs up the member's own copy of a pod |
 
-An `s:ServiceProvider` — an organization's own service, such as Citibank's — is equally a service by this definition; it simply acts for the organization that provides it rather than for a member, and the app does not ship its code.
+An `s:ServiceProvider` — an organization's own service, such as Citibank's — is equally a service by this definition; it simply acts for the organization that provides it rather than for a member, and the app does not ship its code. So is an `s:WebsiteService`, the website a verifiable credential is issued by or presented to: the app mints one itself, known only by its `s:siteDomain`, and runs no code for it at all, since the site never takes part in the pod — see [Browser Extension](#browser-extension) below.
 
 ### Pod Interface
 
-Every module reaches a pod through one and the same surface, the **Pod Interface** — every `s:Service`, and the module behind a tool such as `pod:Contacts` (see [Tool Modules](#tool-modules) below) alike: the read and write operations over a pod's [note](#note-area), [attachments](#pod-contents), [chat](#chat-area), and `pod:member`/tool claims. There is no side door — no service reaches a pod's content by any other route, or writes to another member's claims directly, and none gets an API of its own.
+A **module** — here and in [Service Tag Access](#service-tag-access) below — is any service or tool: every `s:Service`, and every tool, such as `pod:Contacts` (see [Tools](#tools) below). Every module reaches a pod through one and the same surface, the **Pod Interface**: the read and write operations over a pod's [note](#note-area), [attachments](#pod-contents), [chat](#chat-area), and `pod:member`/tool claims. There is no side door — no service reaches a pod's content by any other route, or writes to another member's claims directly, and none gets an API of its own.
 
 This is why an invited service needs no special-case permission logic anywhere in this document. The Pod Interface is the same surface a human member's own UI uses, and it enforces the same rules for both, already set out in [Permissions](#permissions) above:
 
@@ -352,7 +352,7 @@ What a service does *beyond* the pod — call an LLM, read an address book, writ
 
 A module reaches the [hidden service tags](README.md#tags) it has written through the [Pod Interface](#pod-interface), like everything else it touches in a pod. This is not the user's tag search under another name: the user's search never matches these tags at all (see [Finding Pods by Tag](#finding-pods-by-tag) above), and a module does not search them by free text but by `pod:tagNamespace` and `pod:tagKey` — which is what those two parts are for.
 
-The interface scopes **every** service-tag operation — search, read, add, delete alike — to the namespace the calling module's developer controls. The Apple Contacts module (a `pod:Contacts` tool, not a service — see [Apple Contacts](#apple-contacts) below) therefore searches, reads, adds and removes `foundation.mee.applecontacts` tags and nothing else: another module's tags are not merely absent from its results, they are unreadable and unwritable. That isolation between services is the namespace's whole job; it is not a display convention layered over one shared pool.
+The interface scopes **every** service-tag operation — search, read, add, delete alike — to the namespace the calling module's developer controls. The Apple Contacts tool (`pod:Contacts`, not a service — see [Apple Contacts](#apple-contacts) below) therefore searches, reads, adds and removes `foundation.mee.applecontacts` tags and nothing else: another module's tags are not merely absent from its results, they are unreadable and unwritable. That isolation between services is the namespace's whole job; it is not a display convention layered over one shared pool.
 
 Two practical consequences for a module. First, results are scoped to its own member's tree, so a tag is only ever reachable in the instance that wrote it — consistent with its never being shared. Second, two identical tags are two separate tags, not one: nothing deduplicates them, so a module adding a tag checks whether the pod already carries that exact namespace/key/value combination before writing another.
 
@@ -383,16 +383,28 @@ This module lets a member invite OpenAI's ChatGPT into a pod as a real `s:ChatGP
 
    It never writes to a graph claimed by someone else — not another member's `pod:member` entry, not a tool graph another party claims — read access is unrestricted, but write access is always scoped to the module's own claimant identity. In the steady state this means revising its tool graph in place turn by turn (see [The Iterative Prompt/Response Loop](#the-iterative-promptresponse-loop)); "create" and "delete" cover the initial contribution and retracting a claim that's no longer accurate (e.g. a cancelled leg of an itinerary), respectively. Each of those revisions is a delete-and-re-issue at the PDN layer, exactly as for a human member's own edit (see [Tool & Member Info Permissions](#tool--member-info-permissions) above).
 
-## Tool Modules
+## Tools
 
-A tool can have a module behind it too. Where a service's module acts for a member inside the pod as a member in its own right, a tool's module backs a capability the pod carries, and reaches the pod through the same [Pod Interface](#pod-interface) under the same rules. One is shipped.
+Where a service acts inside the pod as a member in its own right, a tool is a capability the pod carries and never a member. It reaches the pod through the same [Pod Interface](#pod-interface), under the same rules. Two are shipped.
 
 ### Apple Contacts
 
-This module lets a member sync their Apple Contacts address book into and out of a pod. It is a **tool** (`pod:Contacts`), not a service: it never joins the pod as a member, because no claim in the pod is the address book's and there is no party for a `pod:member` entry to name. What it adds is a capability the pod carries — a sync action in the app's UI and the correspondence behind it — which is what a tool is.
+This tool (`pod:Contacts`) lets a member sync their Apple Contacts address book into and out of a pod. It is not a service: it never joins the pod as a member, because no claim in the pod is the address book's and there is no party for a `pod:member` entry to name. What it adds is a capability the pod carries — a sync action in the app's UI and the correspondence behind it — which is what a tool is.
 
 On **import**, each contact record becomes a graph, its vCard fields mapping onto the Persona ontology's own names, phone numbers, addresses, organization, job title, birthday, photo and so on. On **export**, the direction reverses: all of a person's graphs merge into a single vCard, each field value carrying the label of the graph it came from, since vCard's own model is one card per person with repeatable labelled fields.
 
-The piece the pod model has nowhere else to put is an Apple Contacts **Group**. A group is not a category, not a topic, and not a member, so the module records it as a [hidden service tag](README.md#tags) on the pod — namespace `foundation.mee.applecontacts`, key `group`, value `Christmas List` for a contact that sat in a group of that name. Holding it on the pod is what makes the round trip **lossless** and the sync **bidirectional**: a later edit on either side can be carried back to the other, because the module can still tell which group the contact came from. Alice's `Bob Johnson` and `Fred Flintstone` pods both carry it.
+The piece the pod model has nowhere else to put is an Apple Contacts **Group**. A group is not a category, not a topic, and not a member, so the tool records it as a [hidden service tag](README.md#tags) on the pod — namespace `foundation.mee.applecontacts`, key `group`, value `Christmas List` for a contact that sat in a group of that name. Holding it on the pod is what makes the round trip **lossless** and the sync **bidirectional**: a later edit on either side can be carried back to the other, because the tool can still tell which group the contact came from. Alice's `Bob Johnson` and `Fred Flintstone` pods both carry it.
 
-That tag stays in the syncing member's own copy and is never shared: it is that member's own bookkeeping, and a member whose instance runs a different module, or none, could neither interpret nor clear the value.
+That tag stays in the syncing member's own copy and is never shared: it is that member's own bookkeeping, and a member whose instance runs a different tool, or none, could neither interpret nor clear the value.
+
+### Browser Extension
+
+This tool (`pod:Browser`) connects the app to a standalone web browser, letting the app act as the person's **digital wallet** for credentials (e.g. verifiable credentials). It is not a service, and it needs a Tellipod browser extension installed in that browser: the extension is what sees a site offer or ask for a credential, and what carries the credential between the site and the app. It never joins a pod as a member. The party in a credential's pod is the site itself, recorded as an `s:WebsiteService` member known by its `s:siteDomain`, and the extension is only the channel between the two.
+
+A credential is kept as a pod [attachment](#pod-contents), stored exactly as the issuer sent it, never parsed into a graph: its signature has to verify for whoever it is later presented to, and re-serializing it would break that. It is an attachment rather than a private file, so it would travel with the pod if the pod were ever shared with a person. The `pod:Browser` tool itself holds nothing; it is the pod's connection to the extension and the app's view of the credentials the pod holds, and the app puts one on every pod the two flows below find or create.
+
+Both flows find a site's pod the same way: by looking for a pod with an `s:WebsiteService` member whose `s:siteDomain` equals the site's own domain. If more than one pod has one, the app asks which to use. If none does, it creates a pod holding the person and a newly minted `s:WebsiteService` for that domain, whose `pod:member` entry the person claims, since the site never writes to the pod. The new pod's `pod:category` comes from classifying the site by the kind of company behind it — `podcat:BankingPayments`, `podcat:HealthWellness` and so on — and falls back to `podcat:Companies` whenever the classification is not confident. Like any category, it is fixed at creation and the pod can be moved afterwards.
+
+**Issuing.** The person visits a site that issues a credential by the standard issuance protocols. The extension asks whether to store it in the app. If a pod already exists for the issuing site, the app asks whether to add the new credential to it; otherwise it creates one as above. The credential becomes an attachment of that pod.
+
+**Presenting.** Later, the person visits a site that asks for a credential of some kind from any of a set of issuers it trusts — an age-verification credential, say, from any of several age-verification providers. The app finds or creates the pod for the requesting site. If that pod does not already hold a suitable credential, the app searches every pod for one from a trusted issuer, finds it in the pod for the site that issued it, and copies it, bit for bit, into the requesting site's pod. The extension then passes it from that pod to the requesting site. Each site's pod therefore ends up holding every credential that has passed between the person and that site, whichever direction it went.

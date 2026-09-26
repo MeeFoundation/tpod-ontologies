@@ -11,8 +11,8 @@
 
 <http://mee.foundation/ontologies/service/shapes> rdf:type owl:Ontology ;
     owl:imports <http://mee.foundation/ontologies/service> ;
-    owl:versionIRI <http://mee.foundation/ontologies/service/shapes/2.0.1> ;
-    dc:date "2026-09-16"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/service/shapes/2.1.0> ;
+    dc:date "2026-09-26"^^xsd:date ;
     rdfs:label "Service Ontology SHACL Validation Shapes"@en ;
     rdfs:comment "SHACL validation shapes for the Service Ontology."@en .
 
@@ -124,3 +124,31 @@
         sh:message "A service:ServiceProvider must have exactly one service:providedBy value, a single o:Organization."@en
     ] ;
     sh:message "Service Provider validation."@en .
+
+
+#################################################################
+#  Website Service
+#################################################################
+#  No sh:maxCount 0 on service:actsFor or service:providedBy, for the
+#  reason the Service block above gives: a website service may also be
+#  typed service:ServiceProvider once the organization behind it is
+#  known, and lowering a bound here would make that unsatisfiable.
+#################################################################
+
+:WebsiteServiceShape
+    a sh:NodeShape ;
+    sh:targetClass service:WebsiteService ;
+
+    # service:siteDomain — required, exactly one value: the key the app
+    # matches a site on. Lowercase, two or more labels, ordinary order;
+    # the label syntax is pod:tagNamespace's (shacl/pod-shacl.ttl), which
+    # is symmetric, so the same pattern admits the normal-order form.
+    sh:property [
+        sh:path service:siteDomain ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:datatype xsd:string ;
+        sh:pattern "^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$" ;  # DNS domain, two or more lowercase labels
+        sh:message "A service:WebsiteService must have exactly one service:siteDomain value, a lowercase DNS domain such as \"privo.com\"."@en
+    ] ;
+    sh:message "Website Service validation."@en .

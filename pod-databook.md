@@ -135,7 +135,7 @@ The format will change, though. It has so far been exercised by one worked examp
 validation pipeline around it, not by an implementation, and the Tellipod implementation team will find
 requirements it does not yet meet — a field that has to be added, a convention that holds across the
 example tree but not across a real user's, a distinction that only matters once pods are syncing
-between real instances. The largest known gap is tools: three of the four kinds have no data format
+between real instances. The largest known gap is tools: four of the six kinds have no data format
 at all yet. See [Open Questions](#open-questions) at the end for that and the rest of what is
 still unsettled. This document tracks the format as it stands rather than freezing it; what
 keeps a proposed change honest is that [integrity.md](integrity.md)'s checks and the tree under
@@ -377,7 +377,7 @@ One entry per tool the pod carries; zero is the ordinary case. Always written as
 
 | Sub-key | Required | Value |
 |---------|----------|-------|
-| `type` | yes | Which tool class this is: `form`, `calendar`, `canvas` or `map`, mapping to `pod:Form`/`pod:Calendar`/`pod:Canvas`/`pod:Map`. Only `form` has a content model today, and only `form` appears in the example tree |
+| `type` | yes | Which tool class this is: `form`, `calendar`, `canvas`, `contacts`, `map` or `browser`, mapping to `pod:Form`/`pod:Calendar`/`pod:Canvas`/`pod:Contacts`/`pod:Map`/`pod:Browser`. Only `form` has a content model today, and only `form` appears in the example tree |
 | `formTopic` | yes on a form | What the tool's content is about (`pod:formTopic`) — any resource IRI, stated once by the tool rather than repeated on each graph beneath it |
 | `graph` | yes on a form | A list of that tool's own graph entries, at least one |
 
@@ -653,8 +653,9 @@ an append-only, mostly-read-at-the-tail stream with two propagation rules inside
 
 Only `pod:Form` has a data format today. Its content is graphs, and a graph is Turtle, which is why
 every one of the 101 fences across this repo's example tree is a ```` ```turtle ```` one.
-`pod:Calendar`, `pod:Canvas` and `pod:Map` are declared with no content model at all, so this document has
+`pod:Calendar`, `pod:Canvas`, `pod:Contacts` and `pod:Map` are declared with no content model at all, so this document has
 nothing to say about what a calendar's entries or a canvas's drawing surface look like on disk.
+`pod:Browser` has none by design: the credentials it handles are pod attachments, not tool content.
 
 Settling any of them lands in two places: a `tpod.tool` entry needs whatever keys that kind's data
 calls for alongside `type`, and the body needs somewhere to put the content.

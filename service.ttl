@@ -11,9 +11,9 @@
 @base <http://mee.foundation/ontologies/service> .
 
 <http://mee.foundation/ontologies/service> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/service/2.9.0> ;
-    dc:date "2026-09-19"^^xsd:date ;
-    owl:versionInfo "Version 2.9.0 - the app renamed to Tellipod, with the v4 token becoming tpod"@en ;
+    owl:versionIRI <http://mee.foundation/ontologies/service/2.10.0> ;
+    dc:date "2026-09-26"^^xsd:date ;
+    owl:versionInfo "Version 2.10.0 - added service:WebsiteService and service:siteDomain, the website a credential is issued by or presented to"@en ;
     owl:imports <https://w3id.org/cco-domains/cco/AgentOntology> ,
                 <http://mee.foundation/ontologies/prov-upper-subset> ;
     rdfs:label "Service Ontology"@en ;
@@ -68,11 +68,13 @@ service:Service rdf:type owl:Class ;
                     see pod:claimant's own comment for which of the two a graph names. Whatever it does outside the
                     pod, every service:Service reaches the pod itself through one surface — the Pod Interface, the
                     same read/write surface a human member's own UI uses (app-behavior.md), which is why an invited
-                    service needs no special-case permission logic. It branches in two on the
+                    service needs no special-case permission logic. It branches in three on the
                     question of whom the service acts for: service:AgentService acts on
-                    behalf of exactly one p:Person member of the pod (service:actsFor), and
+                    behalf of exactly one p:Person member of the pod (service:actsFor),
                     service:ServiceProvider acts on behalf of the o:Organization that
-                    provides it (service:providedBy). The concrete services the app
+                    provides it (service:providedBy), and service:WebsiteService stands for
+                    a website known only by its domain (service:siteDomain), with no
+                    member or organization it is known to act for. The concrete services the app
                     ships — service:ChatGPT and service:ArcaBackup — are both the former,
                     each a leaf under service:AgentService. No class here
                     is declared owl:disjointWith any other, since one real service can
@@ -240,3 +242,49 @@ service:ServiceProvider rdf:type owl:Class ;
                     rather than narrowed to prov:SoftwareAgent (unlike service:AgentService
                     and every leaf beneath it), since what an organization provides need not
                     be running software at all."""@en .
+
+
+
+#################################################################
+#    Website Service
+#################################################################
+
+service:WebsiteService rdf:type owl:Class ;
+    rdfs:subClassOf service:Service ;
+    rdfs:label "Website Service"@en ;
+    rdfs:comment """A website that issues a verifiable credential to the person or asks the
+                    person to present one, standing in for that site as a member of the pod
+                    the credential is kept in — e.g. an age-verification site that issues a
+                    credential, or a social network that requires one. Carries
+                    service:siteDomain, required exactly once (1..1,
+                    shacl/service-shacl.ttl's :WebsiteServiceShape): the site is known by its
+                    domain and nothing else, and that domain is what the app matches on to
+                    find the pod a site's credentials belong in. The app mints one itself,
+                    during a credential issuance or presentation handled by the pod:Browser
+                    tool's extension, when no pod yet has a member with a matching
+                    service:siteDomain; the site never runs a Tellipod instance, so it never
+                    receives a copy of the pod and never writes to it. For the same reason it
+                    claims nothing: its pod:member entry is claimed by the person whose app
+                    minted it, with the service as that entry's pod:subject. The credentials
+                    themselves are pod attachments, kept exactly as received, not claims in
+                    any graph. Carries no service:actsFor — it acts for no member of the pod —
+                    and no service:providedBy, since a domain alone does not tell the app
+                    which o:Organization runs the site; a service later found to be an
+                    organization's own may additionally be typed service:ServiceProvider,
+                    since no class here is disjoint with any other. Left at its
+                    service:Service parent's cco:ont00001017/prov:Agent alignment, as
+                    service:ServiceProvider is, since a website is not known to be one piece
+                    of running software."""@en .
+
+service:siteDomain rdf:type owl:DatatypeProperty ;
+    rdfs:domain service:WebsiteService ;
+    rdfs:range xsd:string ;
+    rdfs:label "site domain"@en ;
+    rdfs:comment """The DNS domain of the website a service:WebsiteService stands for, in
+                    lowercase and in ordinary left-to-right order — e.g. "privo.com", never
+                    "PRIVO.com" or reverse-DNS "com.privo" (contrast pod:tagNamespace, which
+                    is reverse-DNS). Required, exactly one value. It is the key both
+                    credential flows match on: the app finds the pod a site's credentials
+                    belong in by looking for a member whose service:siteDomain equals the
+                    site's own domain, and mints a new pod only when none has one. Named
+                    siteDomain rather than domain so it cannot be misread as rdfs:domain."""@en .

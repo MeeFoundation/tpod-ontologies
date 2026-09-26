@@ -2,7 +2,7 @@
 
 ## Overview
 
-Apple Contacts is a **tool** (`pod:Contacts`), not a service: the module never joins a pod as a member, it backs a capability the pod carries. See app-behavior.md's Tool Modules section.
+Apple Contacts is a **tool** (`pod:Contacts`), not a service: it never joins a pod as a member, it is a capability the pod carries. See app-behavior.md's Tools section.
 
 Tellipod is a strict superset of Apple Contacts in every dimension. This means importing from Apple Contacts into the app is straightforward, but exporting from the app back to Apple Contacts requires explicit design decisions. Round-tripping losslessly is achievable but requires an anchor strategy (see below).
 
