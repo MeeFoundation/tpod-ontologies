@@ -385,7 +385,7 @@ This module lets a member invite OpenAI's ChatGPT into a pod as a real `s:ChatGP
 
 ## Tools
 
-Where a service acts inside the pod as a member in its own right, a tool is a capability the pod carries and never a member. It reaches the pod through the same [Pod Interface](#pod-interface), under the same rules. Two are shipped.
+Where a service acts inside the pod as a member in its own right, a tool is a capability the pod carries and never a member. It reaches the pod through the same [Pod Interface](#pod-interface), under the same rules. Two are planned.
 
 ### Apple Contacts
 
