@@ -214,7 +214,7 @@ BASE_ONTOLOGY_FILES = [
 # naming an extension concept resolves against pod-shacl's sh:class
 # skos:Concept / skos:ConceptScheme checks; the template half is harmless
 # there, being a single well-formed pod:TemplatePod rather than
-# pod-category-templates.ttl's 106.
+# pod-category-templates.ttl's 107.
 TEMPLATE_PASS_ONTOLOGY_FILES = BASE_ONTOLOGY_FILES + ["pod-category-templates.ttl"]
 
 # The four general shapes files the pod pass runs, all at once. The

@@ -19,10 +19,10 @@
 @base <http://mee.foundation/ontologies/pod-templates> .
 
 <http://mee.foundation/ontologies/pod-templates> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/pod-templates/4.3.0> ;
-    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod-templates/4.4.0> ;
+    dc:date "2026-09-26"^^xsd:date ;
     owl:imports <http://mee.foundation/ontologies/pod> ;
-    owl:versionInfo "Version 4.3.0 - the category ontology renamed to pod-categories, with the cat: prefix becoming podcat:"@en ;
+    owl:versionInfo "Version 4.4.0 - added ctpl:IdVerificationTemplatePod, the first template to declare a pod:Browser tool"@en ;
     rdfs:label "Pod Templates"@en ;
     rdfs:comment """Class-level pod:Pod templates for category concepts (pod-categories.ttl's podcat:PodCategoryScheme). Each individual here is what the app clones into a new pod when a pod of its own pod:category concept is first instantiated into a user's tree (Lazy Instantiation) — finding the template for a given category is a reverse lookup (?tc pod:category podcat:X), since pod-categories.ttl carries no forward pointer of its own. Each is typed solely pod:TemplatePod, and carries pod:memberShape for the member baseline plus zero or more pod:declaresTool nodes naming the tools — a pod:Form and its governing pod:formShape — a pod of that category is created with. Most declare none: most categories have nothing structured to say beyond their member baseline, and a pod cloned from such a template can still gain tools later, chosen by the user."""@en .
 
@@ -241,6 +241,16 @@ ctpl:CompaniesTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
     pod:memberShape pshapes:ContactInfoShape ;
     pod:declaresTool [ rdf:type pod:Form ;
                         pod:formShape sashapes:ServiceAccountShape ] .
+
+#################################################################
+#  podcat:IdVerification
+#################################################################
+
+ctpl:IdVerificationTemplatePod rdf:type pod:Pod, pod:TemplatePod ;
+    rdfs:label "IdVerification Template Pod"@en ;
+    pod:category podcat:IdVerification ;
+    pod:memberShape pshapes:ContactInfoShape ;
+    pod:declaresTool [ rdf:type pod:Browser ] .
 
 #################################################################
 #  podcat:BankingPayments

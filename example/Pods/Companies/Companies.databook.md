@@ -11,7 +11,8 @@ description: >
   content or relationship of its own beyond Alice's required membership.
   Also carries an empty tool graph, since podcat:Companies's own TemplatePod
   declares a form tool — the real content
-  lives in this category's own leaf pods (Google, ATT) instead.
+  lives in this category's own leaf pods (Google, ATT, Arca, Facenook, and the IdVerification
+  scaffold pod) instead.
 tpod:
   category: "podcat:Companies"
   creator: ":Self"

@@ -8,10 +8,11 @@ description: >
   Pod DataBook for folder "Arca" (pod:category: podcat:Companies), nested under "Companies". Alice's
   pod backup provider. A two-member pod demonstrating service:ArcaBackup as a real pod member:
   :Arca_Backup, the backup service Arca provides, joins alongside Alice, each with its own member
-  entry (graph-95, graph-96). Unlike :Citibank_Service and :BHS_Service, which are
-  service:ServiceProvider individuals standing in for an organization Alice has a relationship with,
-  a backup service is not any one member's delegate and has no service:actsFor value — it serves the
-  pod itself. The account Alice holds with Arca is the topic of the pod's tool (graph-97), the same
+  entry (graph-95, graph-96). :Arca_Backup is a service:ArcaBackup, an agent service: it carries
+  service:actsFor :Self, since Alice invited it and it preserves her own copy of the pod, and
+  service:providedBy :Arca, naming the organization that runs it. That is what separates it from
+  :Citibank_Service and :BHS_Service, service:ServiceProvider individuals that act for the
+  organization behind them rather than for a member. The account Alice holds with Arca is the topic of the pod's tool (graph-97), the same
   sa:ServiceAccount pattern the Google and ATT pods already use.
 tpod:
   category: "podcat:Companies"

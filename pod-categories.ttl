@@ -8,8 +8,8 @@
 @base <http://mee.foundation/ontologies/pod-categories> .
 
 <http://mee.foundation/ontologies/pod-categories> rdf:type owl:Ontology ;
-    owl:versionIRI <http://mee.foundation/ontologies/pod-categories/2.11.0> ;
-    dc:date "2026-09-19"^^xsd:date ;
+    owl:versionIRI <http://mee.foundation/ontologies/pod-categories/2.12.0> ;
+    dc:date "2026-09-26"^^xsd:date ;
     rdfs:label "Pod Categories"@en ;
     rdfs:comment """Pod Categories for the Tellipod App."""@en .
 
@@ -110,6 +110,12 @@ podcat:Companies rdf:type skos:Concept ;
     skos:broader podcat:Person ;
     skos:inScheme podcat:PodCategoryScheme ;
     rdfs:comment "A catch-all for your relationships with companies and organizations that provide services and/or products to you that are not included in more specific categories such as podcat:Finances, podcat:HealthWellness, podcat:Home, podcat:Food, etc."@en .
+
+podcat:IdVerification rdf:type skos:Concept ;
+    skos:prefLabel "IdVerification"@en ;
+    skos:broader podcat:Companies ;
+    skos:inScheme podcat:PodCategoryScheme ;
+    rdfs:comment "Companies that verify who you are, or a single fact about you such as your age, and issue you a credential attesting to it — age-verification providers, identity-proofing services, and other credential issuers. A pod of this category holds the credentials a provider issued you, as pod attachments, alongside that provider as a service:WebsiteService member."@en .
 
 
 #################################################################

@@ -1,0 +1,24 @@
+flowchart TD
+    classDef person fill:#fffacd,stroke:#aaa,color:#333
+    classDef org    fill:#cce5ff,stroke:#aaa,color:#333
+    classDef service fill:#e6e6e6,stroke:#aaa,color:#333
+    classDef lit    fill:none,stroke:none,font-style:italic,color:#2a7a2a
+    classDef meta   fill:#f5f5ff,stroke:#9999cc,color:#333
+
+    subgraph ctx["Graph"]
+        direction LR
+        ctx_meta["claimant: :Self\nformTopic: :Alice_Facenook_Account\nshape: sashapes:ServiceAccountShape"]:::meta
+    end
+
+    na02c4d2885a1[":Alice_Facenook_Account\n(ServiceAccount)"]
+    n95cc66a82a5b("Facenook"):::lit
+    nbbf4a1049ebe("awalker@gmail.com"):::lit
+    n5cc49098b114("https://www.facenook.com"):::lit
+    n5cd4d482031a("Alice#Facenook2026!"):::lit
+    n61a8e87382f0[":Self\n(Person)"]:::person
+
+    na02c4d2885a1 -->|"serviceName"| n95cc66a82a5b
+    na02c4d2885a1 -->|"userHandle"| nbbf4a1049ebe
+    na02c4d2885a1 -->|"serviceURI"| n5cc49098b114
+    na02c4d2885a1 -->|"hasPassword"| n5cd4d482031a
+    n61a8e87382f0 -->|"holdsUserAccount"| na02c4d2885a1

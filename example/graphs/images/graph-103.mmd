@@ -1,0 +1,20 @@
+flowchart TD
+    classDef person fill:#fffacd,stroke:#aaa,color:#333
+    classDef org    fill:#cce5ff,stroke:#aaa,color:#333
+    classDef service fill:#e6e6e6,stroke:#aaa,color:#333
+    classDef lit    fill:none,stroke:none,font-style:italic,color:#2a7a2a
+    classDef meta   fill:#f5f5ff,stroke:#9999cc,color:#333
+
+    subgraph ctx["Graph"]
+        direction LR
+        ctx_meta["claimant: :PRIVO\nsubject: :PRIVO_Site\nshape: pshapes:ContactInfoShape"]:::meta
+    end
+
+    n24f574b83b2d[":PRIVO\n(Organization)"]:::org
+    n9fb725062899("https://www.privo.com"):::lit
+    nc40f7431e445[":PRIVO_Site\n(WebsiteService)"]:::service
+    n29a0d308068c("privo.com"):::lit
+
+    n24f574b83b2d -->|"hasWebsite"| n9fb725062899
+    nc40f7431e445 -->|"siteDomain"| n29a0d308068c
+    nc40f7431e445 -->|"providedBy"| n24f574b83b2d

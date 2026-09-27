@@ -377,7 +377,7 @@ One entry per tool the pod carries; zero is the ordinary case. Always written as
 
 | Sub-key | Required | Value |
 |---------|----------|-------|
-| `type` | yes | Which tool class this is: `form`, `calendar`, `canvas`, `contacts`, `map` or `browser`, mapping to `pod:Form`/`pod:Calendar`/`pod:Canvas`/`pod:Contacts`/`pod:Map`/`pod:Browser`. Only `form` has a content model today, and only `form` appears in the example tree |
+| `type` | yes | Which tool class this is: `form`, `calendar`, `canvas`, `contacts`, `map` or `browser`, mapping to `pod:Form`/`pod:Calendar`/`pod:Canvas`/`pod:Contacts`/`pod:Map`/`pod:Browser`. Only `form` has a content model today. `form` and `browser` are the two that appear in the example tree, `browser` only in the PRIVO and Facenook pods |
 | `formTopic` | yes on a form | What the tool's content is about (`pod:formTopic`) — any resource IRI, stated once by the tool rather than repeated on each graph beneath it |
 | `graph` | yes on a form | A list of that tool's own graph entries, at least one |
 
